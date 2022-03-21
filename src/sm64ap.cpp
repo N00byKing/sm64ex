@@ -34,8 +34,6 @@ std::map<int,int> map_exits;
 std::map<int,int> map_courseidx_coursenum;
 std::map<int,int> map_coursenum_courseidx;
 
-void none() {};
-
 void SM64AP_RecvItem(int idx, bool notify) {
     switch (idx) {
         case SM64AP_ITEMID_STAR:
@@ -223,7 +221,6 @@ void SM64AP_ResetItems() {
 
 void SM64AP_GenericInit() {
     AP_SetDeathLinkSupported(true);
-    AP_SetDeathLinkRecvCallback(&none);
     AP_SetItemClearCallback(&SM64AP_ResetItems);
     AP_SetLocationCheckedCallback(&SM64AP_CheckLocation);
     AP_SetItemRecvCallback(&SM64AP_RecvItem);
