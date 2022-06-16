@@ -2574,12 +2574,18 @@ void render_pause_castle_main_strings(s16 x, s16 y) {
     if (gDialogLineNum < COURSE_STAGES_COUNT) {
         courseName = segmented_to_virtual(courseNameTbl[gDialogLineNum]);
         render_pause_castle_course_stars(x, y, gCurrSaveFileNum - 1, gDialogLineNum);
-        print_generic_string(x + 34, y - 5, textCoin);
+        print_generic_string(x - 9, y - 5, textCoin);
 #ifdef VERSION_EU
         print_generic_string(x + 44, y - 5, textX);
 #endif
         int_to_str(save_file_get_course_coin_score(gCurrSaveFileNum - 1, gDialogLineNum), strVal);
-        print_generic_string(x + 54, y - 5, strVal);
+        print_generic_string(x + 11, y - 5, strVal);
+
+        if (SM64AP_HaveCannon(gDialogLineNum)) {
+            u8 str_cannon[] = { TEXT_CANYON };
+            print_generic_string(x + 45, y - 5, str_cannon);
+        }
+
 #ifdef VERSION_EU
         print_generic_string(x - 17, y + 30, courseName);
 #endif

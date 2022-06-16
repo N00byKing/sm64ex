@@ -29,6 +29,8 @@
 #define TEXT_PAUSE _("PAUSE") // Pause text, Castle Courses
 #define TEXT_HUD_CONGRATULATIONS _("CONGRATULATIONS") // Course Complete Text, Bowser Courses
 
+#define TEXT_CANYON _("Cannon Unlocked")
+
 #if defined(VERSION_JP) || defined(VERSION_SH)
 
 /**
