@@ -2484,7 +2484,7 @@ void render_pause_castle_course_stars(s16 x, s16 y, s16 fileNum, s16 courseNum) 
 
     if (starFlags & 0x40) {
         starCount--;
-        print_generic_string(x + 89, y - 5, textStar);
+        print_generic_string(x + 30, y - 5, textStar);
     }
 
     while (hasStar != starCount) {
@@ -2579,11 +2579,11 @@ void render_pause_castle_main_strings(s16 x, s16 y) {
         print_generic_string(x + 44, y - 5, textX);
 #endif
         int_to_str(save_file_get_course_coin_score(gCurrSaveFileNum - 1, gDialogLineNum), strVal);
-        print_generic_string(x + 11, y - 5, strVal);
+        print_generic_string(x + 5, y - 5, strVal);
 
         if (SM64AP_HaveCannon(gDialogLineNum)) {
             u8 str_cannon[] = { TEXT_CANYON };
-            print_generic_string(x + 45, y - 5, str_cannon);
+            print_generic_string(x + 50, y - 5, str_cannon);
         }
 
 #ifdef VERSION_EU
