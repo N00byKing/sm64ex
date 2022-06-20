@@ -1,0 +1,54 @@
+From a5c04e3b7166d02236be73b82d903e0f0945314f Mon Sep 17 00:00:00 2001
+From: GateGuy <gateguy33@gmail.com>
+Date: Sat, 13 Jun 2020 19:20:34 -0400
+Subject: [PATCH] Non-Stop Mode Always Enabled
+
+---
+ src/game/interaction.c            | 10 +++++++++-
+ src/game/mario_actions_cutscene.c |  5 +++++
+ 2 files changed, 14 insertions(+), 1 deletion(-)
+
+diff --git a/src/game/interaction.c b/src/game/interaction.c
+index 199911fb..5edd84f1 100644
+--- a/src/game/interaction.c
++++ b/src/game/interaction.c
+@@ -763,6 +763,10 @@ u32 interact_star_or_key(struct MarioState *m, UNUSED u32 interactType, struct O
+     u32 starIndex;
+     u32 starGrabAction = ACT_STAR_DANCE_EXIT;
+     u32 noExit = (o->oInteractionSubtype & INT_SUBTYPE_NO_EXIT) != 0;
++    u8 stayInLevelCommon = !(m->controller->buttonDown & L_TRIG || gCurrLevelNum == LEVEL_BOWSER_1 || gCurrLevelNum == LEVEL_BOWSER_2 || gCurrLevelNum == LEVEL_BOWSER_3);
++    if (stayInLevelCommon == TRUE) {
++        noExit = TRUE;
++    }
+     u32 grandStar = (o->oInteractionSubtype & INT_SUBTYPE_GRAND_STAR) != 0;
+ 
+     if (m->health >= 0x100) {
+@@ -820,7 +824,11 @@ u32 interact_star_or_key(struct MarioState *m, UNUSED u32 interactType, struct O
+             return set_mario_action(m, ACT_JUMBO_STAR_CUTSCENE, 0);
+         }
+ 
+-        return set_mario_action(m, starGrabAction, noExit + 2 * grandStar);
++        if (stayInLevelCommon == FALSE) {
++            return set_mario_action(m, starGrabAction, noExit + 2 * grandStar);
++        }
++        //If nonstop StayInLevel is enabled, autosave
++        save_file_do_save(gCurrSaveFileNum - 1);
+     }
+ 
+     return FALSE;
+diff --git a/src/game/mario_actions_cutscene.c b/src/game/mario_actions_cutscene.c
+index 30c0033a..11b5fa44 100644
+--- a/src/game/mario_actions_cutscene.c
++++ b/src/game/mario_actions_cutscene.c
+@@ -645,6 +645,11 @@ void general_star_dance_handler(struct MarioState *m, s32 isInWater) {
+             set_mario_action(m, ACT_READING_AUTOMATIC_DIALOG, dialogID);
+         } else {
+             set_mario_action(m, isInWater ? ACT_WATER_IDLE : ACT_IDLE, 0);
++            set_fov_function(CAM_FOV_DEFAULT);
++            // fix camera bug when getting a star underwater with StayInLevel cheat enabled
++            if (isInWater) {
++                cutscene_exit_painting_end(m->area->camera);
++            }
+         }
+     }
+ }
