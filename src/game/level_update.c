@@ -614,8 +614,10 @@ s16 music_changed_through_warp(s16 arg) {
 /**
  * Set the current warp type and destination level/area/node.
  */
-void initiate_warp(s16 destLevel, s16 destArea, s16 destWarpNode, s32 arg3) {
-    SM64AP_RedirectWarp(&gCurrLevelNum, &destLevel, &(gCurrentArea->index), &destArea, &destWarpNode);
+
+#define initiate_warp(a,b,c,d) _initiate_warp(a, b, c, d, -1);
+void _initiate_warp(s16 destLevel, s16 destArea, s16 destWarpNode, s32 arg3, int painting_ID) {
+    SM64AP_RedirectWarp(&gCurrLevelNum, &destLevel, &(gCurrentArea->index), &destArea, &destWarpNode, painting_ID);
     if (destWarpNode >= WARP_NODE_CREDITS_MIN) {
         sWarpDest.type = WARP_TYPE_CHANGE_LEVEL;
     } else if (destLevel != gCurrLevelNum) {
@@ -673,7 +675,7 @@ void initiate_painting_warp(void) {
                     D_8032C9E0 = check_warp_checkpoint(&warpNode);
                 }
 
-                initiate_warp(warpNode.destLevel & 0x7F, warpNode.destArea, warpNode.destNode, 0);
+                _initiate_warp(warpNode.destLevel & 0x7F, warpNode.destArea, warpNode.destNode, 0, gMarioState->floor->type - SURFACE_PAINTING_WARP_D3);
                 check_if_should_set_warp_checkpoint(&warpNode);
 
                 play_transition_after_delay(WARP_TRANSITION_FADE_INTO_COLOR, 30, 255, 255, 255, 45);
