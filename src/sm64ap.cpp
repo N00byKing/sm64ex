@@ -22,7 +22,10 @@ bool sm64_have_metalcap = false;
 bool sm64_have_vanishcap = false;
 bool sm64_have_cannon[15];
 int* sm64_clockaction = nullptr;
-int sm64_starstofinish = 70;
+int sm64_cost_firstbowserdoor = 8;
+int sm64_cost_basementdoor = 30;
+int sm64_cost_secondfloordoor = 50;
+int sm64_cost_endlessstairs = 70;
 int msg_frame_duration = 90; // 3 Secounds at 30F/s
 int cur_msg_frame_duration = msg_frame_duration;
 
@@ -192,8 +195,20 @@ void SM64AP_SetClockToTTCAction(int* action) {
     sm64_clockaction = action;
 }
 
+void SM64AP_SetFirstBowserDoorCost(int amount) {
+    sm64_cost_firstbowserdoor = amount;
+}
+
+void SM64AP_SetBasementDoorCost(int amount) {
+    sm64_cost_basementdoor = amount;
+}
+
+void SM64AP_SetSecondFloorDoorCost(int amount) {
+    sm64_cost_secondfloordoor = amount;
+}
+
 void SM64AP_SetStarsToFinish(int amount) {
-    sm64_starstofinish = amount;
+    sm64_cost_endlessstairs = amount;
 }
 
 void SM64AP_SetCourseMap(std::map<int,int> map) {
@@ -223,6 +238,9 @@ void SM64AP_GenericInit() {
     AP_SetItemClearCallback(&SM64AP_ResetItems);
     AP_SetLocationCheckedCallback(&SM64AP_CheckLocation);
     AP_SetItemRecvCallback(&SM64AP_RecvItem);
+    AP_RegisterSlotDataIntCallback("FirstBowserDoorCost", &SM64AP_SetFirstBowserDoorCost);
+    AP_RegisterSlotDataIntCallback("BasementDoorCost", &SM64AP_SetBasementDoorCost);
+    AP_RegisterSlotDataIntCallback("SecondFloorDoorCost", &SM64AP_SetSecondFloorDoorCost);
     AP_RegisterSlotDataIntCallback("StarsToFinish", &SM64AP_SetStarsToFinish);
     AP_RegisterSlotDataMapIntIntCallback("AreaRando", &SM64AP_SetCourseMap);
 
@@ -313,8 +331,19 @@ int SM64AP_GetStars() {
     return starsCollected;
 }
 
-int SM64AP_StarsToFinish() {
-    return sm64_starstofinish;
+int SM64AP_GetRequiredStars(int prevAmount) {
+    switch (prevAmount) {
+        case 8:
+            return sm64_cost_firstbowserdoor;
+        case 30:
+            return sm64_cost_basementdoor;
+        case 50:
+            return sm64_cost_secondfloordoor;
+        case 70:
+            return sm64_cost_endlessstairs;
+        default:
+            return prevAmount;
+    }
 }
 
 bool SM64AP_CheckedLoc(int x) {

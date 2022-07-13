@@ -984,7 +984,8 @@ u32 get_door_save_file_flag(struct Object *door) {
 }
 
 u32 interact_door(struct MarioState *m, UNUSED u32 interactType, struct Object *o) {
-    s16 requiredNumStars = o->oBehParams >> 24;
+    s16 orignumstars = o->oBehParams >> 24;
+    s16 requiredNumStars = SM64AP_GetRequiredStars(orignumstars);
     s16 numStars = save_file_get_total_star_count(gCurrSaveFileNum - 1, COURSE_MIN - 1, COURSE_MAX - 1);
 
     if (m->action == ACT_WALKING || m->action == ACT_DECELERATING) {
@@ -1015,7 +1016,7 @@ u32 interact_door(struct MarioState *m, UNUSED u32 interactType, struct Object *
         } else if (!sDisplayingDoorText) {
             u32 text = DIALOG_022 << 16;
 
-            switch (requiredNumStars) {
+            switch (orignumstars) {
                 case 1:
                     text = DIALOG_024 << 16;
                     break;
@@ -1036,12 +1037,12 @@ u32 interact_door(struct MarioState *m, UNUSED u32 interactType, struct Object *
                     break;
             }
 
-            text += requiredNumStars - numStars;
+            text += requiredNumStars;
 
             sDisplayingDoorText = TRUE;
             return set_mario_action(m, ACT_READING_AUTOMATIC_DIALOG, text);
         }
-    } else if (m->action == ACT_IDLE && sDisplayingDoorText == TRUE && requiredNumStars == 70) {
+    } else if (m->action == ACT_IDLE && sDisplayingDoorText == TRUE && orignumstars == 70) {
         m->interactObj = o;
         m->usedObj = o;
         return set_mario_action(m, ACT_ENTERING_STAR_DOOR, should_push_or_pull_door(m, o));

@@ -29,7 +29,7 @@ extern "C" void SM64AP_InitSP(const char*);
 
 // Local Stars, Keys and Caps
 extern "C" int SM64AP_GetStars();
-extern "C" int SM64AP_StarsToFinish();
+extern "C" int SM64AP_GetRequiredStars(int);
 extern "C" u32 SM64AP_CourseStarFlags(s32);
 extern "C" void SM64AP_RedirectWarp(s16*,s16*,s8*,s16*,s16*,int);
 extern "C" int SM64AP_CourseToTTC();
@@ -55,7 +55,7 @@ extern "C" void SM64AP_StoryComplete();
 void SM64AP_InitMW(const char*, const char*, const char*);
 void SM64AP_InitSP(const char*);
 int SM64AP_GetStars();
-int SM64AP_StarsToFinish();
+int SM64AP_GetRequiredStars(int);
 u32 SM64AP_CourseStarFlags(s32);
 void SM64AP_RedirectWarp(s16*,s16*,s8*,s16*,s16*,int);
 int SM64AP_CourseToTTC();
