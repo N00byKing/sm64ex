@@ -234,6 +234,8 @@ void SM64AP_ResetItems() {
 }
 
 void SM64AP_GenericInit() {
+    AP_NetworkVersion version = {0,3,0};
+    AP_SetClientVersion(&version);
     AP_SetDeathLinkSupported(true);
     AP_SetItemClearCallback(&SM64AP_ResetItems);
     AP_SetLocationCheckedCallback(&SM64AP_CheckLocation);
