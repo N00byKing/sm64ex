@@ -21,7 +21,6 @@ extern "C" {
 
 #define SM64AP_NUM_LOCS 215
 
-
 #ifdef __cplusplus
 //Init
 extern "C" void SM64AP_InitMW(const char*, const char*, const char*);

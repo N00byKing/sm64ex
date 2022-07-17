@@ -35,6 +35,8 @@ std::map<int,int> map_courseidx_coursenum;
 std::map<int,int> map_coursenum_courseidx;
 std::map<int,int> map_warpnodeid_entranceid;
 
+int sm64_exit_from_destination;
+
 void SM64AP_RecvItem(int idx, bool notify) {
     switch (idx) {
         case SM64AP_ITEMID_STAR:
@@ -160,6 +162,7 @@ void SM64AP_RedirectWarp(s16* curLevel, s16* destLevel, s8* curArea, s16* destAr
         } else {
             destination = map_entrances.at(map_warpnodeid_entranceid.at(warpNode_id));
         }
+        sm64_exit_from_destination = destination;
         *destLevel = map_courseidx_coursenum.at(destination/10); // Cuts off Area Info
         *destArea = destination % 10; // Cuts off Level Info
         *destWarpNode = 0x0A;
@@ -168,9 +171,7 @@ void SM64AP_RedirectWarp(s16* curLevel, s16* destLevel, s8* curArea, s16* destAr
     
     if ((*destLevel == LEVEL_CASTLE || *destLevel == LEVEL_CASTLE_COURTYARD) && map_coursenum_courseidx.count(*curLevel)) {
         if (*destLevel == LEVEL_CASTLE && (*destWarpNode == 0x1F || *destWarpNode == 0x00)) return; //Exit Course, Inter-Case warp
-        if (*curLevel == LEVEL_COTMC) *curLevel = LEVEL_HMC;
-        int orig_destination = map_coursenum_courseidx.at(*curLevel)*10 + *curArea;
-        int lvl = map_exits.at(orig_destination) >= 13 ? map_exits.at(orig_destination) - 1 : map_exits.at(orig_destination);
+        int lvl = map_exits.at(sm64_exit_from_destination) >= 13 ? map_exits.at(sm64_exit_from_destination) - 1 : map_exits.at(sm64_exit_from_destination);
         int exit = map_courseidx_coursenum.at(lvl);
         if (exit == LEVEL_BBH) {
             *destLevel = LEVEL_CASTLE_COURTYARD;
