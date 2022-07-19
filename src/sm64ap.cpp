@@ -35,7 +35,8 @@ std::map<int,int> map_courseidx_coursenum;
 std::map<int,int> map_coursenum_courseidx;
 std::map<int,int> map_warpnodeid_entranceid;
 
-int sm64_exit_from_destination;
+int sm64_exit_return_to;
+int sm64_exit_orig_entrancelvl;
 
 void SM64AP_RecvItem(int idx, bool notify) {
     switch (idx) {
@@ -84,101 +85,105 @@ u32 SM64AP_CourseStarFlags(s32 courseIdx) {
     return starflags;
 }
 
-void setCourseNodeAndArea(int coursenum, s16* oldnode, s16* oldarea) {
-    bool isDeathWarp = *oldnode >= 64 || *oldnode == 0x0B;
+void setCourseNodeAndArea(int coursenum, s16* oldnode, bool isDeathWarp) {
     switch (coursenum) {
         case LEVEL_BOB:
             *oldnode = isDeathWarp ? 0x64 : 0x32;
-            *oldarea = 0x01;
             return;
         case LEVEL_CCM:
             *oldnode = isDeathWarp ? 0x65 : 0x33;
-            *oldarea = 0x01;
             return;
         case LEVEL_WF:
             *oldnode = isDeathWarp ? 0x66 : 0x34;
-            *oldarea = 0x01;
             return;
         case LEVEL_JRB:
             *oldnode = isDeathWarp ? 0x67 : 0x35;
-            *oldarea = 0x01;
             return;
         case LEVEL_BBH:
             *oldnode = isDeathWarp ? 0x0B : 0x0A;
-            *oldarea = 0x01;
             return;
         case LEVEL_LLL:
             *oldnode = isDeathWarp ? 0x64 : 0x32;
-            *oldarea = 0x03;
             return;
         case LEVEL_SSL:
             *oldnode = isDeathWarp ? 0x65 : 0x33;
-            *oldarea = 0x03;
             return;
         case LEVEL_HMC:
             *oldnode = isDeathWarp ? 0x66 : 0x34;
-            *oldarea = 0x03;
             return;
         case LEVEL_DDD:
             *oldnode = isDeathWarp ? 0x67 : 0x35;
-            *oldarea = 0x03;
             return;
         case LEVEL_WDW:
             *oldnode = isDeathWarp ? 0x64 : 0x32;
-            *oldarea = 0x02;
             return;
         case LEVEL_THI:
             *oldnode = isDeathWarp ? 0x65 : 0x33;
-            *oldarea = 0x02;
             return;
         case LEVEL_TTM:
             *oldnode = isDeathWarp ? 0x66 : 0x34;
-            *oldarea = 0x02;
             return;
         case LEVEL_TTC:
             *oldnode = isDeathWarp ? 0x67 : 0x35;
-            *oldarea = 0x02;
             return;
         case LEVEL_SL:
             *oldnode = isDeathWarp ? 0x68 : 0x36;
-            *oldarea = 0x02;
             return;
         case LEVEL_RR:
             *oldnode = isDeathWarp ? 0x6C : 0x3A;
-            *oldarea = 0x02;
             return;
+        case LEVEL_PSS:
+        case LEVEL_TOTWC:
+            *oldnode = isDeathWarp ? 0x21 : 0x20;
+            return;
+        case LEVEL_SA:
+            *oldnode = isDeathWarp ? 0x28 : 0x27;
+            return;
+        case LEVEL_BITDW:
+            *oldnode = isDeathWarp ? 0x25 : 0x24;
+            return;
+        case LEVEL_VCUTM:
+            *oldnode = isDeathWarp ? 0x06 : 0x07;
+            return;
+        case LEVEL_BITFS:
+            *oldnode = isDeathWarp ? 0x68 : 0x36;
+            return;
+        case LEVEL_WMOTR:
+            *oldnode = isDeathWarp ? 0x6D : 0x38;
         default:
             return;
     }
 }
 
-void SM64AP_RedirectWarp(s16* curLevel, s16* destLevel, s8* curArea, s16* destArea, s16* destWarpNode, int warpNode_id) {
-    if (map_warpnodeid_entranceid.count(warpNode_id) || (*destLevel != LEVEL_CASTLE && *destLevel != LEVEL_CASTLE_COURTYARD && warpNode_id == 0x2A)) {
+void SM64AP_RedirectWarp(s16* curLevel, s16* destLevel, s8* curArea, s16* destArea, s16* destWarpNode, int warpNode_id, bool isDeathWarp) {
+    if ((*curLevel == LEVEL_CASTLE || *curLevel == LEVEL_CASTLE_COURTYARD || *curLevel == LEVEL_CASTLE_GROUNDS || *curLevel == LEVEL_HMC) && 
+         *destLevel != LEVEL_CASTLE && *destLevel != LEVEL_CASTLE_COURTYARD && *destLevel != LEVEL_CASTLE_GROUNDS) {
         if (sm64_clockaction) *sm64_clockaction = 5;
         int destination;
-        if (warpNode_id == 0x2A) { // HMC or RR
-            int entrance = map_coursenum_courseidx[*destLevel] >= 13 ? map_coursenum_courseidx[*destLevel] + 1 : map_coursenum_courseidx[*destLevel];
-            destination = map_entrances.at(entrance);
-        } else {
-            destination = map_entrances.at(map_warpnodeid_entranceid.at(warpNode_id));
+        switch (*destLevel) {
+            case LEVEL_COTMC:
+                destination = map_entrances[281];
+                break;
+            default:
+                if (*curLevel == LEVEL_HMC) return; // Safety Check: If in HMC only relevant warp is to COTMC
+                destination = map_entrances[*destLevel * 10 + *destArea];
+                break;
         }
-        sm64_exit_from_destination = destination;
-        *destLevel = map_courseidx_coursenum.at(destination/10); // Cuts off Area Info
+        if (*curLevel != LEVEL_HMC) { // HMC -> COTMC transition should not set new return point
+            sm64_exit_return_to = *curLevel * 10 + *curArea;
+            sm64_exit_orig_entrancelvl = *destLevel;
+        }
+        *destLevel = destination/10; // Cuts off Area Info
         *destArea = destination % 10; // Cuts off Level Info
         *destWarpNode = 0x0A;
         return;
     }
     
-    if ((*destLevel == LEVEL_CASTLE || *destLevel == LEVEL_CASTLE_COURTYARD) && map_coursenum_courseidx.count(*curLevel)) {
+    if ((*destLevel == LEVEL_CASTLE || *destLevel == LEVEL_CASTLE_COURTYARD || *destLevel == LEVEL_CASTLE_GROUNDS) && map_coursenum_courseidx.count(*curLevel)) {
         if (*destLevel == LEVEL_CASTLE && (*destWarpNode == 0x1F || *destWarpNode == 0x00)) return; //Exit Course, Inter-Case warp
-        int lvl = map_exits.at(sm64_exit_from_destination) >= 13 ? map_exits.at(sm64_exit_from_destination) - 1 : map_exits.at(sm64_exit_from_destination);
-        int exit = map_courseidx_coursenum.at(lvl);
-        if (exit == LEVEL_BBH) {
-            *destLevel = LEVEL_CASTLE_COURTYARD;
-        } else {
-            *destLevel = LEVEL_CASTLE;
-        }
-        setCourseNodeAndArea(exit, destWarpNode, destArea);
+        *destLevel = sm64_exit_return_to / 10;
+        *destArea = sm64_exit_return_to % 10;
+        setCourseNodeAndArea(sm64_exit_orig_entrancelvl, destWarpNode, isDeathWarp);
         return;
     }
 }
@@ -186,8 +191,8 @@ void SM64AP_RedirectWarp(s16* curLevel, s16* destLevel, s8* curArea, s16* destAr
 int SM64AP_CourseToTTC() {
     int courseidx = 0;
     for (auto itr : map_entrances) {
-        if (map_courseidx_coursenum.at(itr.second/10) == LEVEL_TTC) {
-            courseidx = itr.first >= 13 ? itr.first - 1 : itr.first;
+        if (itr.second/10 == LEVEL_TTC) {
+            courseidx = map_coursenum_courseidx[itr.first/10];
             break;
         }
     }
@@ -264,52 +269,60 @@ void SM64AP_GenericInit() {
     map_courseidx_coursenum[12] = LEVEL_THI;
     map_courseidx_coursenum[13] = LEVEL_TTC;
     map_courseidx_coursenum[14] = LEVEL_RR;
+    map_courseidx_coursenum[15] = LEVEL_PSS;
+    map_courseidx_coursenum[16] = LEVEL_SA;
+    map_courseidx_coursenum[17] = LEVEL_BITDW;
+    map_courseidx_coursenum[18] = LEVEL_TOTWC;
+    map_courseidx_coursenum[19] = LEVEL_COTMC;
+    map_courseidx_coursenum[20] = LEVEL_VCUTM;
+    map_courseidx_coursenum[21] = LEVEL_BITFS;
+    map_courseidx_coursenum[22] = LEVEL_WMOTR;
     for (auto itr : map_courseidx_coursenum) {
         map_coursenum_courseidx[itr.second] = itr.first;
     }
     map_coursenum_courseidx[LEVEL_COTMC] = 5; //Map COTMC to HMC
 
     // NOT INCLUDED: RR, HMC due to same warp node ID (Magic Num 0x2A)
-    map_warpnodeid_entranceid.insert(std::pair<int, int>(0x00,0)); // BOB
-    map_warpnodeid_entranceid.insert(std::pair<int, int>(0x01,0));
-    map_warpnodeid_entranceid.insert(std::pair<int, int>(0x02,0));
-    map_warpnodeid_entranceid.insert(std::pair<int, int>(0x03,3)); // CCM
-    map_warpnodeid_entranceid.insert(std::pair<int, int>(0x04,3));
-    map_warpnodeid_entranceid.insert(std::pair<int, int>(0x05,3));
-    map_warpnodeid_entranceid.insert(std::pair<int, int>(0x06,1)); // WF
-    map_warpnodeid_entranceid.insert(std::pair<int, int>(0x07,1));
-    map_warpnodeid_entranceid.insert(std::pair<int, int>(0x08,1));
-    map_warpnodeid_entranceid.insert(std::pair<int, int>(0x09,2)); // JRB
-    map_warpnodeid_entranceid.insert(std::pair<int, int>(0x0A,2));
-    map_warpnodeid_entranceid.insert(std::pair<int, int>(0x0B,2));
-    map_warpnodeid_entranceid.insert(std::pair<int, int>(0x0C,6)); // LLL
-    map_warpnodeid_entranceid.insert(std::pair<int, int>(0x0D,6));
-    map_warpnodeid_entranceid.insert(std::pair<int, int>(0x0E,6));
-    map_warpnodeid_entranceid.insert(std::pair<int, int>(0x0F,7)); // SSL
-    map_warpnodeid_entranceid.insert(std::pair<int, int>(0x10,7));
-    map_warpnodeid_entranceid.insert(std::pair<int, int>(0x11,7));
-    map_warpnodeid_entranceid.insert(std::pair<int, int>(0x12,5)); // HMC
-    map_warpnodeid_entranceid.insert(std::pair<int, int>(0x15,8)); // DDD
-    map_warpnodeid_entranceid.insert(std::pair<int, int>(0x16,8));
-    map_warpnodeid_entranceid.insert(std::pair<int, int>(0x17,8));
-    map_warpnodeid_entranceid.insert(std::pair<int, int>(0x18,10)); // WDW
-    map_warpnodeid_entranceid.insert(std::pair<int, int>(0x19,10));
-    map_warpnodeid_entranceid.insert(std::pair<int, int>(0x1A,10));
-    map_warpnodeid_entranceid.insert(std::pair<int, int>(0x1B,12)); // THI Huge
-    map_warpnodeid_entranceid.insert(std::pair<int, int>(0x1C,12));
-    map_warpnodeid_entranceid.insert(std::pair<int, int>(0x1D,12));
-    map_warpnodeid_entranceid.insert(std::pair<int, int>(0x1E,11)); // TTM
-    map_warpnodeid_entranceid.insert(std::pair<int, int>(0x1F,11));
-    map_warpnodeid_entranceid.insert(std::pair<int, int>(0x20,11));
-    map_warpnodeid_entranceid.insert(std::pair<int, int>(0x21,14)); // TTC
-    map_warpnodeid_entranceid.insert(std::pair<int, int>(0x22,14));
-    map_warpnodeid_entranceid.insert(std::pair<int, int>(0x23,14));
-    map_warpnodeid_entranceid.insert(std::pair<int, int>(0x24,9)); // SL
-    map_warpnodeid_entranceid.insert(std::pair<int, int>(0x25,9));
-    map_warpnodeid_entranceid.insert(std::pair<int, int>(0x26,9));
-    map_warpnodeid_entranceid.insert(std::pair<int, int>(0x27,13)); // THI Tiny
-    map_warpnodeid_entranceid.insert(std::pair<int, int>(0x28,13));
-    map_warpnodeid_entranceid.insert(std::pair<int, int>(0x29,13));
+    map_warpnodeid_entranceid[0x00] = 0; // BOB
+    map_warpnodeid_entranceid[0x01] = 0;
+    map_warpnodeid_entranceid[0x02] = 0;
+    map_warpnodeid_entranceid[0x03] = 3; // CCM
+    map_warpnodeid_entranceid[0x04] = 3;
+    map_warpnodeid_entranceid[0x05] = 3;
+    map_warpnodeid_entranceid[0x06] = 1; // WF
+    map_warpnodeid_entranceid[0x07] = 1;
+    map_warpnodeid_entranceid[0x08] = 1;
+    map_warpnodeid_entranceid[0x09] = 2; // JRB
+    map_warpnodeid_entranceid[0x0A] = 2;
+    map_warpnodeid_entranceid[0x0B] = 2;
+    map_warpnodeid_entranceid[0x0C] = 6; // LLL
+    map_warpnodeid_entranceid[0x0D] = 6;
+    map_warpnodeid_entranceid[0x0E] = 6;
+    map_warpnodeid_entranceid[0x0F] = 7; // SSL
+    map_warpnodeid_entranceid[0x10] = 7;
+    map_warpnodeid_entranceid[0x11] = 7;
+    map_warpnodeid_entranceid[0x12] = 5; // HMC
+    map_warpnodeid_entranceid[0x15] = 8; // DDD
+    map_warpnodeid_entranceid[0x16] = 8;
+    map_warpnodeid_entranceid[0x17] = 8;
+    map_warpnodeid_entranceid[0x18] = 10; // WDW
+    map_warpnodeid_entranceid[0x19] = 10;
+    map_warpnodeid_entranceid[0x1A] = 10;
+    map_warpnodeid_entranceid[0x1B] = 12; // THI Huge
+    map_warpnodeid_entranceid[0x1C] = 12;
+    map_warpnodeid_entranceid[0x1D] = 12;
+    map_warpnodeid_entranceid[0x1E] = 11; // TTM
+    map_warpnodeid_entranceid[0x1F] = 11;
+    map_warpnodeid_entranceid[0x20] = 11;
+    map_warpnodeid_entranceid[0x21] = 14; // TTC
+    map_warpnodeid_entranceid[0x22] = 14;
+    map_warpnodeid_entranceid[0x23] = 14;
+    map_warpnodeid_entranceid[0x24] = 9; // SL
+    map_warpnodeid_entranceid[0x25] = 9;
+    map_warpnodeid_entranceid[0x26] = 9;
+    map_warpnodeid_entranceid[0x27] = 13; // THI Tiny
+    map_warpnodeid_entranceid[0x28] = 13;
+    map_warpnodeid_entranceid[0x29] = 13;
 }
 
 void SM64AP_InitMW(const char* ip, const char* player_name, const char* passwd) {
