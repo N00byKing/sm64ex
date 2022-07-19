@@ -6,21 +6,24 @@
  * Initializes MIPS' physics parameters and checks if he should be active,
  * hiding him if necessary.
  */
+
+#include "sm64ap.h"
+
 void bhv_mips_init(void) {
     // Retrieve star flags for Castle Secret Stars on current save file.
     u8 starFlags;
     starFlags = save_file_get_star_flags(gCurrSaveFileNum - 1, -1);
 
     // If the player has >= 15 stars and hasn't collected first MIPS star...
-    if (save_file_get_total_star_count(gCurrSaveFileNum - 1, 0, 24) >= 15 && (starFlags & 0x08) == 0) {
+    if (save_file_get_total_star_count(gCurrSaveFileNum - 1, 0, 24) >= SM64AP_GetRequiredStars(3626171) && !SM64AP_CheckedLoc(3626171)) {
         o->oBehParams2ndByte = 0;
 #ifndef VERSION_JP
         o->oMipsForwardVelocity = 40.0f;
 #endif
     }
     // If the player has >= 50 stars and hasn't collected second MIPS star...
-    else if (save_file_get_total_star_count(gCurrSaveFileNum - 1, 0, 24) >= 50
-             && (starFlags & 0x10) == 0) {
+    else if (save_file_get_total_star_count(gCurrSaveFileNum - 1, 0, 24) >= SM64AP_GetRequiredStars(3626172)
+             && SM64AP_CheckedLoc(3626171) && !SM64AP_CheckedLoc(3626172)) {
         o->oBehParams2ndByte = 1;
 #ifndef VERSION_JP
         o->oMipsForwardVelocity = 45.0f;

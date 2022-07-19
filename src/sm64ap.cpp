@@ -26,6 +26,8 @@ int sm64_cost_firstbowserdoor = 8;
 int sm64_cost_basementdoor = 30;
 int sm64_cost_secondfloordoor = 50;
 int sm64_cost_endlessstairs = 70;
+int sm64_cost_mips1 = 15;
+int sm64_cost_mips2 = 50;
 int msg_frame_duration = 90; // 3 Secounds at 30F/s
 int cur_msg_frame_duration = msg_frame_duration;
 
@@ -215,6 +217,14 @@ void SM64AP_SetSecondFloorDoorCost(int amount) {
     sm64_cost_secondfloordoor = amount;
 }
 
+void SM64AP_SetMIPS1Cost(int amount) {
+    sm64_cost_mips1 = amount;
+}
+
+void SM64AP_SetMIPS2Cost(int amount) {
+    sm64_cost_mips2 = amount;
+}
+
 void SM64AP_SetStarsToFinish(int amount) {
     sm64_cost_endlessstairs = amount;
 }
@@ -251,6 +261,8 @@ void SM64AP_GenericInit() {
     AP_RegisterSlotDataIntCallback("FirstBowserDoorCost", &SM64AP_SetFirstBowserDoorCost);
     AP_RegisterSlotDataIntCallback("BasementDoorCost", &SM64AP_SetBasementDoorCost);
     AP_RegisterSlotDataIntCallback("SecondFloorDoorCost", &SM64AP_SetSecondFloorDoorCost);
+    AP_RegisterSlotDataIntCallback("MIPS1Cost", &SM64AP_SetMIPS1Cost);
+    AP_RegisterSlotDataIntCallback("MIPS2Cost", &SM64AP_SetMIPS2Cost);
     AP_RegisterSlotDataIntCallback("StarsToFinish", &SM64AP_SetStarsToFinish);
     AP_RegisterSlotDataMapIntIntCallback("AreaRando", &SM64AP_SetCourseMap);
 
@@ -349,18 +361,22 @@ int SM64AP_GetStars() {
     return starsCollected;
 }
 
-int SM64AP_GetRequiredStars(int prevAmount) {
-    switch (prevAmount) {
-        case 8:
+int SM64AP_GetRequiredStars(int idprx) {
+    switch (idprx) {
+        case 8: // Star Door 8
             return sm64_cost_firstbowserdoor;
-        case 30:
+        case 30: // Star Door 30
             return sm64_cost_basementdoor;
-        case 50:
+        case 50: // Star Door 50
             return sm64_cost_secondfloordoor;
-        case 70:
+        case 70: // Star Door 70
             return sm64_cost_endlessstairs;
+        case 3626171: // MIPS 1
+            return sm64_cost_mips1;
+        case 3626172: // MIPS 2
+            return sm64_cost_mips2;
         default:
-            return prevAmount;
+            return idprx;
     }
 }
 
