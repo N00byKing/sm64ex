@@ -8,7 +8,6 @@ extern "C" {
     #include "game/level_update.h"
 }
 
-#include <deque>
 #include <string>
 #include <vector>
 #include <map>
@@ -32,10 +31,8 @@ int msg_frame_duration = 90; // 3 Secounds at 30F/s
 int cur_msg_frame_duration = msg_frame_duration;
 
 std::map<int,int> map_entrances;
-std::map<int,int> map_exits;
 std::map<int,int> map_courseidx_coursenum;
 std::map<int,int> map_coursenum_courseidx;
-std::map<int,int> map_warpnodeid_entranceid;
 
 int sm64_exit_return_to;
 int sm64_exit_orig_entrancelvl;
@@ -87,77 +84,79 @@ u32 SM64AP_CourseStarFlags(s32 courseIdx) {
     return starflags;
 }
 
-void setCourseNodeAndArea(int coursenum, s16* oldnode, bool isDeathWarp) {
+void setCourseNodeAndArea(int coursenum, s16* oldnode, bool isDeathWarp, int warpOp) {
     switch (coursenum) {
         case LEVEL_BOB:
-            *oldnode = isDeathWarp ? 0x64 : 0x32;
+            *oldnode = (isDeathWarp || warpOp != WARP_OP_STAR_EXIT) ? 0x64 : 0x32;
             return;
         case LEVEL_CCM:
-            *oldnode = isDeathWarp ? 0x65 : 0x33;
+            *oldnode = (isDeathWarp || warpOp != WARP_OP_STAR_EXIT) ? 0x65 : 0x33;
             return;
         case LEVEL_WF:
-            *oldnode = isDeathWarp ? 0x66 : 0x34;
+            *oldnode = (isDeathWarp || warpOp != WARP_OP_STAR_EXIT) ? 0x66 : 0x34;
             return;
         case LEVEL_JRB:
-            *oldnode = isDeathWarp ? 0x67 : 0x35;
+            *oldnode = (isDeathWarp || warpOp != WARP_OP_STAR_EXIT) ? 0x67 : 0x35;
             return;
         case LEVEL_BBH:
-            *oldnode = isDeathWarp ? 0x0B : 0x0A;
+            *oldnode = (isDeathWarp || warpOp != WARP_OP_STAR_EXIT) ? 0x0B : 0x0A;
             return;
         case LEVEL_LLL:
-            *oldnode = isDeathWarp ? 0x64 : 0x32;
+            *oldnode = (isDeathWarp || warpOp != WARP_OP_STAR_EXIT) ? 0x64 : 0x32;
             return;
         case LEVEL_SSL:
-            *oldnode = isDeathWarp ? 0x65 : 0x33;
+            *oldnode = (isDeathWarp || warpOp != WARP_OP_STAR_EXIT) ? 0x65 : 0x33;
             return;
         case LEVEL_HMC:
-            *oldnode = isDeathWarp ? 0x66 : 0x34;
+            *oldnode = (isDeathWarp || warpOp != WARP_OP_STAR_EXIT) ? 0x66 : 0x34;
             return;
         case LEVEL_DDD:
-            *oldnode = isDeathWarp ? 0x67 : 0x35;
+            *oldnode = (isDeathWarp || warpOp != WARP_OP_STAR_EXIT) ? 0x67 : 0x35;
             return;
         case LEVEL_WDW:
-            *oldnode = isDeathWarp ? 0x64 : 0x32;
+            *oldnode = (isDeathWarp || warpOp != WARP_OP_STAR_EXIT) ? 0x64 : 0x32;
             return;
         case LEVEL_THI:
-            *oldnode = isDeathWarp ? 0x65 : 0x33;
+            *oldnode = (isDeathWarp || warpOp != WARP_OP_STAR_EXIT) ? 0x65 : 0x33;
             return;
         case LEVEL_TTM:
-            *oldnode = isDeathWarp ? 0x66 : 0x34;
+            *oldnode = (isDeathWarp || warpOp != WARP_OP_STAR_EXIT) ? 0x66 : 0x34;
             return;
         case LEVEL_TTC:
-            *oldnode = isDeathWarp ? 0x67 : 0x35;
+            *oldnode = (isDeathWarp || warpOp != WARP_OP_STAR_EXIT) ? 0x67 : 0x35;
             return;
         case LEVEL_SL:
-            *oldnode = isDeathWarp ? 0x68 : 0x36;
+            *oldnode = (isDeathWarp || warpOp != WARP_OP_STAR_EXIT) ? 0x68 : 0x36;
             return;
         case LEVEL_RR:
-            *oldnode = isDeathWarp ? 0x6C : 0x3A;
+            *oldnode = (isDeathWarp || warpOp != WARP_OP_STAR_EXIT) ? 0x6C : 0x3A;
             return;
         case LEVEL_PSS:
         case LEVEL_TOTWC:
-            *oldnode = isDeathWarp ? 0x21 : 0x20;
+            *oldnode = isDeathWarp ? 0x21 : (warpOp == WARP_OP_STAR_EXIT ? 0x26: 0x20);
             return;
         case LEVEL_SA:
-            *oldnode = isDeathWarp ? 0x28 : 0x27;
+            *oldnode = (isDeathWarp || warpOp != WARP_OP_STAR_EXIT) ? 0x28 : 0x27;
             return;
         case LEVEL_BITDW:
-            *oldnode = isDeathWarp ? 0x25 : 0x24;
+        case LEVEL_BOWSER_1:
+            *oldnode = (isDeathWarp || warpOp != WARP_OP_STAR_EXIT) ? 0x25 : 0x24;
             return;
         case LEVEL_VCUTM:
-            *oldnode = isDeathWarp ? 0x06 : 0x07;
+            *oldnode = (isDeathWarp || warpOp != WARP_OP_STAR_EXIT) ? 0x06 : 0x07;
             return;
         case LEVEL_BITFS:
+        case LEVEL_BOWSER_2:
             *oldnode = isDeathWarp ? 0x68 : 0x36;
             return;
         case LEVEL_WMOTR:
-            *oldnode = isDeathWarp ? 0x6D : 0x38;
+            *oldnode = (isDeathWarp || warpOp != WARP_OP_STAR_EXIT) ? 0x6D : 0x38;
         default:
             return;
     }
 }
 
-void SM64AP_RedirectWarp(s16* curLevel, s16* destLevel, s8* curArea, s16* destArea, s16* destWarpNode, bool isDeathWarp) {
+void SM64AP_RedirectWarp(s16* curLevel, s16* destLevel, s8* curArea, s16* destArea, s16* destWarpNode, bool isDeathWarp, int warpOp) {
     if ((*curLevel == LEVEL_CASTLE || *curLevel == LEVEL_CASTLE_COURTYARD || *curLevel == LEVEL_CASTLE_GROUNDS || *curLevel == LEVEL_HMC) && 
          *destLevel != LEVEL_CASTLE && *destLevel != LEVEL_CASTLE_COURTYARD && *destLevel != LEVEL_CASTLE_GROUNDS) {
         if (sm64_clockaction) *sm64_clockaction = 5;
@@ -185,20 +184,18 @@ void SM64AP_RedirectWarp(s16* curLevel, s16* destLevel, s8* curArea, s16* destAr
         if (*destLevel == LEVEL_CASTLE && (*destWarpNode == 0x1F || *destWarpNode == 0x00)) return; //Exit Course, Inter-Case warp
         *destLevel = sm64_exit_return_to / 10;
         *destArea = sm64_exit_return_to % 10;
-        setCourseNodeAndArea(sm64_exit_orig_entrancelvl, destWarpNode, isDeathWarp);
+        setCourseNodeAndArea(sm64_exit_orig_entrancelvl, destWarpNode, isDeathWarp, warpOp);
         return;
     }
 }
 
 int SM64AP_CourseToTTC() {
-    int courseidx = 0;
+    int level = 0;
     for (auto itr : map_entrances) {
         if (itr.second/10 == LEVEL_TTC) {
-            courseidx = map_coursenum_courseidx[itr.first/10];
-            break;
+            return itr.first/10;
         }
     }
-    return courseidx;
 }
 
 void SM64AP_SetClockToTTCAction(int* action) {
@@ -231,9 +228,6 @@ void SM64AP_SetStarsToFinish(int amount) {
 
 void SM64AP_SetCourseMap(std::map<int,int> map) {
     map_entrances = map;
-    for (auto itr : map_entrances) {
-        map_exits[itr.second] = itr.first;
-    }
 }
 
 void SM64AP_ResetItems() {
@@ -289,52 +283,13 @@ void SM64AP_GenericInit() {
     map_courseidx_coursenum[20] = LEVEL_VCUTM;
     map_courseidx_coursenum[21] = LEVEL_BITFS;
     map_courseidx_coursenum[22] = LEVEL_WMOTR;
+    map_courseidx_coursenum[23] = LEVEL_BOWSER_1;
+    map_courseidx_coursenum[24] = LEVEL_BOWSER_2;
+    map_courseidx_coursenum[25] = LEVEL_BOWSER_3;
     for (auto itr : map_courseidx_coursenum) {
         map_coursenum_courseidx[itr.second] = itr.first;
     }
     map_coursenum_courseidx[LEVEL_COTMC] = 5; //Map COTMC to HMC
-
-    // NOT INCLUDED: RR, HMC due to same warp node ID (Magic Num 0x2A)
-    map_warpnodeid_entranceid[0x00] = 0; // BOB
-    map_warpnodeid_entranceid[0x01] = 0;
-    map_warpnodeid_entranceid[0x02] = 0;
-    map_warpnodeid_entranceid[0x03] = 3; // CCM
-    map_warpnodeid_entranceid[0x04] = 3;
-    map_warpnodeid_entranceid[0x05] = 3;
-    map_warpnodeid_entranceid[0x06] = 1; // WF
-    map_warpnodeid_entranceid[0x07] = 1;
-    map_warpnodeid_entranceid[0x08] = 1;
-    map_warpnodeid_entranceid[0x09] = 2; // JRB
-    map_warpnodeid_entranceid[0x0A] = 2;
-    map_warpnodeid_entranceid[0x0B] = 2;
-    map_warpnodeid_entranceid[0x0C] = 6; // LLL
-    map_warpnodeid_entranceid[0x0D] = 6;
-    map_warpnodeid_entranceid[0x0E] = 6;
-    map_warpnodeid_entranceid[0x0F] = 7; // SSL
-    map_warpnodeid_entranceid[0x10] = 7;
-    map_warpnodeid_entranceid[0x11] = 7;
-    map_warpnodeid_entranceid[0x12] = 5; // HMC
-    map_warpnodeid_entranceid[0x15] = 8; // DDD
-    map_warpnodeid_entranceid[0x16] = 8;
-    map_warpnodeid_entranceid[0x17] = 8;
-    map_warpnodeid_entranceid[0x18] = 10; // WDW
-    map_warpnodeid_entranceid[0x19] = 10;
-    map_warpnodeid_entranceid[0x1A] = 10;
-    map_warpnodeid_entranceid[0x1B] = 12; // THI Huge
-    map_warpnodeid_entranceid[0x1C] = 12;
-    map_warpnodeid_entranceid[0x1D] = 12;
-    map_warpnodeid_entranceid[0x1E] = 11; // TTM
-    map_warpnodeid_entranceid[0x1F] = 11;
-    map_warpnodeid_entranceid[0x20] = 11;
-    map_warpnodeid_entranceid[0x21] = 14; // TTC
-    map_warpnodeid_entranceid[0x22] = 14;
-    map_warpnodeid_entranceid[0x23] = 14;
-    map_warpnodeid_entranceid[0x24] = 9; // SL
-    map_warpnodeid_entranceid[0x25] = 9;
-    map_warpnodeid_entranceid[0x26] = 9;
-    map_warpnodeid_entranceid[0x27] = 13; // THI Tiny
-    map_warpnodeid_entranceid[0x28] = 13;
-    map_warpnodeid_entranceid[0x29] = 13;
 }
 
 void SM64AP_InitMW(const char* ip, const char* player_name, const char* passwd) {

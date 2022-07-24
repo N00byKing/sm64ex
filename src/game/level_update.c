@@ -616,7 +616,7 @@ s16 music_changed_through_warp(s16 arg) {
  */
 
 void initiate_warp(s16 destLevel, s16 destArea, s16 destWarpNode, s32 arg3) {
-    SM64AP_RedirectWarp(&gCurrLevelNum, &destLevel, &(gCurrentArea->index), &destArea, &destWarpNode, sSourceWarpNodeId == WARP_NODE_DEATH);
+    SM64AP_RedirectWarp(&gCurrLevelNum, &destLevel, &(gCurrentArea->index), &destArea, &destWarpNode, sSourceWarpNodeId == WARP_NODE_DEATH, sDelayedWarpOp);
     if (destWarpNode >= WARP_NODE_CREDITS_MIN) {
         sWarpDest.type = WARP_TYPE_CHANGE_LEVEL;
     } else if (destLevel != gCurrLevelNum) {
