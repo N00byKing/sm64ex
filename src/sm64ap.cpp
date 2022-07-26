@@ -157,6 +157,7 @@ void setCourseNodeAndArea(int coursenum, s16* oldnode, bool isDeathWarp, int war
 }
 
 void SM64AP_RedirectWarp(s16* curLevel, s16* destLevel, s8* curArea, s16* destArea, s16* destWarpNode, bool isDeathWarp, int warpOp) {
+    if (*destLevel == LEVEL_BOWSER_3) return; // Dont play around with this one
     if ((*curLevel == LEVEL_CASTLE || *curLevel == LEVEL_CASTLE_COURTYARD || *curLevel == LEVEL_CASTLE_GROUNDS || *curLevel == LEVEL_HMC) && 
          *destLevel != LEVEL_CASTLE && *destLevel != LEVEL_CASTLE_COURTYARD && *destLevel != LEVEL_CASTLE_GROUNDS) {
         if (sm64_clockaction) *sm64_clockaction = 5;
