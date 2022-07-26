@@ -246,7 +246,7 @@ void SM64AP_ResetItems() {
 }
 
 void SM64AP_GenericInit() {
-    AP_NetworkVersion version = {0,3,0};
+    AP_NetworkVersion version = {0,3,4};
     AP_SetClientVersion(&version);
     AP_SetDeathLinkSupported(true);
     AP_SetItemClearCallback(&SM64AP_ResetItems);
