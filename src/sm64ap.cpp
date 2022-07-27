@@ -12,6 +12,8 @@ extern "C" {
 #include <vector>
 #include <map>
 
+#define WARP_NODE_CREDITS_MIN 0xF8 // level_update.c
+
 int starsCollected = 0;
 bool sm64_locations[SM64AP_NUM_LOCS];
 bool sm64_have_key1 = false;
@@ -157,7 +159,9 @@ void setCourseNodeAndArea(int coursenum, s16* oldnode, bool isDeathWarp, int war
 }
 
 void SM64AP_RedirectWarp(s16* curLevel, s16* destLevel, s8* curArea, s16* destArea, s16* destWarpNode, bool isDeathWarp, int warpOp) {
-    if (*destLevel == LEVEL_BOWSER_3 || *curLevel == LEVEL_BOWSER_3) return; // Dont play around with this one
+    if (*destLevel == LEVEL_BOWSER_3 || *curLevel == LEVEL_BOWSER_3 ||
+        *destLevel == LEVEL_BITS || *curLevel == LEVEL_BITS) return; // Dont play around with this one
+    if (*destWarpNode >= WARP_NODE_CREDITS_MIN) return; // Credit Warps
     if ((*curLevel == LEVEL_CASTLE || *curLevel == LEVEL_CASTLE_COURTYARD || *curLevel == LEVEL_CASTLE_GROUNDS || *curLevel == LEVEL_HMC) && 
          *destLevel != LEVEL_CASTLE && *destLevel != LEVEL_CASTLE_COURTYARD && *destLevel != LEVEL_CASTLE_GROUNDS) {
         if (sm64_clockaction) *sm64_clockaction = 5;
@@ -197,6 +201,7 @@ int SM64AP_CourseToTTC() {
             return itr.first/10;
         }
     }
+    return -1; // Error Cond
 }
 
 void SM64AP_SetClockToTTCAction(int* action) {
