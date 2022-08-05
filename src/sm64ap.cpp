@@ -149,7 +149,7 @@ void setCourseNodeAndArea(int coursenum, s16* oldnode, bool isDeathWarp, int war
             return;
         case LEVEL_BITFS:
         case LEVEL_BOWSER_2:
-            *oldnode = isDeathWarp ? 0x68 : 0x36;
+            *oldnode = (isDeathWarp || warpOp != WARP_OP_STAR_EXIT) ? 0x68 : 0x36;
             return;
         case LEVEL_WMOTR:
             *oldnode = (isDeathWarp || warpOp != WARP_OP_STAR_EXIT) ? 0x6D : 0x38;
