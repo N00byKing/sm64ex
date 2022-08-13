@@ -1,5 +1,6 @@
 #include "sm64ap.h"
 #include "Archipelago.h"
+#include <cstdio>
 
 extern "C" {
     #include "game/print.h"
@@ -252,7 +253,7 @@ void SM64AP_ResetItems() {
 }
 
 void SM64AP_GenericInit() {
-    AP_NetworkVersion version = {0,3,0};
+    AP_NetworkVersion version = {0,3,5};
     AP_SetClientVersion(&version);
     AP_SetDeathLinkSupported(true);
     AP_SetItemClearCallback(&SM64AP_ResetItems);
@@ -393,9 +394,21 @@ void SM64AP_DeathLinkSend() {
 
 void SM64AP_PrintNext() {
     if (!AP_IsMessagePending()) return;
-    std::vector<std::string> msg = AP_GetLatestMessage();
-    for (int i = 0; i < msg.size(); i++) {
-        print_text(GFX_DIMENSIONS_FROM_LEFT_EDGE(0), (msg.size()-i)*20, msg.at(i).c_str());
+    AP_Message* msg = AP_GetLatestMessage();
+    if (msg->type == AP_MessageType::ItemSend) {
+        AP_ItemSendMessage* o_msg = static_cast<AP_ItemSendMessage*>(msg);
+        print_text(GFX_DIMENSIONS_FROM_LEFT_EDGE(0), (1-0)*20, (o_msg->item + std::string(" was sent")).c_str());
+        print_text(GFX_DIMENSIONS_FROM_LEFT_EDGE(0), (1-1)*20, (std::string("to ") + o_msg->recvPlayer).c_str());
+    } else if (msg->type == AP_MessageType::ItemRecv) {
+        AP_ItemRecvMessage* o_msg = static_cast<AP_ItemRecvMessage*>(msg);
+        print_text(GFX_DIMENSIONS_FROM_LEFT_EDGE(0), (1-0)*20, (std::string("Got ") + o_msg->item).c_str());
+        print_text(GFX_DIMENSIONS_FROM_LEFT_EDGE(0), (1-1)*20, (std::string("From ") + o_msg->sendPlayer).c_str());
+    } else if (msg->type == AP_MessageType::Countdown) {
+        cur_msg_frame_duration = std::min(cur_msg_frame_duration, 30);
+        AP_CountdownMessage* o_msg = static_cast<AP_CountdownMessage*>(msg);
+        print_text(GFX_DIMENSIONS_FROM_LEFT_EDGE(0) + SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2, std::to_string(o_msg->timer).c_str());
+    } else {
+        //print_text(GFX_DIMENSIONS_FROM_LEFT_EDGE(0), (1-0)*20, msg->text.c_str());
     }
     if (cur_msg_frame_duration > 0) {
         cur_msg_frame_duration--;
