@@ -168,6 +168,10 @@ void SM64AP_RedirectWarp(s16* curLevel, s16* destLevel, s8* curArea, s16* destAr
         if (sm64_clockaction) *sm64_clockaction = 5;
         int destination;
         switch (*destLevel) {
+            case LEVEL_LLL:
+            case LEVEL_SSL:
+                destination = map_entrances[*destLevel * 10 + 1];
+                break;
             case LEVEL_COTMC:
                 destination = map_entrances[281];
                 break;
