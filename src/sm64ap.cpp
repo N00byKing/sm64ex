@@ -37,6 +37,8 @@ std::map<int,int> map_entrances;
 std::map<int,int> map_courseidx_coursenum;
 std::map<int,int> map_coursenum_courseidx;
 
+std::map<int,int> map_boxid_locid;
+
 int sm64_exit_return_to;
 int sm64_exit_orig_entrancelvl;
 
@@ -301,6 +303,36 @@ void SM64AP_GenericInit() {
         map_coursenum_courseidx[itr.second] = itr.first;
     }
     map_coursenum_courseidx[LEVEL_COTMC] = 5; //Map COTMC to HMC
+    
+    map_boxid_locid[LEVEL_CCM*10 + 1] = 3626215;
+    map_boxid_locid[LEVEL_CCM*10 + 2] = 3626216;
+    map_boxid_locid[LEVEL_CCM*10 + 3] = 3626217;
+    map_boxid_locid[LEVEL_BBH*10 + 1] = 3626218;
+    map_boxid_locid[LEVEL_HMC*10 + 1] = 3626219;
+    map_boxid_locid[LEVEL_HMC*10 + 2] = 3626220;
+    map_boxid_locid[LEVEL_SSL*10 + 1] = 3626221;
+    map_boxid_locid[LEVEL_SSL*10 + 2] = 3626222;
+    map_boxid_locid[LEVEL_SSL*10 + 3] = 3626223;
+    map_boxid_locid[LEVEL_SL*10 + 1] = 3626224;
+    map_boxid_locid[LEVEL_SL*10 + 2] = 3626225;
+    map_boxid_locid[LEVEL_WDW*10 + 2] = 3626226; // Uses first bit as flag for something, makes mario invisible :/
+    map_boxid_locid[LEVEL_TTM*10 + 1] = 3626227;
+    map_boxid_locid[LEVEL_THI*10 + 1] = 3626228;
+    map_boxid_locid[LEVEL_THI*10 + 2] = 3626229;
+    map_boxid_locid[LEVEL_THI*10 + 3] = 3626230;
+    map_boxid_locid[LEVEL_TTC*10 + 1] = 3626231;
+    map_boxid_locid[LEVEL_TTC*10 + 2] = 3626232;
+    map_boxid_locid[LEVEL_RR*10 + 1] = 3626233;
+    map_boxid_locid[LEVEL_RR*10 + 2] = 3626234;
+    map_boxid_locid[LEVEL_RR*10 + 3] = 3626235;
+    map_boxid_locid[LEVEL_BITDW*10 + 1] = 3626236;
+    map_boxid_locid[LEVEL_BITDW*10 + 2] = 3626237;
+    map_boxid_locid[LEVEL_BITFS*10 + 1] = 3626238;
+    map_boxid_locid[LEVEL_BITFS*10 + 2] = 3626239;
+    map_boxid_locid[LEVEL_BITS*10 + 1] = 3626240;
+    map_boxid_locid[LEVEL_COTMC*10 + 1] = 3626241;
+    map_boxid_locid[LEVEL_VCUTM*10 + 1] = 3626242;
+    map_boxid_locid[LEVEL_WMOTR*10 + 1] = 3626243;
 }
 
 void SM64AP_InitMW(const char* ip, const char* player_name, const char* passwd) {
@@ -315,8 +347,12 @@ void SM64AP_InitSP(const char * filename) {
     AP_Start();
 }
 
-void SM64AP_SendItem(int idxNoOffset) {
-    AP_SendItem(idxNoOffset + SM64AP_ID_OFFSET);
+void SM64AP_SendByBoxID(int id) {
+    SM64AP_SendItem(map_boxid_locid[id]);
+}
+
+void SM64AP_SendItem(int idx) {
+    AP_SendItem(idx);
 }
 
 void SM64AP_StoryComplete() {

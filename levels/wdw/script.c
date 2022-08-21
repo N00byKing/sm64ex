@@ -118,6 +118,7 @@ const LevelScript level_wdw_entry[] = {
         INSTANT_WARP(/*index*/ 0, /*destArea*/ 1, /*displace*/ 0, 0, 0),
         TERRAIN(/*terrainData*/ wdw_seg7_area_2_collision),
         MACRO_OBJECTS(/*objList*/ wdw_seg7_area_2_macro_objs),
+        OBJECT(/*model*/ MODEL_EXCLAMATION_BOX, /*pos*/ 1655, -2160, -1293, /*angle*/ 0, 0, 0, /*behParam*/ (0x14040000 + LEVEL_WDW*10 + 2), /*beh*/ bhvExclamationBox),
         SET_BACKGROUND_MUSIC(/*settingsPreset*/ 0x0003, /*seq*/ SEQ_LEVEL_UNDERGROUND),
         TERRAIN_TYPE(/*terrainType*/ TERRAIN_WATER),
     END_AREA(),

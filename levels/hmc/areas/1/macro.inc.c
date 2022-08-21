@@ -46,7 +46,6 @@ const MacroObject hmc_seg7_macro_objs[] = {
     MACRO_OBJECT_WITH_BEH_PARAM(/*preset*/ macro_wooden_signpost,             /*yaw*/   0, /*pos*/  5439,     0,  2785, /*behParam*/ DIALOG_125),
     MACRO_OBJECT_WITH_BEH_PARAM(/*preset*/ macro_wooden_signpost,             /*yaw*/   0, /*pos*/ -3184,     0,   699, /*behParam*/ DIALOG_126),
     MACRO_OBJECT_WITH_BEH_PARAM(/*preset*/ macro_wooden_signpost,             /*yaw*/ 270, /*pos*/   500, -4300,  3644, /*behParam*/ DIALOG_127),
-    MACRO_OBJECT(/*preset*/ macro_box_1up,                     /*yaw*/   0, /*pos*/ -4960,  2700,    80),
     MACRO_OBJECT_WITH_BEH_PARAM(/*preset*/ macro_wooden_signpost,             /*yaw*/ 180, /*pos*/  2006,     0,  6713, /*behParam*/ DIALOG_124),
     MACRO_OBJECT_WITH_BEH_PARAM(/*preset*/ macro_wooden_signpost,             /*yaw*/   0, /*pos*/  2510,     0,  2800, /*behParam*/ DIALOG_140),
     MACRO_OBJECT_WITH_BEH_PARAM(/*preset*/ macro_wooden_signpost,             /*yaw*/  90, /*pos*/   510,     0,  5380, /*behParam*/ DIALOG_139),
@@ -83,6 +82,5 @@ const MacroObject hmc_seg7_macro_objs[] = {
     MACRO_OBJECT(/*preset*/ macro_flamethrower,                /*yaw*/   0, /*pos*/ -2900,  1620,  4640),
     MACRO_OBJECT(/*preset*/ macro_fire_spitter,                /*yaw*/   0, /*pos*/  1420,  -380, -7040),
     MACRO_OBJECT(/*preset*/ macro_fire_spitter,                /*yaw*/   0, /*pos*/  2500,  -380, -7740),
-    MACRO_OBJECT(/*preset*/ macro_box_1up_running_away,        /*yaw*/   0, /*pos*/ -2700,  2100, -6400),
     MACRO_OBJECT_END(),
 };

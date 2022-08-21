@@ -54,6 +54,7 @@ const LevelScript level_cotmc_entry[] = {
         JUMP_LINK(script_func_local_1),
         TERRAIN(/*terrainData*/ cotmc_seg7_collision_level),
         MACRO_OBJECTS(/*objList*/ cotmc_seg7_macro_objs),
+        OBJECT(/*model*/ MODEL_EXCLAMATION_BOX, /*pos*/ -20,   180,  2060, /*angle*/ 0, 0, 0, /*behParam*/ (0x14040000 + LEVEL_COTMC*10 + 1), /*beh*/ bhvExclamationBox),
         SHOW_DIALOG(/*index*/ 0x00, DIALOG_130),
         SET_BACKGROUND_MUSIC(/*settingsPreset*/ 0x0004, /*seq*/ SEQ_LEVEL_UNDERGROUND),
         TERRAIN_TYPE(/*terrainType*/ TERRAIN_STONE),

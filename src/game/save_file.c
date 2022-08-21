@@ -510,14 +510,14 @@ void save_file_collect_star_or_key(s16 coinScore, s16 starIndex) {
             if (!(save_file_get_flags() & (SAVE_FLAG_HAVE_KEY_1 | SAVE_FLAG_UNLOCKED_BASEMENT_DOOR))) {
                 save_file_set_flags(SAVE_FLAG_HAVE_KEY_1);
             }
-            SM64AP_SendItem(SM64AP_ID_KEY1 - SM64AP_ID_OFFSET);
+            SM64AP_SendItem(SM64AP_ID_KEY1);
             break;
 
         case LEVEL_BOWSER_2:
             if (!(save_file_get_flags() & (SAVE_FLAG_HAVE_KEY_2 | SAVE_FLAG_UNLOCKED_UPSTAIRS_DOOR))) {
                 save_file_set_flags(SAVE_FLAG_HAVE_KEY_2);
             }
-            SM64AP_SendItem(SM64AP_ID_KEY2 - SM64AP_ID_OFFSET);
+            SM64AP_SendItem(SM64AP_ID_KEY2);
             break;
 
         case LEVEL_BOWSER_3:
@@ -528,7 +528,7 @@ void save_file_collect_star_or_key(s16 coinScore, s16 starIndex) {
             if (!(save_file_get_star_flags(fileIndex, courseIndex) & starFlag)) {
                 save_file_set_star_flags(fileIndex, courseIndex, starFlag);
             }
-            SM64AP_SendItem((courseIndex == -1 ? (10+15-1)*7 : courseIndex*7) + starIndex);
+            SM64AP_SendItem((courseIndex == -1 ? (10+15-1)*7 : courseIndex*7) + starIndex + SM64AP_ID_OFFSET);
             break;
     }
 }
@@ -584,13 +584,13 @@ s32 save_file_get_total_star_count(s32 fileIndex, s32 minCourse, s32 maxCourse) 
 void save_file_set_flags(u32 flags) {
     switch (flags) {
         case 2:
-            SM64AP_SendItem(SM64AP_ID_WINGCAP - SM64AP_ID_OFFSET);
+            SM64AP_SendItem(SM64AP_ID_WINGCAP);
             break;
         case 4:
-            SM64AP_SendItem(SM64AP_ID_METALCAP - SM64AP_ID_OFFSET);
+            SM64AP_SendItem(SM64AP_ID_METALCAP);
             break;
         case 8:
-            SM64AP_SendItem(SM64AP_ID_VANISHCAP - SM64AP_ID_OFFSET);
+            SM64AP_SendItem(SM64AP_ID_VANISHCAP);
             break;
     }
     gSaveBuffer.files[gCurrSaveFileNum - 1][0].flags |= (flags | SAVE_FLAG_FILE_EXISTS);
@@ -667,7 +667,7 @@ s32 save_file_is_cannon_unlocked(void) {
  * Sets the cannon status to unlocked in the current course.
  */
 void save_file_set_cannon_unlocked(void) {
-    if (gCurrCourseNum <= 15 ) SM64AP_SendItem(200 + gCurrCourseNum - 1);
+    if (gCurrCourseNum <= 15 ) SM64AP_SendItem(200 + gCurrCourseNum - 1 + SM64AP_ID_OFFSET);
     gSaveBuffer.files[gCurrSaveFileNum - 1][0].courseStars[gCurrCourseNum] |= 0x80;
     gSaveBuffer.files[gCurrSaveFileNum - 1][0].flags |= SAVE_FLAG_FILE_EXISTS;
     gSaveFileModified = TRUE;

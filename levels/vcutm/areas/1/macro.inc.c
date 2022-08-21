@@ -1,6 +1,5 @@
 // 0x0700AB0C - 0x0700AC44
 const MacroObject vcutm_seg7_macro_objs[] = {
-    MACRO_OBJECT(/*preset*/ macro_box_1up,              /*yaw*/   0, /*pos*/ -3434,  2951, -3076),
     MACRO_OBJECT(/*preset*/ macro_1up,                  /*yaw*/   0, /*pos*/ -4711,  1594, -2532),
     MACRO_OBJECT(/*preset*/ macro_1up,                  /*yaw*/   0, /*pos*/ -5952,  -393, -1141),
     MACRO_OBJECT(/*preset*/ macro_box_vanish_cap,       /*yaw*/   0, /*pos*/  3980,   300, -6220),

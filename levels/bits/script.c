@@ -101,6 +101,7 @@ const LevelScript level_bits_entry[] = {
         JUMP_LINK(script_func_local_2),
         TERRAIN(/*terrainData*/ bits_seg7_collision_level),
         MACRO_OBJECTS(/*objList*/ bits_seg7_macro_objs),
+        OBJECT(/*model*/ MODEL_EXCLAMATION_BOX, /*pos*/ 4100, -1050, -1800, /*angle*/ 0, 0, 0, /*behParam*/ (0x14040000 + LEVEL_BITS*10 + 1), /*beh*/ bhvExclamationBox),
         SET_BACKGROUND_MUSIC(/*settingsPreset*/ 0x0000, /*seq*/ SEQ_LEVEL_KOOPA_ROAD),
         TERRAIN_TYPE(/*terrainType*/ TERRAIN_STONE),
     END_AREA(),

@@ -110,6 +110,8 @@ const LevelScript level_hmc_entry[] = {
         JUMP_LINK(script_func_local_4),
         TERRAIN(/*terrainData*/ hmc_seg7_collision_level),
         MACRO_OBJECTS(/*objList*/ hmc_seg7_macro_objs),
+        OBJECT(/*model*/ MODEL_EXCLAMATION_BOX, /*pos*/ -4960,  2700,    80, /*angle*/ 0, 0, 0, /*behParam*/ (0x14040000 + LEVEL_HMC*10 + 1), /*beh*/ bhvExclamationBox),
+        OBJECT(/*model*/ MODEL_EXCLAMATION_BOX, /*pos*/ -2700,  2100, -6400, /*angle*/ 0, 0, 0, /*behParam*/ (0x14040000 + LEVEL_HMC*10 + 2), /*beh*/ bhvExclamationBox),
         ROOMS(/*surfaceRooms*/ hmc_seg7_rooms),
         SET_BACKGROUND_MUSIC(/*settingsPreset*/ 0x0004, /*seq*/ SEQ_LEVEL_UNDERGROUND),
         TERRAIN_TYPE(/*terrainType*/ TERRAIN_STONE),

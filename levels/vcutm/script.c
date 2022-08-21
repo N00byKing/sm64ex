@@ -63,6 +63,7 @@ const LevelScript level_vcutm_entry[] = {
         JUMP_LINK(script_func_local_2),
         TERRAIN(/*terrainData*/ vcutm_seg7_collision),
         MACRO_OBJECTS(/*objList*/ vcutm_seg7_macro_objs),
+        OBJECT(/*model*/ MODEL_EXCLAMATION_BOX, /*pos*/ -3434,  2951, -3076, /*angle*/ 0, 0, 0, /*behParam*/ (0x14040000 + LEVEL_VCUTM*10 + 1), /*beh*/ bhvExclamationBox),
         SHOW_DIALOG(/*index*/ 0x00, DIALOG_129),
         SET_BACKGROUND_MUSIC(/*settingsPreset*/ 0x0000, /*seq*/ SEQ_LEVEL_SLIDE),
         TERRAIN_TYPE(/*terrainType*/ TERRAIN_STONE),

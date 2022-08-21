@@ -35,7 +35,5 @@ const MacroObject ccm_seg7_area_1_macro_objs[] = {
     MACRO_OBJECT(/*preset*/ macro_hidden_blue_coin,          /*yaw*/   0, /*pos*/  3400,  -320, -1740),
     MACRO_OBJECT(/*preset*/ macro_recovery_heart,            /*yaw*/   0, /*pos*/  -270, -4650, -3100),
     MACRO_OBJECT(/*preset*/ macro_red_coin,                  /*yaw*/   0, /*pos*/  4408, -4550, -1534),
-    MACRO_OBJECT(/*preset*/ macro_box_1up_running_away,      /*yaw*/   0, /*pos*/ -4887, -1300, -4003),
-    MACRO_OBJECT(/*preset*/ macro_box_1up_running_away,      /*yaw*/   0, /*pos*/ -1557,  -205,  1794),
     MACRO_OBJECT_END(),
 };

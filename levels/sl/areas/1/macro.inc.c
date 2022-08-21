@@ -42,7 +42,6 @@ const MacroObject sl_seg7_area_1_macro_objs[] = {
     MACRO_OBJECT_WITH_BEH_PARAM(/*preset*/ macro_wooden_signpost,      /*yaw*/ 135, /*pos*/ -3600,  1024,  -800, /*behParam*/ DIALOG_148),
     MACRO_OBJECT(/*preset*/ macro_moneybag,             /*yaw*/   0, /*pos*/  2440,  1024,  4840),
     MACRO_OBJECT(/*preset*/ macro_moneybag,             /*yaw*/   0, /*pos*/ -2400,  1177, -4200),
-    MACRO_OBJECT(/*preset*/ macro_box_1up_running_away, /*yaw*/   0, /*pos*/ -3380,  1360, -4140),
     MACRO_OBJECT(/*preset*/ macro_box_star_4,           /*yaw*/   0, /*pos*/ -4700,  1300,  5850),
     MACRO_OBJECT(/*preset*/ macro_yellow_coin_2,        /*yaw*/   0, /*pos*/  2909,  1024,  4245),
     MACRO_OBJECT(/*preset*/ macro_yellow_coin_2,        /*yaw*/   0, /*pos*/  3418,  1024,  3554),

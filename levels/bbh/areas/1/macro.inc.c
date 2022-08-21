@@ -13,7 +13,6 @@ const MacroObject bbh_seg7_macro_objs[] = {
     MACRO_OBJECT(/*preset*/ macro_red_coin,                  /*yaw*/   0, /*pos*/  -420,   550,    60),
     MACRO_OBJECT(/*preset*/ macro_red_coin,                  /*yaw*/   0, /*pos*/  2856,    50,  2144),
     MACRO_OBJECT(/*preset*/ macro_red_coin,                  /*yaw*/   0, /*pos*/    50,   900, -1400),
-    MACRO_OBJECT(/*preset*/ macro_box_1up,                   /*yaw*/   0, /*pos*/   660,  3200,  1160),
     MACRO_OBJECT(/*preset*/ macro_blue_coin_switch,          /*yaw*/   0, /*pos*/   640,  1741,   760),
     MACRO_OBJECT(/*preset*/ macro_hidden_blue_coin,          /*yaw*/   0, /*pos*/  1400,  1840,  1100),
     MACRO_OBJECT(/*preset*/ macro_hidden_blue_coin,          /*yaw*/   0, /*pos*/  1700,  1840,  1100),

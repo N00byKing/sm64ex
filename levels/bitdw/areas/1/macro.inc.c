@@ -26,7 +26,6 @@ const MacroObject bitdw_seg7_macro_objs[] = {
     MACRO_OBJECT(/*preset*/ macro_yellow_coin_2,               /*yaw*/   0, /*pos*/ -4060,  1011,   240),
     MACRO_OBJECT_WITH_BEH_PARAM(/*preset*/ macro_circling_amp,                /*yaw*/   0, /*pos*/ -4620,  1220,  -300, /*behParam*/ 2),
     MACRO_OBJECT(/*preset*/ macro_coin_ring_horizontal,        /*yaw*/   0, /*pos*/ -4620,  1220,  -300),
-    MACRO_OBJECT(/*preset*/ macro_box_1up,                     /*yaw*/   0, /*pos*/ -4860,  1380,  -300),
     MACRO_OBJECT(/*preset*/ macro_yellow_coin,                 /*yaw*/   0, /*pos*/  -150, -1200,  3660),
     MACRO_OBJECT(/*preset*/ macro_box_three_coins,             /*yaw*/   0, /*pos*/ -5120,  1460, -2140),
     MACRO_OBJECT(/*preset*/ macro_yellow_coin,                 /*yaw*/   0, /*pos*/  4380,  2120,     0),
@@ -58,6 +57,5 @@ const MacroObject bitdw_seg7_macro_objs[] = {
     MACRO_OBJECT(/*preset*/ macro_hidden_box,                  /*yaw*/   0, /*pos*/ -7810, -3360,  4700),
     MACRO_OBJECT(/*preset*/ macro_hidden_box,                  /*yaw*/   0, /*pos*/ -7810, -3360,  4900),
     MACRO_OBJECT(/*preset*/ macro_hidden_box,                  /*yaw*/   0, /*pos*/ -3100, -3145,  4518),
-    MACRO_OBJECT(/*preset*/ macro_box_1up_running_away,        /*yaw*/   0, /*pos*/ -2420, -1140,  3700),
     MACRO_OBJECT_END(),
 };

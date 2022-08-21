@@ -113,6 +113,7 @@ const LevelScript level_bbh_entry[] = {
         WARP_NODE(/*id*/ 0xF1, /*destLevel*/ LEVEL_CASTLE_COURTYARD, /*destArea*/ 0x01, /*destNode*/ 0x0B, /*flags*/ WARP_NO_CHECKPOINT),
         TERRAIN(/*terrainData*/ bbh_seg7_collision_level),
         MACRO_OBJECTS(/*objList*/ bbh_seg7_macro_objs),
+        OBJECT(/*model*/ MODEL_EXCLAMATION_BOX, /*pos*/ 660,  3200,  1160, /*angle*/ 0, 0, 0, /*behParam*/ (0x14040000 + LEVEL_BBH*10 + 1), /*beh*/ bhvExclamationBox),
         ROOMS(/*surfaceRooms*/ bbh_seg7_rooms),
         SHOW_DIALOG(/*index*/ 0x00, DIALOG_098),
         SET_BACKGROUND_MUSIC(/*settingsPreset*/ 0x0006, /*seq*/ SEQ_LEVEL_SPOOKY),

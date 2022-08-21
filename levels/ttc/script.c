@@ -68,6 +68,8 @@ const LevelScript level_ttc_entry[] = {
         JUMP_LINK(script_func_local_2),
         TERRAIN(/*terrainData*/ ttc_seg7_collision_level),
         MACRO_OBJECTS(/*objList*/ ttc_seg7_macro_objs),
+        OBJECT(/*model*/ MODEL_EXCLAMATION_BOX, /*pos*/ 1883,  4150,   550, /*angle*/ 0, 0, 0, /*behParam*/ (0x14040000 + LEVEL_TTC*10 + 1), /*beh*/ bhvExclamationBox),
+        OBJECT(/*model*/ MODEL_EXCLAMATION_BOX, /*pos*/ -1101,  6316,  -685, /*angle*/ 0, 0, 0, /*behParam*/ (0x14040000 + LEVEL_TTC*10 + 2), /*beh*/ bhvExclamationBox),
         SET_BACKGROUND_MUSIC(/*settingsPreset*/ 0x0001, /*seq*/ SEQ_LEVEL_SLIDE),
         TERRAIN_TYPE(/*terrainType*/ TERRAIN_STONE),
     END_AREA(),

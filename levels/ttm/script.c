@@ -139,6 +139,7 @@ const LevelScript level_ttm_entry[] = {
         JUMP_LINK(script_func_local_3),
         TERRAIN(/*terrainData*/ ttm_seg7_area_1_collision),
         MACRO_OBJECTS(/*objList*/ ttm_seg7_area_1_macro_objs),
+        OBJECT(/*model*/ MODEL_EXCLAMATION_BOX, /*pos*/ 3261, -2553, -4092, /*angle*/ 0, 0, 0, /*behParam*/ (0x14040000 + LEVEL_TTM*10 + 1), /*beh*/ bhvExclamationBox),
         SET_BACKGROUND_MUSIC(/*settingsPreset*/ 0x0000, /*seq*/ SEQ_LEVEL_GRASS),
         TERRAIN_TYPE(/*terrainType*/ TERRAIN_STONE),
     END_AREA(),

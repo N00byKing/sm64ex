@@ -19,7 +19,7 @@ extern "C" {
 
 #define SM64AP_ID_CANNONUNLOCK(x) (SM64AP_ID_OFFSET+200+x)
 
-#define SM64AP_NUM_LOCS 215
+#define SM64AP_NUM_LOCS 244
 
 #ifdef __cplusplus
 //Init
@@ -43,6 +43,7 @@ extern "C" void SM64AP_DeathLinkClear();
 extern "C" void SM64AP_DeathLinkSend();
 
 // Send Item
+extern "C" void SM64AP_SendByBoxID(int);
 extern "C" void SM64AP_SendItem(int);
 
 // Print Next Message to Screen
@@ -67,6 +68,7 @@ bool SM64AP_HaveCannon(int);
 bool SM64AP_DeathLinkPending();
 void SM64AP_DeathLinkClear();
 void SM64AP_DeathLinkSend();
+void SM64AP_SendByBoxID(int);
 void SM64AP_SendItem(int);
 void SM64AP_PrintNext();
 void SM64AP_StoryComplete();

@@ -40,6 +40,5 @@ const MacroObject wdw_seg7_area_2_macro_objs[] = {
     MACRO_OBJECT(/*preset*/ macro_breakable_box_giant,         /*yaw*/   0, /*pos*/  -780, -2175,  2810),
     MACRO_OBJECT(/*preset*/ macro_coin_line_horizontal,        /*yaw*/  90, /*pos*/   100, -1791, -2100),
     MACRO_OBJECT(/*preset*/ macro_coin_line_horizontal,        /*yaw*/   0, /*pos*/  -770,  -320,  2820),
-    MACRO_OBJECT(/*preset*/ macro_box_1up_running_away,        /*yaw*/   0, /*pos*/  1655, -2160, -1293),
     MACRO_OBJECT_END(),
 };

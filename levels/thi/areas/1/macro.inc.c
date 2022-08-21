@@ -28,8 +28,6 @@ const MacroObject thi_seg7_area_1_macro_objs[] = {
     MACRO_OBJECT(/*preset*/ macro_fish_group,           /*yaw*/   0, /*pos*/ -6550, -3450,  4100),
     MACRO_OBJECT(/*preset*/ macro_fish_group,           /*yaw*/   0, /*pos*/ -1750, -3450,  7800),
     MACRO_OBJECT(/*preset*/ macro_fish_group,           /*yaw*/   0, /*pos*/  1950, -3500,  7600),
-    MACRO_OBJECT(/*preset*/ macro_box_1up_running_away, /*yaw*/   0, /*pos*/ -5712, -2190,  1100),
-    MACRO_OBJECT(/*preset*/ macro_box_1up_running_away, /*yaw*/   0, /*pos*/  6022, -1722,  -633),
     MACRO_OBJECT(/*preset*/ macro_wooden_post,          /*yaw*/   0, /*pos*/ -5822, -2969,  5822),
     MACRO_OBJECT_WITH_BEH_PARAM(/*preset*/ macro_wooden_signpost,      /*yaw*/  90, /*pos*/  -886, -2559,  6655, /*behParam*/ DIALOG_165),
     MACRO_OBJECT_WITH_BEH_PARAM(/*preset*/ macro_wooden_signpost,      /*yaw*/   0, /*pos*/ -2370,  -511,  2320, /*behParam*/ DIALOG_166),

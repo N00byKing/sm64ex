@@ -26,7 +26,6 @@ const MacroObject ttm_seg7_area_1_macro_objs[] = {
     MACRO_OBJECT(/*preset*/ macro_1up,                         /*yaw*/   0, /*pos*/  1530,   620,  1670),
     MACRO_OBJECT(/*preset*/ macro_coin_line_horizontal,        /*yaw*/   0, /*pos*/  3476,   708,  -896),
     MACRO_OBJECT(/*preset*/ macro_coin_line_horizontal,        /*yaw*/ 125, /*pos*/  2461,  1461,  1960),
-    MACRO_OBJECT(/*preset*/ macro_box_1up,                     /*yaw*/   0, /*pos*/  3261, -2553, -4092),
     MACRO_OBJECT(/*preset*/ macro_coin_line_horizontal_flying, /*yaw*/ 330, /*pos*/ -1907,  -861, -3138),
     MACRO_OBJECT(/*preset*/ macro_hidden_box,                  /*yaw*/  30, /*pos*/  1950,   880,  1321),
     MACRO_OBJECT(/*preset*/ macro_floor_switch_hidden_objects, /*yaw*/  50, /*pos*/ -1200,  1543,   460),

@@ -99,6 +99,8 @@ const LevelScript level_bitdw_entry[] = {
         JUMP_LINK(script_func_local_3),
         TERRAIN(/*terrainData*/ bitdw_seg7_collision_level),
         MACRO_OBJECTS(/*objList*/ bitdw_seg7_macro_objs),
+        OBJECT(/*model*/ MODEL_EXCLAMATION_BOX, /*pos*/ -4860,  1380,  -300, /*angle*/ 0, 0, 0, /*behParam*/ (0x14040000 + LEVEL_BITDW*10 + 1), /*beh*/ bhvExclamationBox),
+        OBJECT(/*model*/ MODEL_EXCLAMATION_BOX, /*pos*/ -2420, -1140,  3700, /*angle*/ 0, 0, 0, /*behParam*/ (0x14040000 + LEVEL_BITDW*10 + 2), /*beh*/ bhvExclamationBox),
         SHOW_DIALOG(/*index*/ 0x00, DIALOG_090),
         SET_BACKGROUND_MUSIC(/*settingsPreset*/ 0x0000, /*seq*/ SEQ_LEVEL_KOOPA_ROAD),
         TERRAIN_TYPE(/*terrainType*/ TERRAIN_STONE),

@@ -112,6 +112,8 @@ const LevelScript level_bitfs_entry[] = {
         JUMP_LINK(script_func_local_3),
         TERRAIN(/*terrainData*/ bitfs_seg7_collision_level),
         MACRO_OBJECTS(/*objList*/ bitfs_seg7_macro_objs),
+        OBJECT(/*model*/ MODEL_EXCLAMATION_BOX, /*pos*/ -7400,  1500,     0, /*angle*/ 0, 0, 0, /*behParam*/ (0x14040000 + LEVEL_BITFS*10 + 1), /*beh*/ bhvExclamationBox),
+        OBJECT(/*model*/ MODEL_EXCLAMATION_BOX, /*pos*/ 2440,  5520,   140, /*angle*/ 0, 0, 0, /*behParam*/ (0x14040000 + LEVEL_BITFS*10 + 2), /*beh*/ bhvExclamationBox),
         SET_BACKGROUND_MUSIC(/*settingsPreset*/ 0x0000, /*seq*/ SEQ_LEVEL_KOOPA_ROAD),
         TERRAIN_TYPE(/*terrainType*/ TERRAIN_STONE),
     END_AREA(),
