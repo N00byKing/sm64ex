@@ -1021,7 +1021,7 @@ else
   APCPP_LIB:=$(APCPP_LIB).so
 endif
 
-$(APCPP_LIB):
+$(APCPP_LIB): lib/APCpp/Archipelago.cpp lib/APCpp/Archipelago.h
 	cd lib/APCpp && mkdir -p build && cd build && CXX=$(CXX) cmake .. $(CMAKE_WIN_BUILD_FLAG) && CXX=$(CXX) $(MAKE)
 
 $(EXE): $(O_FILES) $(MIO0_FILES:.mio0=.o) $(SOUND_OBJ_FILES) $(ULTRA_O_FILES) $(GODDARD_O_FILES) $(BUILD_DIR)/$(RPC_LIBS) $(APCPP_LIB)
