@@ -42,7 +42,7 @@ std::map<int,int> map_boxid_locid;
 int sm64_exit_return_to;
 int sm64_exit_orig_entrancelvl;
 
-void SM64AP_RecvItem(int idx, bool notify) {
+void SM64AP_RecvItem(int64_t idx, bool notify) {
     switch (idx) {
         case SM64AP_ITEMID_STAR:
             starsCollected++;
@@ -75,7 +75,7 @@ void SM64AP_RecvItem(int idx, bool notify) {
     }
 }
 
-void SM64AP_CheckLocation(int loc_id) {
+void SM64AP_CheckLocation(int64_t loc_id) {
     sm64_locations[loc_id - SM64AP_ID_OFFSET] = true;
 }
 
