@@ -433,6 +433,13 @@ void SM64AP_DeathLinkSend() {
 }
 
 void SM64AP_PrintNext() {
+    if (AP_GetConnectionStatus() == AP_ConnectionStatus::Disconnected) {
+        print_text(GFX_DIMENSIONS_FROM_LEFT_EDGE(SCREEN_WIDTH / 2) - 7, SCREEN_HEIGHT / 2, "Connecting");
+    }
+    if (AP_GetConnectionStatus() == AP_ConnectionStatus::ConnectionRefused) {
+        print_text(GFX_DIMENSIONS_FROM_LEFT_EDGE(SCREEN_WIDTH / 2) - 10, SCREEN_HEIGHT / 2, "CONNECTION REFUSED");
+        print_text(GFX_DIMENSIONS_FROM_LEFT_EDGE(SCREEN_WIDTH / 2) - 10, SCREEN_HEIGHT / 2 - 20, "CHECK ARGS");
+    }
     if (!AP_IsMessagePending()) return;
     AP_Message* msg = AP_GetLatestMessage();
     if (msg->type == AP_MessageType::ItemSend) {
