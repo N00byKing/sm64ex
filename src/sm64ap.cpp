@@ -172,6 +172,7 @@ void SM64AP_RedirectWarp(s16* curLevel, s16* destLevel, s8* curArea, s16* destAr
         switch (*destLevel) {
             case LEVEL_LLL:
             case LEVEL_SSL:
+            case LEVEL_TTL:
                 destination = map_entrances[*destLevel * 10 + 1];
                 break;
             case LEVEL_COTMC:
@@ -193,7 +194,7 @@ void SM64AP_RedirectWarp(s16* curLevel, s16* destLevel, s8* curArea, s16* destAr
     }
     
     if ((*destLevel == LEVEL_CASTLE || *destLevel == LEVEL_CASTLE_COURTYARD || *destLevel == LEVEL_CASTLE_GROUNDS) && map_coursenum_courseidx.count(*curLevel)) {
-        if (*destLevel == LEVEL_CASTLE && (*destWarpNode == 0x1F || *destWarpNode == 0x00)) return; //Exit Course, Inter-Case warp
+        if (*destLevel == LEVEL_CASTLE && (*destWarpNode == 0x1F || *destWarpNode == 0x00)) return; //Exit Course or Inter-Castle warp
         *destLevel = sm64_exit_return_to / 10;
         *destArea = sm64_exit_return_to % 10;
         setCourseNodeAndArea(sm64_exit_orig_entrancelvl, destWarpNode, isDeathWarp, warpOp);
