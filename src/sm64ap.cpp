@@ -172,7 +172,7 @@ void SM64AP_RedirectWarp(s16* curLevel, s16* destLevel, s8* curArea, s16* destAr
         switch (*destLevel) {
             case LEVEL_LLL:
             case LEVEL_SSL:
-            case LEVEL_TTL:
+            case LEVEL_TTM:
                 destination = map_entrances[*destLevel * 10 + 1];
                 break;
             case LEVEL_COTMC:
