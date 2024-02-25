@@ -1274,7 +1274,7 @@ index 96ab5dc..1408e2e 100644
  
 -    if (m->input & INPUT_A_PRESSED) {
 -        return set_jumping_action(m, ACT_SIDE_FLIP, 0);
-+    if (m->input & INPUT_A_PRESSED && SM64AP_CanSideFlip()) {
++    if (m->input & INPUT_A_PRESSED) {
 +        if (m->input & INPUT_ANALOG_SPIN) {
 +            return set_jumping_action(m, ACT_SPIN_JUMP, 0);
 +        }
@@ -1290,7 +1290,7 @@ index 96ab5dc..1408e2e 100644
  
 -    if (m->input & INPUT_A_PRESSED) {
 -        return set_jumping_action(m, ACT_SIDE_FLIP, 0);
-+    if (m->input & INPUT_A_PRESSED && SM64AP_CanSideFlip()) {
++    if (m->input & INPUT_A_PRESSED) {
 +        if (m->input & INPUT_ANALOG_SPIN) {
 +            return set_jumping_action(m, ACT_SPIN_JUMP, 0);
 +        }
