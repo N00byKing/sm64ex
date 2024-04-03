@@ -76,89 +76,25 @@ index 632224e..45d83ce 100644
  #define ACT_SWIMMING_END               0x300024D1 // (0x0D1 | ACT_FLAG_MOVING | ACT_FLAG_SWIMMING | ACT_FLAG_SWIMMING_OR_FLYING | ACT_FLAG_WATER_OR_TEXT)
  #define ACT_FLUTTER_KICK               0x300024D2 // (0x0D2 | ACT_FLAG_MOVING | ACT_FLAG_SWIMMING | ACT_FLAG_SWIMMING_OR_FLYING | ACT_FLAG_WATER_OR_TEXT)
 diff --git a/include/text_options_strings.h.in b/include/text_options_strings.h.in
-index 8c6732e..ca620e6 100644
+index 8c6732e..28ffab9 100644
 --- a/include/text_options_strings.h.in
 +++ b/include/text_options_strings.h.in
-@@ -59,22 +59,23 @@
- #define TEXT_OPT_APPLY     _("APPLY")
- #define TEXT_OPT_RESETWND  _("RESET WINDOW")
- 
--#define TEXT_BIND_A        _("A BUTTON")
--#define TEXT_BIND_B        _("B BUTTON")
--#define TEXT_BIND_START    _("START BUTTON")
--#define TEXT_BIND_L        _("L TRIGGER")
--#define TEXT_BIND_R        _("R TRIGGER")
--#define TEXT_BIND_Z        _("Z TRIGGER")
--#define TEXT_BIND_C_UP     _("C-UP")
--#define TEXT_BIND_C_DOWN   _("C-DOWN")
--#define TEXT_BIND_C_LEFT   _("C-LEFT")
--#define TEXT_BIND_C_RIGHT  _("C-RIGHT")
--#define TEXT_BIND_UP       _("STICK UP")
--#define TEXT_BIND_DOWN     _("STICK DOWN")
--#define TEXT_BIND_LEFT     _("STICK LEFT")
--#define TEXT_BIND_RIGHT    _("STICK RIGHT")
--#define TEXT_OPT_DEADZONE  _("STICK DEADZONE")
--#define TEXT_OPT_RUMBLE    _("RUMBLE STRENGTH")
-+#define TEXT_BIND_A          _("A BUTTON")
-+#define TEXT_BIND_B          _("B BUTTON")
-+#define TEXT_BIND_START      _("START BUTTON")
-+#define TEXT_BIND_L          _("L TRIGGER")
-+#define TEXT_BIND_R          _("R TRIGGER")
-+#define TEXT_BIND_Z          _("Z TRIGGER")
-+#define TEXT_BIND_C_UP       _("C-UP")
-+#define TEXT_BIND_C_DOWN     _("C-DOWN")
-+#define TEXT_BIND_C_LEFT     _("C-LEFT")
-+#define TEXT_BIND_C_RIGHT    _("C-RIGHT")
+@@ -69,6 +69,7 @@
+ #define TEXT_BIND_C_DOWN   _("C-DOWN")
+ #define TEXT_BIND_C_LEFT   _("C-LEFT")
+ #define TEXT_BIND_C_RIGHT  _("C-RIGHT")
 +#define TEXT_BIND_DPAD_RIGHT _("D-PAD RIGHT")
-+#define TEXT_BIND_UP         _("STICK UP")
-+#define TEXT_BIND_DOWN       _("STICK DOWN")
-+#define TEXT_BIND_LEFT       _("STICK LEFT")
-+#define TEXT_BIND_RIGHT      _("STICK RIGHT")
-+#define TEXT_OPT_DEADZONE    _("STICK DEADZONE")
-+#define TEXT_OPT_RUMBLE      _("RUMBLE STRENGTH")
- 
- #define TEXT_OPT_CHEAT1    _("ENABLE CHEATS")
- #define TEXT_OPT_CHEAT2    _("MOONJUMP (PRESS L)")
-@@ -123,22 +124,23 @@
- #define TEXT_OPT_APPLY     _("Apply")
- #define TEXT_OPT_RESETWND  _("Reset Window")
- 
--#define TEXT_BIND_A        _("A Button")
--#define TEXT_BIND_B        _("B Button")
--#define TEXT_BIND_START    _("Start Button")
--#define TEXT_BIND_L        _("L Trigger")
--#define TEXT_BIND_R        _("R Trigger")
--#define TEXT_BIND_Z        _("Z Trigger")
--#define TEXT_BIND_C_UP     _("C-Up")
--#define TEXT_BIND_C_DOWN   _("C-Down")
--#define TEXT_BIND_C_LEFT   _("C-Left")
--#define TEXT_BIND_C_RIGHT  _("C-Right")
--#define TEXT_BIND_UP       _("Stick Up")
--#define TEXT_BIND_DOWN     _("Stick Down")
--#define TEXT_BIND_LEFT     _("Stick Left")
--#define TEXT_BIND_RIGHT    _("Stick Right")
--#define TEXT_OPT_DEADZONE  _("Stick Deadzone")
--#define TEXT_OPT_RUMBLE    _("Rumble Strength")
-+#define TEXT_BIND_A          _("A Button")
-+#define TEXT_BIND_B          _("B Button")
-+#define TEXT_BIND_START      _("Start Button")
-+#define TEXT_BIND_L          _("L Trigger")
-+#define TEXT_BIND_R          _("R Trigger")
-+#define TEXT_BIND_Z          _("Z Trigger")
-+#define TEXT_BIND_C_UP       _("C-Up")
-+#define TEXT_BIND_C_DOWN     _("C-Down")
-+#define TEXT_BIND_C_LEFT     _("C-Left")
-+#define TEXT_BIND_C_RIGHT    _("C-Right")
+ #define TEXT_BIND_UP       _("STICK UP")
+ #define TEXT_BIND_DOWN     _("STICK DOWN")
+ #define TEXT_BIND_LEFT     _("STICK LEFT")
+@@ -133,6 +134,7 @@
+ #define TEXT_BIND_C_DOWN   _("C-Down")
+ #define TEXT_BIND_C_LEFT   _("C-Left")
+ #define TEXT_BIND_C_RIGHT  _("C-Right")
 +#define TEXT_BIND_DPAD_RIGHT _("D-pad Right")
-+#define TEXT_BIND_UP         _("Stick Up")
-+#define TEXT_BIND_DOWN       _("Stick Down")
-+#define TEXT_BIND_LEFT       _("Stick Left")
-+#define TEXT_BIND_RIGHT      _("Stick Right")
-+#define TEXT_OPT_DEADZONE    _("Stick Deadzone")
-+#define TEXT_OPT_RUMBLE      _("Rumble Strength")
- 
- #define TEXT_OPT_CHEAT1    _("Enable cheats")
- #define TEXT_OPT_CHEAT2    _("Moonjump (Press L)")
+ #define TEXT_BIND_UP       _("Stick Up")
+ #define TEXT_BIND_DOWN     _("Stick Down")
+ #define TEXT_BIND_LEFT     _("Stick Left")
 diff --git a/include/text_strings.h.in b/include/text_strings.h.in
 index f22fbe3..bd937ca 100644
 --- a/include/text_strings.h.in
@@ -370,7 +306,7 @@ index ec4026e..f03a4ee 100644
              // so the speed check is nearly always true (perhaps not if you land while going upwards?)
              // Additionally, actionState it set on each first thing in their action, so this is
 diff --git a/src/game/mario.c b/src/game/mario.c
-index c7c6e01..5cead85 100644
+index c7c6e01..3cef3c1 100644
 --- a/src/game/mario.c
 +++ b/src/game/mario.c
 @@ -788,7 +788,7 @@ static u32 set_mario_action_airborne(struct MarioState *m, u32 action, u32 actio
@@ -417,7 +353,7 @@ index c7c6e01..5cead85 100644
          || (action == ACT_LONG_JUMP && !SM64AP_CanLongJump())
 -        || (action == ACT_SIDE_FLIP && !SM64AP_CanSideFlip())
 +        || (action == ACT_SIDE_FLIP && !SM64AP_CanSideFlip()
-+		|| (action == ACT_SPIN_JUMP && !SM64AP_CanSideFlip()))
++        || (action == ACT_SPIN_JUMP && !SM64AP_CanSideFlip()))
      ) {
          action = ACT_JUMP;
      }
@@ -1084,7 +1020,7 @@ index 01a991b..950eb7c 100644
          if (m->marioObj->oInteractStatus & INT_STATUS_MARIO_UNK1) {
              m->hurtCounter += (m->flags & MARIO_CAP_ON_HEAD) ? 12 : 18;
 diff --git a/src/game/mario_actions_moving.c b/src/game/mario_actions_moving.c
-index 96ab5dc..1408e2e 100644
+index 96ab5dc..70bf1b8 100644
 --- a/src/game/mario_actions_moving.c
 +++ b/src/game/mario_actions_moving.c
 @@ -155,7 +155,12 @@ s32 set_triple_jump_action(struct MarioState *m, UNUSED u32 action, UNUSED u32 a
@@ -1182,12 +1118,11 @@ index 96ab5dc..1408e2e 100644
  
      oldSpeed = sqrtf(m->slideVelX * m->slideVelX + m->slideVelZ * m->slideVelZ);
  
--    //! This is attempting to use trig derivatives to rotate Mario's speed.
+     //! This is attempting to use trig derivatives to rotate Mario's speed.
 -    // It is slightly off/asymmetric since it uses the new X speed, but the old
 -    // Z speed.
 -    m->slideVelX += m->slideVelZ * (m->intendedMag / 32.0f) * sideward * 0.05f;
 -    m->slideVelZ -= m->slideVelX * (m->intendedMag / 32.0f) * sideward * 0.05f;
-+    //! This is uses trig derivatives to rotate Mario's speed.
 +    // In vanilla, it was slightly off/asymmetric since it uses the new X speed, but the old
 +    // Z speed. I've gone and fixed it here.
 +    angleChange  = (m->intendedMag / 32.0f) * (m->action == ACT_ROLL ? 0.6f : 1.0f),
@@ -1923,7 +1858,7 @@ index 56ebdeb..c938252 100644
  
  static struct Option optsVideo[] = {
 diff --git a/src/pc/configfile.c b/src/pc/configfile.c
-index 7411d4f..8ed5de7 100644
+index 7411d4f..b49f126 100644
 --- a/src/pc/configfile.c
 +++ b/src/pc/configfile.c
 @@ -60,8 +60,9 @@ unsigned int configKeyA[MAX_BINDS]          = { 0x0026,   0x1000,     0x1103    
@@ -1945,15 +1880,6 @@ index 7411d4f..8ed5de7 100644
      {.name = "key_stickup",          .type = CONFIG_TYPE_BIND, .uintValue = configKeyStickUp},
      {.name = "key_stickdown",        .type = CONFIG_TYPE_BIND, .uintValue = configKeyStickDown},
      {.name = "key_stickleft",        .type = CONFIG_TYPE_BIND, .uintValue = configKeyStickLeft},
-@@ -140,7 +142,7 @@ static const struct ConfigOption options[] = {
-     {.name = "skip_intro",           .type = CONFIG_TYPE_BOOL, .boolValue = &configSkipIntro},
-     #ifdef DISCORDRPC
-     {.name = "discordrpc_enable",    .type = CONFIG_TYPE_BOOL, .boolValue = &configDiscordRPC},
--    #endif 
-+    #endif
- };
- 
- // Reads an entire line from a file (excluding the newline character) and returns an allocated string
 diff --git a/src/pc/configfile.h b/src/pc/configfile.h
 index b92ae7b..67f1117 100644
 --- a/src/pc/configfile.h
