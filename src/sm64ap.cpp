@@ -90,10 +90,40 @@ void SM64AP_CheckLocation(int64_t loc_id) {
 
 u32 SM64AP_CourseStarFlags(s32 courseIdx) {
     u32 starflags = 0;
-    for (int i = 0; i < 7; i++) {
-        if (sm64_locations[i + (courseIdx*7)]) {
-            starflags |= (1 << i);
-        }
+    switch (courseIdx) {
+        case 15: // BITDW
+            starflags = sm64_locations[105];
+            break;
+        case 16: // BITFS
+            starflags = sm64_locations[112];
+            break;
+        case 17: // BITS
+            starflags = sm64_locations[119];
+            break;
+        case 18: // PSS (2 stars)
+            starflags = sm64_locations[126] | (sm64_locations[127] << 1);
+            break;
+        case 19: // CotMC
+            starflags = sm64_locations[133];
+            break;
+        case 20: // TotWC
+            starflags = sm64_locations[140];
+            break;
+        case 21: // VCutM
+            starflags = sm64_locations[147];
+            break;
+        case 22: // WMotR
+            starflags = sm64_locations[154];
+            break;
+        case 23: // SA
+            starflags = sm64_locations[161];
+            break;
+        default:
+            for (int i = 0; i < 7; i++) {
+                if (sm64_locations[i + (courseIdx * 7)]) {
+                    starflags |= (1 << i);
+                }
+            }
     }
     return starflags;
 }

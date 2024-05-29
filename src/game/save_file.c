@@ -620,14 +620,9 @@ u32 save_file_get_star_flags(s32 fileIndex, s32 courseIndex) {
     u32 starFlags;
 
     if (courseIndex == -1) {
-        starFlags = (gSaveBuffer.files[fileIndex][0].flags >> 24) & 0x7F;
+        starFlags = 0; // Castle stars have spawn checks, so when spawned are always yellow
     } else {
-        if (courseIndex > 14) {
-            starFlags = gSaveBuffer.files[fileIndex][0].courseStars[courseIndex] & 0x7F;
-        } else {
-            starFlags = SM64AP_CourseStarFlags(courseIndex);
-        }
-        
+        starFlags = SM64AP_CourseStarFlags(courseIndex);
     }
 
     return starFlags;
