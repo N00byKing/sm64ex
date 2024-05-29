@@ -91,6 +91,13 @@ void SM64AP_CheckLocation(int64_t loc_id) {
 u32 SM64AP_CourseStarFlags(s32 courseIdx) {
     u32 starflags = 0;
     switch (courseIdx) {
+        case -1: // Castle
+            for (int i = 0; i < 5; i++) {
+                if (sm64_locations[i + 168]) {
+                    starflags |= (1 << i);
+                }
+            }
+            break;
         case 15: // BITDW
             starflags = sm64_locations[105];
             break;
