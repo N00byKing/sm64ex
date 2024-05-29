@@ -540,6 +540,9 @@ bool SM64AP_CanLedgeGrab() {
     return sm64_have_abilities[SM64AP_ID_LEDGEGRAB - SM64AP_ABILITY_OFFSET];
 }
 
+bool SM64AP_CanDrainMoat() {
+    return SM64AP_HaveKey1() && SM64AP_CanGroundPound();
+}
 
 void SM64AP_PrintNext() {
     if (AP_GetConnectionStatus() == AP_ConnectionStatus::Disconnected) {

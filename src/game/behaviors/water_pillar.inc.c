@@ -1,4 +1,5 @@
 // water_pillar.c.inc
+#include "sm64ap.h"
 
 void water_level_pillar_undrained(void) {
     struct Object *sp1C;
@@ -58,7 +59,7 @@ void water_level_pillar_drained(void) {
 }
 
 void bhv_water_level_pillar_init(void) {
-    if (save_file_get_flags() & SAVE_FLAG_MOAT_DRAINED)
+    if ((save_file_get_flags() & SAVE_FLAG_MOAT_DRAINED) && SM64AP_CanDrainMoat())
         o->oWaterLevelPillarUnkF8 = 1;
 }
 
