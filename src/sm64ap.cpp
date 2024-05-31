@@ -474,6 +474,20 @@ bool SM64AP_HaveCap(int flag) {
     }
 }
 
+bool SM64AP_PressedSwitch(int flag) {
+    switch (flag) {
+        case 2:
+            return SM64AP_CheckedLoc(SM64AP_ID_WINGCAP);
+        case 4:
+            return SM64AP_CheckedLoc(SM64AP_ID_METALCAP);
+        case 8:
+            return SM64AP_CheckedLoc(SM64AP_ID_VANISHCAP);
+        default:
+            // Shouldn't happen, but just in case, this shouldn't be pressed
+            return false;
+    }
+}
+
 bool SM64AP_HaveCannon(int courseIdx) {
     if (courseIdx < 15) return sm64_have_cannon[courseIdx];
     return true;
