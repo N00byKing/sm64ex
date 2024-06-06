@@ -97,7 +97,4 @@ AP_EXTERN_C void SM64AP_FinishBowser(int i);
 // Check for switch state (used for initial switch state on level load)
 AP_EXTERN_C bool SM64AP_PressedSwitch(int);
 
-// Checks if the moat is able to be drained currently for save protection purposes
-AP_EXTERN_C bool SM64AP_CanDrainMoat();
-
 #undef AP_EXTERN_C
