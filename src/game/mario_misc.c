@@ -203,7 +203,7 @@ void bhv_toad_message_init(void) {
             break;
         case TOAD_STAR_3_DIALOG:
             enoughStars = (starCount >= TOAD_STAR_3_REQUIREMENT);
-            if (SM64AP_CheckedLoc(SM64AP_LOCATIONID_ATTICTOAD)) {
+            if (SM64AP_CheckedLoc(SM64AP_LOCATIONID_THIRDFLOORTOAD)) {
                 dialogId = TOAD_STAR_3_DIALOG_AFTER;
             }
             break;
