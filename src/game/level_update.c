@@ -250,15 +250,15 @@ void load_level_init_text(u32 arg) {
 
     switch (dialogID) {
         case DIALOG_129:
-            gotAchievement = save_file_get_flags() & SAVE_FLAG_HAVE_VANISH_CAP;
+            gotAchievement = SM64AP_CheckedLoc(SM64AP_ID_VANISHCAP);
             break;
 
         case DIALOG_130:
-            gotAchievement = save_file_get_flags() & SAVE_FLAG_HAVE_METAL_CAP;
+            gotAchievement = SM64AP_CheckedLoc(SM64AP_ID_METALCAP);
             break;
 
         case DIALOG_131:
-            gotAchievement = save_file_get_flags() & SAVE_FLAG_HAVE_WING_CAP;
+            gotAchievement = SM64AP_CheckedLoc(SM64AP_ID_WINGCAP);
             break;
 
         case 255:

@@ -90,8 +90,12 @@ void SM64AP_CheckLocation(int64_t loc_id) {
 
 u32 SM64AP_CourseStarFlags(s32 courseIdx) {
     u32 starflags = 0;
+    s32 courseIndex = courseIdx;
+    if (courseIdx == -1) {
+        courseIndex = 24;
+    }
     for (int i = 0; i < 7; i++) {
-        if (sm64_locations[i + (courseIdx*7)]) {
+        if (sm64_locations[i + (courseIndex * 7)]) {
             starflags |= (1 << i);
         }
     }
@@ -434,6 +438,20 @@ bool SM64AP_HaveCap(int flag) {
         default:
             //Probably coin/1up or something
             return true;
+    }
+}
+
+bool SM64AP_PressedSwitch(int flag) {
+    switch (flag) {
+        case 2:
+            return SM64AP_CheckedLoc(SM64AP_ID_WINGCAP);
+        case 4:
+            return SM64AP_CheckedLoc(SM64AP_ID_METALCAP);
+        case 8:
+            return SM64AP_CheckedLoc(SM64AP_ID_VANISHCAP);
+        default:
+            // Shouldn't happen, but just in case, this shouldn't be pressed
+            return false;
     }
 }
 

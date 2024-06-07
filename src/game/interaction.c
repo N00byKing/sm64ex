@@ -896,7 +896,7 @@ u32 interact_warp_door(struct MarioState *m, UNUSED u32 interactType, struct Obj
     u32 actionArg;
 
     if (m->action == ACT_WALKING || m->action == ACT_DECELERATING) {
-        if (warpDoorId == 1 && !(saveFlags & SAVE_FLAG_UNLOCKED_UPSTAIRS_DOOR)) {
+        if (warpDoorId == 1) {
             if (!SM64AP_HaveKey2()) {
                 if (!sDisplayingDoorText) {
                     set_mario_action(m, ACT_READING_AUTOMATIC_DIALOG,
@@ -907,10 +907,12 @@ u32 interact_warp_door(struct MarioState *m, UNUSED u32 interactType, struct Obj
                 return FALSE;
             }
 
-            doorAction = ACT_UNLOCKING_KEY_DOOR;
+            if (!(saveFlags & SAVE_FLAG_UNLOCKED_UPSTAIRS_DOOR)) {
+                doorAction = ACT_UNLOCKING_KEY_DOOR;
+            }
         }
 
-        if (warpDoorId == 2 && !(saveFlags & SAVE_FLAG_UNLOCKED_BASEMENT_DOOR)) {
+        if (warpDoorId == 2) {
             if (!SM64AP_HaveKey1()) {
                 if (!sDisplayingDoorText) {
                     // Moat door skip was intended confirmed
@@ -922,7 +924,9 @@ u32 interact_warp_door(struct MarioState *m, UNUSED u32 interactType, struct Obj
                 return FALSE;
             }
 
-            doorAction = ACT_UNLOCKING_KEY_DOOR;
+            if (!(saveFlags & SAVE_FLAG_UNLOCKED_BASEMENT_DOOR)) {
+                doorAction = ACT_UNLOCKING_KEY_DOOR;
+            }
         }
 
         if (m->action == ACT_WALKING || m->action == ACT_DECELERATING) {

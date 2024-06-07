@@ -1,5 +1,6 @@
 #include <PR/ultratypes.h>
 
+#include "sm64ap.h"
 #include "sm64.h"
 #include "geo_misc.h"
 
@@ -82,7 +83,7 @@ Gfx *geo_exec_inside_castle_light(s32 callContext, struct GraphNode *node, UNUSE
 
     if (callContext == GEO_CONTEXT_RENDER) {
         flags = save_file_get_flags();
-        if (gHudDisplay.stars >= 10 && (flags & SAVE_FLAG_HAVE_WING_CAP) == 0) {
+        if (gHudDisplay.stars >= 10 && !SM64AP_CheckedLoc(SM64AP_ID_WINGCAP)) {
             displayList = alloc_display_list(2 * sizeof(*displayList));
 
             if (displayList == NULL) {
