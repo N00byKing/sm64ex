@@ -28,7 +28,6 @@ bool sm64_have_wingcap = false;
 bool sm64_have_metalcap = false;
 bool sm64_have_vanishcap = false;
 int sm64_moat_state = 0;
-bool moat_state_checked = false;
 bool sm64_have_cannon[15];
 int sm64_completion_type = 0;
 std::bitset<SM64AP_NUM_ABILITIES> sm64_have_abilities;
@@ -306,7 +305,6 @@ void SM64AP_SetReplyHandler(AP_SetReply reply) {
     }
     else if (reply.key == AP_GetPrivateServerDataPrefix() + "MoatDrained") {
         sm64_moat_state = *(int *) (reply.value);
-        moat_state_checked = true;
     }
 }
 
@@ -409,7 +407,6 @@ void SM64AP_CheckMoatState() {
     moat_request.type = AP_DataType::Int;
     moat_request.value = &sm64_moat_state;
     AP_GetServerData(&moat_request);
-    moat_state_checked = true;
 }
 
 void SM64AP_SetMoatDrained(int flag) {
