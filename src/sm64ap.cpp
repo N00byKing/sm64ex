@@ -27,6 +27,8 @@ bool sm64_have_key2 = false;
 bool sm64_have_wingcap = false;
 bool sm64_have_metalcap = false;
 bool sm64_have_vanishcap = false;
+int sm64_moat_state = 0;
+bool moat_state_checked = false;
 bool sm64_have_cannon[15];
 int sm64_completion_type = 0;
 std::bitset<SM64AP_NUM_ABILITIES> sm64_have_abilities;
@@ -224,6 +226,10 @@ int SM64AP_CourseToTTC() {
     return -1; // Error Cond
 }
 
+void SM64AP_SetMoatState(int action) {
+    sm64_moat_state = action;
+}
+
 void SM64AP_SetClockToTTCAction(int* action) {
     sm64_clockaction = action;
 }
@@ -298,6 +304,10 @@ void SM64AP_SetReplyHandler(AP_SetReply reply) {
                 break;
         }
     }
+    else if (reply.key == AP_GetPrivateServerDataPrefix() + "MoatDrained") {
+        sm64_moat_state = *(int *) (reply.value);
+        moat_state_checked = true;
+    }
 }
 
 void SM64AP_GenericInit() {
@@ -309,6 +319,7 @@ void SM64AP_GenericInit() {
     AP_SetItemRecvCallback(&SM64AP_RecvItem);
     AP_RegisterSetReplyCallback(&SM64AP_SetReplyHandler);
     AP_SetNotify(AP_GetPrivateServerDataPrefix() + "FinishedBowser", AP_DataType::Int);
+    AP_SetNotify(AP_GetPrivateServerDataPrefix() + "MoatDrained", AP_DataType::Int);
 
     AP_RegisterSlotDataIntCallback("FirstBowserDoorCost", &SM64AP_SetFirstBowserDoorCost);
     AP_RegisterSlotDataIntCallback("BasementDoorCost", &SM64AP_SetBasementDoorCost);
@@ -389,6 +400,29 @@ void SM64AP_FinishBowser(int i) {
     AP_SetServerData(&req);
 }
 
+AP_GetServerDataRequest moat_request;
+void SM64AP_CheckMoatState() {
+    if (moat_request.key != "") {
+        return;
+    }
+    moat_request.key = AP_GetPrivateServerDataPrefix() + "MoatDrained";
+    moat_request.type = AP_DataType::Int;
+    moat_request.value = &sm64_moat_state;
+    AP_GetServerData(&moat_request);
+    moat_state_checked = true;
+}
+
+void SM64AP_SetMoatDrained(int flag) {
+    AP_SetServerDataRequest req;
+    req.key = AP_GetPrivateServerDataPrefix() + "MoatDrained";
+    int def_val = 0;
+    req.default_value = &def_val;
+    req.type = AP_DataType::Int;
+    req.want_reply = true;
+    req.operations = std::vector<AP_DataStorageOperation>{ { { "or", &flag } } };
+    AP_SetServerData(&req);
+}
+
 int SM64AP_GetStars() {
     return starsCollected;
 }
@@ -458,6 +492,13 @@ bool SM64AP_PressedSwitch(int flag) {
 bool SM64AP_HaveCannon(int courseIdx) {
     if (courseIdx < 15) return sm64_have_cannon[courseIdx];
     return true;
+}
+
+bool SM64AP_MoatDrained() {
+    while (moat_request.key == "" || moat_request.status == AP_RequestStatus::Pending) {
+        SM64AP_CheckMoatState();
+    }
+    return sm64_moat_state != 0;
 }
 
 bool SM64AP_DeathLinkPending() {
