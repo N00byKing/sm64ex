@@ -225,10 +225,6 @@ int SM64AP_CourseToTTC() {
     return -1; // Error Cond
 }
 
-void SM64AP_SetMoatState(int action) {
-    sm64_moat_state = action;
-}
-
 void SM64AP_SetClockToTTCAction(int* action) {
     sm64_clockaction = action;
 }
