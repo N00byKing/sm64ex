@@ -286,6 +286,15 @@ void SM64AP_ResetItems() {
     sm64_have_metalcap = false;
     sm64_have_vanishcap = false;
     starsCollected = 0;
+
+    AP_SetServerDataRequest moat_request;
+    moat_request.key = AP_GetPrivateServerDataPrefix() + "MoatDrained";
+    moat_request.type = AP_DataType::Int;
+    int def_val = 0;
+    moat_request.operations = {{ "default", &def_val }};
+    moat_request.default_value = &def_val;
+    moat_request.want_reply = true;
+    AP_SetServerData(&moat_request);
 }
 
 void SM64AP_SetReplyHandler(AP_SetReply reply) {
@@ -298,8 +307,7 @@ void SM64AP_SetReplyHandler(AP_SetReply reply) {
                 if (*(int*)(reply.value) == 0b111) AP_StoryComplete();
                 break;
         }
-    }
-    else if (reply.key == AP_GetPrivateServerDataPrefix() + "MoatDrained") {
+    } else if (reply.key == AP_GetPrivateServerDataPrefix() + "MoatDrained") {
         sm64_moat_state = *(int *) (reply.value);
     }
 }
@@ -394,25 +402,14 @@ void SM64AP_FinishBowser(int i) {
     AP_SetServerData(&req);
 }
 
-AP_GetServerDataRequest moat_request;
-void SM64AP_CheckMoatState() {
-    if (moat_request.key != "") {
-        return;
-    }
-    moat_request.key = AP_GetPrivateServerDataPrefix() + "MoatDrained";
-    moat_request.type = AP_DataType::Int;
-    moat_request.value = &sm64_moat_state;
-    AP_GetServerData(&moat_request);
-}
 
-void SM64AP_SetMoatDrained(int flag) {
+void SM64AP_SetMoatDrained() {
     AP_SetServerDataRequest req;
     req.key = AP_GetPrivateServerDataPrefix() + "MoatDrained";
-    int def_val = 0;
-    req.default_value = &def_val;
     req.type = AP_DataType::Int;
     req.want_reply = true;
-    req.operations = std::vector<AP_DataStorageOperation>{ { { "or", &flag } } };
+    int new_val = 1;
+    req.operations = std::vector<AP_DataStorageOperation>{ { { "replace", &new_val } } };
     AP_SetServerData(&req);
 }
 
@@ -488,9 +485,6 @@ bool SM64AP_HaveCannon(int courseIdx) {
 }
 
 bool SM64AP_MoatDrained() {
-    while (moat_request.key == "" || moat_request.status == AP_RequestStatus::Pending) {
-        SM64AP_CheckMoatState();
-    }
     return sm64_moat_state != 0;
 }
 

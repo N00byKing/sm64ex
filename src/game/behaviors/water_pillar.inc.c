@@ -29,7 +29,7 @@ void water_level_pillar_undrained(void) {
                 if (sp1C->oAction > 1) {
                     o->oAction++;
 
-                    SM64AP_SetMoatDrained(1);
+                    SM64AP_SetMoatDrained();
                     play_puzzle_jingle();
                 }
             }
