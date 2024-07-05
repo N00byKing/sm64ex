@@ -92,6 +92,10 @@ AP_EXTERN_C void SM64AP_PrintNext();
 // Called on each Bowser stage completion, i is bowser index. Will send StoryComplete depending on completion option.
 AP_EXTERN_C void SM64AP_FinishBowser(int i);
 
+// Used to send and receive moat state
+AP_EXTERN_C void SM64AP_SetMoatDrained();
+AP_EXTERN_C bool SM64AP_MoatDrained();
+
 // Check for switch state (used for initial switch state on level load)
 AP_EXTERN_C bool SM64AP_PressedSwitch(int);
 

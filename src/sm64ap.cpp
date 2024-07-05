@@ -27,6 +27,7 @@ bool sm64_have_key2 = false;
 bool sm64_have_wingcap = false;
 bool sm64_have_metalcap = false;
 bool sm64_have_vanishcap = false;
+int sm64_moat_state = 0;
 bool sm64_have_cannon[15];
 int sm64_completion_type = 0;
 std::bitset<SM64AP_NUM_ABILITIES> sm64_have_abilities;
@@ -285,6 +286,15 @@ void SM64AP_ResetItems() {
     sm64_have_metalcap = false;
     sm64_have_vanishcap = false;
     starsCollected = 0;
+
+    AP_SetServerDataRequest moat_request;
+    moat_request.key = AP_GetPrivateServerDataPrefix() + "MoatDrained";
+    moat_request.type = AP_DataType::Int;
+    int def_val = 0;
+    moat_request.operations = {{ "default", &def_val }};
+    moat_request.default_value = &def_val;
+    moat_request.want_reply = true;
+    AP_SetServerData(&moat_request);
 }
 
 void SM64AP_SetReplyHandler(AP_SetReply reply) {
@@ -297,6 +307,8 @@ void SM64AP_SetReplyHandler(AP_SetReply reply) {
                 if (*(int*)(reply.value) == 0b111) AP_StoryComplete();
                 break;
         }
+    } else if (reply.key == AP_GetPrivateServerDataPrefix() + "MoatDrained") {
+        sm64_moat_state = *(int *) (reply.value);
     }
 }
 
@@ -309,6 +321,7 @@ void SM64AP_GenericInit() {
     AP_SetItemRecvCallback(&SM64AP_RecvItem);
     AP_RegisterSetReplyCallback(&SM64AP_SetReplyHandler);
     AP_SetNotify(AP_GetPrivateServerDataPrefix() + "FinishedBowser", AP_DataType::Int);
+    AP_SetNotify(AP_GetPrivateServerDataPrefix() + "MoatDrained", AP_DataType::Int);
 
     AP_RegisterSlotDataIntCallback("FirstBowserDoorCost", &SM64AP_SetFirstBowserDoorCost);
     AP_RegisterSlotDataIntCallback("BasementDoorCost", &SM64AP_SetBasementDoorCost);
@@ -389,6 +402,17 @@ void SM64AP_FinishBowser(int i) {
     AP_SetServerData(&req);
 }
 
+
+void SM64AP_SetMoatDrained() {
+    AP_SetServerDataRequest req;
+    req.key = AP_GetPrivateServerDataPrefix() + "MoatDrained";
+    req.type = AP_DataType::Int;
+    req.want_reply = true;
+    int new_val = 1;
+    req.operations = std::vector<AP_DataStorageOperation>{ { { "replace", &new_val } } };
+    AP_SetServerData(&req);
+}
+
 int SM64AP_GetStars() {
     return starsCollected;
 }
@@ -458,6 +482,10 @@ bool SM64AP_PressedSwitch(int flag) {
 bool SM64AP_HaveCannon(int courseIdx) {
     if (courseIdx < 15) return sm64_have_cannon[courseIdx];
     return true;
+}
+
+bool SM64AP_MoatDrained() {
+    return sm64_moat_state != 0;
 }
 
 bool SM64AP_DeathLinkPending() {
