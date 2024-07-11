@@ -2,6 +2,7 @@
 #include <string.h>
 
 #include "sm64.h"
+#include "sm64ap.h"
 #include "audio/external.h"
 #include "buffers/framebuffers.h"
 #include "buffers/zbuffer.h"
