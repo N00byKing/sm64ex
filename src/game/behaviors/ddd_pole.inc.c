@@ -1,7 +1,7 @@
 #include "../../sm64ap.h"
 
 void bhv_ddd_pole_init(void) {
-    if (!SM64AP_CheckedLoc(SM64AP_ID_KEY2) || !SM64AP_CheckedLoc(3626056)) {
+    if (!SM64AP_CheckedLoc(SM64AP_ID_KEY2) || !SM64AP_CheckedLoc(SM64AP_LOCATIONID_BOARDBOWSERSSUB)) {
         obj_mark_for_deletion(o);
     } else {
         o->hitboxDownOffset = 100.0f;
