@@ -427,9 +427,9 @@ int SM64AP_GetRequiredStars(int idprx) {
             return sm64_cost_secondfloordoor;
         case 70: // Star Door 70
             return sm64_cost_endlessstairs;
-        case 3626171: // MIPS 1
+        case SM64AP_LOCATIONID_MIPS1: // MIPS 1
             return sm64_cost_mips1;
-        case 3626172: // MIPS 2
+        case SM64AP_LOCATIONID_MIPS2: // MIPS 2
             return sm64_cost_mips2;
         default:
             return idprx;
