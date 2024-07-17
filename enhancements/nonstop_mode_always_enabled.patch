@@ -5,14 +5,14 @@ Subject: [PATCH] Non-Stop Mode Always Enabled
 
 ---
 diff --git a/src/game/behaviors/ddd_pole.inc.c b/src/game/behaviors/ddd_pole.inc.c
-index cc82102..a155806 100644
+index cd4d884..4df90f8 100644
 --- a/src/game/behaviors/ddd_pole.inc.c
 +++ b/src/game/behaviors/ddd_pole.inc.c
 @@ -1,23 +1,27 @@
  #include "../../sm64ap.h"
  
  void bhv_ddd_pole_init(void) {
--    if (!SM64AP_CheckedLoc(SM64AP_ID_KEY2) || !SM64AP_CheckedLoc(3626056)) {
+-    if (!SM64AP_CheckedLoc(SM64AP_ID_KEY2) || !SM64AP_CheckedLoc(SM64AP_LOCATIONID_BOARDBOWSERSSUB)) {
 -        obj_mark_for_deletion(o);
 -    } else {
 -        o->hitboxDownOffset = 100.0f;
@@ -26,7 +26,7 @@ index cc82102..a155806 100644
  void bhv_ddd_pole_update(void) {
 -    if (o->oTimer > 20) {
 -        o->oDDDPoleOffset += o->oDDDPoleVel;
-+    if (SM64AP_CheckedLoc(SM64AP_ID_KEY2) && SM64AP_CheckedLoc(3626056)) {
++    if (SM64AP_CheckedLoc(SM64AP_ID_KEY2) && SM64AP_CheckedLoc(SM64AP_LOCATIONID_BOARDBOWSERSSUB)) {
 +        if (o->oPosY != o->oHomeY) {
 +            o->oPosY = o->oHomeY;
 +        }
