@@ -1,3 +1,9 @@
+From a5c04e3b7166d02236be73b82d903e0f0945314f Mon Sep 17 00:00:00 2001
+From: GateGuy <gateguy33@gmail.com>
+Date: Sat, 13 Jun 2020 19:20:34 -0400
+Subject: [PATCH] Non-Stop Mode Always Enabled
+
+---
 diff --git a/src/game/behaviors/ddd_pole.inc.c b/src/game/behaviors/ddd_pole.inc.c
 index cc82102..a155806 100644
 --- a/src/game/behaviors/ddd_pole.inc.c
