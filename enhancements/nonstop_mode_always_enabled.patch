@@ -4,22 +4,74 @@ Date: Sat, 13 Jun 2020 19:20:34 -0400
 Subject: [PATCH] Non-Stop Mode Always Enabled
 
 ---
+diff --git a/src/game/behaviors/ddd_pole.inc.c b/src/game/behaviors/ddd_pole.inc.c
+index cd4d884..4df90f8 100644
+--- a/src/game/behaviors/ddd_pole.inc.c
++++ b/src/game/behaviors/ddd_pole.inc.c
+@@ -1,23 +1,27 @@
+ #include "../../sm64ap.h"
+ 
+ void bhv_ddd_pole_init(void) {
+-    if (!SM64AP_CheckedLoc(SM64AP_ID_KEY2) || !SM64AP_CheckedLoc(SM64AP_LOCATIONID_BOARDBOWSERSSUB)) {
+-        obj_mark_for_deletion(o);
+-    } else {
+-        o->hitboxDownOffset = 100.0f;
+-        o->oDDDPoleMaxOffset = 100.0f * o->oBehParams2ndByte;
+-    }
++    o->oHomeY = o->oPosY;
++    o->hitboxDownOffset = 100.0f;
++    o->oDDDPoleMaxOffset = 100.0f * o->oBehParams2ndByte;
+ }
+ 
+ void bhv_ddd_pole_update(void) {
+-    if (o->oTimer > 20) {
+-        o->oDDDPoleOffset += o->oDDDPoleVel;
++    if (SM64AP_CheckedLoc(SM64AP_ID_KEY2) && SM64AP_CheckedLoc(SM64AP_LOCATIONID_BOARDBOWSERSSUB)) {
++        if (o->oPosY != o->oHomeY) {
++            o->oPosY = o->oHomeY;
++        }
++        if (o->oTimer > 20) {
++            o->oDDDPoleOffset += o->oDDDPoleVel;
+ 
+-        if (clamp_f32(&o->oDDDPoleOffset, 0.0f, o->oDDDPoleMaxOffset)) {
+-            o->oDDDPoleVel = -o->oDDDPoleVel;
+-            o->oTimer = 0;
++            if (clamp_f32(&o->oDDDPoleOffset, 0.0f, o->oDDDPoleMaxOffset)) {
++                o->oDDDPoleVel = -o->oDDDPoleVel;
++                o->oTimer = 0;
++            }
+         }
+-    }
+ 
+-    obj_set_dist_from_home(o->oDDDPoleOffset);
++        obj_set_dist_from_home(o->oDDDPoleOffset);
++    } else {
++        o->oPosY = -10000.0f;
++    }
+ }
 diff --git a/src/game/interaction.c b/src/game/interaction.c
-index ec4026e..ba4d764 100644
+index 474b5e8..0285b1f 100644
 --- a/src/game/interaction.c
 +++ b/src/game/interaction.c
-@@ -765,6 +765,10 @@ u32 interact_star_or_key(struct MarioState *m, UNUSED u32 interactType, struct O
+@@ -765,10 +765,16 @@ u32 interact_star_or_key(struct MarioState *m, UNUSED u32 interactType, struct O
      u32 starIndex;
      u32 starGrabAction = ACT_STAR_DANCE_EXIT;
      u32 noExit = (o->oInteractionSubtype & INT_SUBTYPE_NO_EXIT) != 0;
 +    u8 stayInLevelCommon = !(m->controller->buttonDown & L_TRIG || gCurrLevelNum == LEVEL_BOWSER_1 || gCurrLevelNum == LEVEL_BOWSER_2 || gCurrLevelNum == LEVEL_BOWSER_3);
-+    if (stayInLevelCommon == TRUE) {
-+        noExit = TRUE;
-+    }
      u32 grandStar = (o->oInteractionSubtype & INT_SUBTYPE_GRAND_STAR) != 0;
  
      if (m->health >= 0x100) {
-@@ -822,7 +826,11 @@ u32 interact_star_or_key(struct MarioState *m, UNUSED u32 interactType, struct O
+-        mario_stop_riding_and_holding(m);
++        if (stayInLevelCommon == TRUE) {
++            noExit = TRUE;
++        }
++        else {
++            mario_stop_riding_and_holding(m);
++        }
+         queue_rumble_data(5, 80);
+ 
+         if (!noExit) {
+@@ -822,7 +828,11 @@ u32 interact_star_or_key(struct MarioState *m, UNUSED u32 interactType, struct O
              return set_mario_action(m, ACT_JUMBO_STAR_CUTSCENE, 0);
          }
  
