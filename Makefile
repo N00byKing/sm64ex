@@ -1027,7 +1027,7 @@ endif
 $(APCPP_LIB): lib/APCpp/Archipelago.cpp lib/APCpp/Archipelago.h
 	cd lib/APCpp && mkdir -p build && cd build && CXX=$(CXX) cmake .. $(CMAKE_WIN_BUILD_FLAG) && CXX=$(CXX) cmake --build .
 
-$(EXE): $(O_FILES) $(MIO0_FILES:.mio0=.o) $(SOUND_OBJ_FILES) $(ULTRA_O_FILES) $(GODDARD_O_FILES) $(APCPP_LIB)
+$(EXE): $(O_FILES) $(MIO0_FILES:.mio0=.o) $(SOUND_OBJ_FILES) $(ULTRA_O_FILES) $(GODDARD_O_FILES) $(if $(RPC_LIBS),$(BUILD_DIR)/$(RPC_LIBS),) $(APCPP_LIB)
 	$(LD) -static-libgcc -static-libstdc++ -L $(BUILD_DIR) -o $@ $(O_FILES) $(SOUND_OBJ_FILES) $(ULTRA_O_FILES) $(GODDARD_O_FILES) $(LDFLAGS) $(APCPP_LIB) -Wl,-rpath,. 
 	cp $(APCPP_LIB) $(BUILD_DIR)
 
