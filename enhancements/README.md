@@ -28,12 +28,13 @@ This is the 60fps patch from [sm64-port](https://github.com/sm64-port/sm64-port/
 
 This adds various new actions to Mario's moveset, including moves from Sunshine and Odyssey.
 
-Information about the added moves can be found at the [sm64-port branch](https://github.com/TheGag96/sm64-port/blob/extended_moveset/README.md)
+Information about the added moves can be found at the [original patch repo (sm64-port branch)](https://github.com/TheGag96/sm64-port/blob/extended_moveset/README.md).
+If any bugs occur using this patch, report them in the Archipelago discord or [the sm64ex archipelago repo](https://github.com/N00byKing/sm64ex), NOT in the patch repo!
 
 ## Nonstop Mode - `nonstop_mode_always_enabled.patch`
 
 Allows Mario to stay within the level after collecting a star.
 
-Holding L while the star dance is playing disables nonstop mode and allows you to leave the level normally.
+Holding `L` while the star dance is playing disables nonstop mode and allows you to leave the level normally.
 
 Any map changes require you to leave the level to take effect.
