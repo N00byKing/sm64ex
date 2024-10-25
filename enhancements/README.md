@@ -23,3 +23,17 @@ This allows the game to be rendered at 60 FPS instead of 30 FPS by interpolation
 The Mario head intro is the only exception which is still rendered at 30 FPS.
 
 This is the 60fps patch from [sm64-port](https://github.com/sm64-port/sm64-port/tree/master/enhancements) adapted for sm64ex.
+
+## Extended Moveset - `Extended.Moveset.v1.03b.sm64ex_archipelago.patch`
+
+This adds various new actions to Mario's moveset, including moves from Sunshine and Odyssey.
+
+Information about the added moves can be found at the [sm64-port branch](https://github.com/TheGag96/sm64-port/blob/extended_moveset/README.md)
+
+## Nonstop Mode - `nonstop_mode_always_enabled.patch`
+
+Allows Mario to stay within the level after collecting a star.
+
+Holding L while the star dance is playing disables nonstop mode and allows you to leave the level normally.
+
+Any map changes require you to leave the level to take effect.
