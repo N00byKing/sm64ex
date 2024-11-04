@@ -1134,7 +1134,8 @@ void render_star_count_dialog_text(s8 *xMatrix, s16 *linePos)
 #endif
     }
 #endif
-    if (tensDigit != 0) {
+
+    if (hundredsDigit != 0 || tensDigit != 0) {
 #if defined(VERSION_JP) || defined(VERSION_SH)
         create_dl_translation_matrix(MENU_MTX_NOPUSH, xMatrix[0] * 10, 0, 0);
         render_generic_char(tensDigit);
