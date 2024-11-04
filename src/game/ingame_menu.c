@@ -1104,9 +1104,36 @@ void render_star_count_dialog_text(struct DialogEntry *dialog, s8 *linePos)
 void render_star_count_dialog_text(s8 *xMatrix, s16 *linePos)
 #endif
 {
-    s8 tensDigit = gDialogVariable / 10;
-    s8 onesDigit = gDialogVariable - (tensDigit * 10); // remainder
+    s8 hundredsDigit = gDialogVariable / 100;
+    s8 onesDigit = gDialogVariable % 10;
+    s8 tensDigit = gDialogVariable % 100 - onesDigit;
 
+    if (hundredsDigit != 0) {
+#if defined(VERSION_JP) || defined(VERSION_SH)
+        create_dl_translation_matrix(MENU_MTX_NOPUSH, xMatrix[0] * 10, 0, 0);
+        render_generic_char(hundredsDigit);
+#elif defined(VERSION_EU)
+        render_generic_dialog_char_at_pos(dialog, gDialogX, gDialogY, hundredsDigit);
+        gDialogX += gDialogCharWidths[hundredsDigit];
+        linePos[0] = 1;
+#else
+        if (xMatrix[0] != 1) {
+            create_dl_translation_matrix(
+                MENU_MTX_NOPUSH, (f32) (gDialogCharWidths[DIALOG_CHAR_SPACE] * xMatrix[0]), 0, 0);
+        }
+        render_generic_char(hundredsDigit);
+        create_dl_translation_matrix(MENU_MTX_NOPUSH, (f32) gDialogCharWidths[hundredsDigit], 0, 0);
+        xMatrix[0] = 1;
+        linePos[0]++;
+#endif
+    }
+#ifndef VERSION_EU
+    else {
+#if defined(VERSION_JP) || defined(VERSION_SH)
+        xMatrix[0]++;
+#endif
+    }
+#endif
     if (tensDigit != 0) {
 #if defined(VERSION_JP) || defined(VERSION_SH)
         create_dl_translation_matrix(MENU_MTX_NOPUSH, xMatrix[0] * 10, 0, 0);
@@ -1119,7 +1146,6 @@ void render_star_count_dialog_text(s8 *xMatrix, s16 *linePos)
         if (xMatrix[0] != 1) {
             create_dl_translation_matrix(MENU_MTX_NOPUSH, (f32)(gDialogCharWidths[DIALOG_CHAR_SPACE] * xMatrix[0]), 0, 0);
         }
-
         render_generic_char(tensDigit);
         create_dl_translation_matrix(MENU_MTX_NOPUSH, (f32) gDialogCharWidths[tensDigit], 0, 0);
         xMatrix[0] = 1;
