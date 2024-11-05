@@ -1127,13 +1127,6 @@ void render_star_count_dialog_text(s8 *xMatrix, s16 *linePos)
         linePos[0]++;
 #endif
     }
-#ifndef VERSION_EU
-    else {
-#if defined(VERSION_JP) || defined(VERSION_SH)
-        xMatrix[0]++;
-#endif
-    }
-#endif
 
     if (hundredsDigit != 0 || tensDigit != 0) {
 #if defined(VERSION_JP) || defined(VERSION_SH)
