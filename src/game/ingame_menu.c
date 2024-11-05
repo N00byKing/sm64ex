@@ -1123,13 +1123,6 @@ void render_star_count_dialog_text(s8 *xMatrix, s16 *linePos)
         render_digit(xMatrix, linePos, tensDigit);
 #endif
     }
-#ifndef VERSION_EU
-#if defined(VERSION_JP) || defined(VERSION_SH)
-    else {
-        xMatrix[0]++;
-    }
-#endif
-#endif
 
 #ifdef VERSION_EU
     render_digit(dialog, linePos, onesDigit);
