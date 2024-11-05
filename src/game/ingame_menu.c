@@ -1105,8 +1105,8 @@ void render_star_count_dialog_text(s8 *xMatrix, s16 *linePos)
 #endif
 {
     s8 hundredsDigit = gDialogVariable / 100;
+    s8 tensDigit = gDialogVariable % 100 / 10;
     s8 onesDigit = gDialogVariable % 10;
-    s8 tensDigit = gDialogVariable % 100 - onesDigit;
 
     if (hundredsDigit != 0) {
 #if defined(VERSION_JP) || defined(VERSION_SH)
