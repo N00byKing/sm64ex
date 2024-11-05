@@ -148,5 +148,10 @@ void do_cutscene_handler(void);
 void render_hud_cannon_reticle(void);
 void reset_red_coins_collected(void);
 s16 render_menus_and_dialogs(void);
+#ifdef VERSION_EU
+void render_digit(struct DialogEntry *dialog, s8 *linePos, int i);
+#else
+void render_digit(s8 *xMatrix, s16 *linePos, int i);
+#endif
 
 #endif // INGAME_MENU_H

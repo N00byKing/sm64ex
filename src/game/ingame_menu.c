@@ -1109,72 +1109,57 @@ void render_star_count_dialog_text(s8 *xMatrix, s16 *linePos)
     s8 onesDigit = gDialogVariable % 10;
 
     if (hundredsDigit != 0) {
-#if defined(VERSION_JP) || defined(VERSION_SH)
-        create_dl_translation_matrix(MENU_MTX_NOPUSH, xMatrix[0] * 10, 0, 0);
-        render_generic_char(hundredsDigit);
-#elif defined(VERSION_EU)
-        render_generic_dialog_char_at_pos(dialog, gDialogX, gDialogY, hundredsDigit);
-        gDialogX += gDialogCharWidths[hundredsDigit];
-        linePos[0] = 1;
+#ifdef VERSION_EU
+        render_digit(dialog, linePos, hundredsDigit);
 #else
-        if (xMatrix[0] != 1) {
-            create_dl_translation_matrix(
-                MENU_MTX_NOPUSH, (f32) (gDialogCharWidths[DIALOG_CHAR_SPACE] * xMatrix[0]), 0, 0);
-        }
-        render_generic_char(hundredsDigit);
-        create_dl_translation_matrix(MENU_MTX_NOPUSH, (f32) gDialogCharWidths[hundredsDigit], 0, 0);
-        xMatrix[0] = 1;
-        linePos[0]++;
+        render_digit(xMatrix, linePos, hundredsDigit);
 #endif
     }
 
     if (hundredsDigit != 0 || tensDigit != 0) {
-#if defined(VERSION_JP) || defined(VERSION_SH)
-        create_dl_translation_matrix(MENU_MTX_NOPUSH, xMatrix[0] * 10, 0, 0);
-        render_generic_char(tensDigit);
-#elif defined(VERSION_EU)
-        render_generic_dialog_char_at_pos(dialog, gDialogX, gDialogY, tensDigit);
-        gDialogX += gDialogCharWidths[tensDigit];
-        linePos[0] = 1;
+#ifdef VERSION_EU
+        render_digit(dialog, linePos, tensDigit);
 #else
-        if (xMatrix[0] != 1) {
-            create_dl_translation_matrix(MENU_MTX_NOPUSH, (f32)(gDialogCharWidths[DIALOG_CHAR_SPACE] * xMatrix[0]), 0, 0);
-        }
-
-        render_generic_char(tensDigit);
-        create_dl_translation_matrix(MENU_MTX_NOPUSH, (f32) gDialogCharWidths[tensDigit], 0, 0);
-        xMatrix[0] = 1;
-        linePos[0]++;
+        render_digit(xMatrix, linePos, tensDigit);
 #endif
     }
 #ifndef VERSION_EU
-    else {
 #if defined(VERSION_JP) || defined(VERSION_SH)
+    else {
         xMatrix[0]++;
-#endif
     }
+#endif
 #endif
 
 #ifdef VERSION_EU
-    render_generic_dialog_char_at_pos(dialog, gDialogX, gDialogY, onesDigit);
-    gDialogX += gDialogCharWidths[onesDigit];
-    linePos[0] = 1;
+    render_digit(dialog, linePos, onesDigit);
 #else
+    render_digit(xMatrix, linePos, onesDigit);
+#endif
+}
 
+#ifdef VERSION_EU
+void render_digit(struct DialogEntry *dialog, s8 *linePos, int i)
+#else
+void render_digit(s8 *xMatrix, s16 *linePos, int i)
+#endif
+{
 #if defined(VERSION_JP) || defined(VERSION_SH)
     create_dl_translation_matrix(MENU_MTX_NOPUSH, xMatrix[0] * 10, 0, 0);
-    render_generic_char(onesDigit);
+    render_generic_char(i);
+#elif defined(VERSION_EU)
+    render_generic_dialog_char_at_pos(dialog, gDialogX, gDialogY, i);
+    gDialogX += gDialogCharWidths[i];
+    linePos[0] = 1;
 #else
     if (xMatrix[0] != 1) {
-        create_dl_translation_matrix(MENU_MTX_NOPUSH, (f32)(gDialogCharWidths[DIALOG_CHAR_SPACE] * (xMatrix[0] - 1)), 0, 0);
+        create_dl_translation_matrix(MENU_MTX_NOPUSH,
+                                     (f32) (gDialogCharWidths[DIALOG_CHAR_SPACE] * xMatrix[0]), 0, 0);
     }
-
-    render_generic_char(onesDigit);
-    create_dl_translation_matrix(MENU_MTX_NOPUSH, (f32) gDialogCharWidths[onesDigit], 0, 0);
-#endif
-
-    linePos[0]++;
+    render_generic_char(i);
+    create_dl_translation_matrix(MENU_MTX_NOPUSH, (f32) gDialogCharWidths[i], 0, 0);
     xMatrix[0] = 1;
+    linePos[0]++;
 #endif
 }
 
