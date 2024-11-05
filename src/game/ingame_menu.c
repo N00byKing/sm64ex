@@ -1140,6 +1140,7 @@ void render_star_count_dialog_text(s8 *xMatrix, s16 *linePos)
         if (xMatrix[0] != 1) {
             create_dl_translation_matrix(MENU_MTX_NOPUSH, (f32)(gDialogCharWidths[DIALOG_CHAR_SPACE] * xMatrix[0]), 0, 0);
         }
+
         render_generic_char(tensDigit);
         create_dl_translation_matrix(MENU_MTX_NOPUSH, (f32) gDialogCharWidths[tensDigit], 0, 0);
         xMatrix[0] = 1;
