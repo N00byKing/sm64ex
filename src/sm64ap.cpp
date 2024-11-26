@@ -79,8 +79,12 @@ void SM64AP_RecvItem(int64_t idx, bool notify) {
         case SM64AP_ID_CANNONUNLOCK(0) ... SM64AP_ID_CANNONUNLOCK(15-1):
             sm64_have_cannon[idx-(SM64AP_ID_CANNONUNLOCK(0))] = true;
             break;
-        case SM64AP_ID_ABILITY(0) ... SM64AP_ID_ABILITY(SM64AP_NUM_ABILITIES-1):
-            sm64_have_abilities[idx-(SM64AP_ID_ABILITY(0))] = true;
+        case SM64AP_ID_ABILITY(0):
+            sm64_have_abilities[idx - SM64AP_ABILITY_OFFSET + 1] = sm64_have_abilities[idx - SM64AP_ABILITY_OFFSET];
+            sm64_have_abilities[idx - SM64AP_ABILITY_OFFSET] = true;
+            break;
+        case SM64AP_ID_ABILITY(1) ... SM64AP_ID_ABILITY(SM64AP_NUM_ABILITIES-1):
+            sm64_have_abilities[idx-SM64AP_ABILITY_OFFSET] = true;
             break;
     }
 }
@@ -505,8 +509,8 @@ void SM64AP_DeathLinkSend() {
 }
 
 bool SM64AP_CanDoubleJump() {
-    #warning Use doublejump logic once implemented
-    return sm64_have_abilities[SM64AP_ID_TRIPLEJUMP - SM64AP_ABILITY_OFFSET];
+    return sm64_have_abilities[SM64AP_ID_DOUBLEJUMP - SM64AP_ABILITY_OFFSET]
+           || sm64_have_abilities[SM64AP_ID_TRIPLEJUMP - SM64AP_ABILITY_OFFSET];
 }
 
 bool SM64AP_CanTripleJump() {
