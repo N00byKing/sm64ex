@@ -2714,7 +2714,7 @@ s16 render_pause_courses_and_castle(void) {
     print_text(GFX_DIMENSIONS_RECT_FROM_RIGHT_EDGE(78)+26, 209-70, SM64AP_HaveCap(8) ? "Y" : "N");
     s16 x = -32;
     s16 y = 170;
-    s16 spacing = 18;
+    s16 spacing = 16;
     print_text(GFX_DIMENSIONS_RECT_FROM_LEFT_EDGE(20), 209-20, "ABILITIES");
     gSPDisplayList(gDisplayListHead++, dl_rgba16_text_begin);
     gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, gDialogTextAlpha);
