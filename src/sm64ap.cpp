@@ -271,7 +271,7 @@ void SM64AP_SetCourseMap(std::map<int,int> map) {
 }
 
 void SM64AP_SetMoveRandoVec(int vec) {
-    for (int i = 0; i < SM64AP_NUM_ABILITIES; i++) {
+    for (int i = 1; i < SM64AP_NUM_ABILITIES; i++) { // Start at 1, DJ bit is unnecessary
         sm64_have_abilities[i] = !std::bitset<SM64AP_NUM_ABILITIES>(vec).test(i) || sm64_have_abilities[i];
     }
 }
