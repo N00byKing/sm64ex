@@ -2714,54 +2714,52 @@ s16 render_pause_courses_and_castle(void) {
     print_text(GFX_DIMENSIONS_RECT_FROM_RIGHT_EDGE(78)+26, 209-70, SM64AP_HaveCap(8) ? "Y" : "N");
     s16 x = -32;
     s16 y = 170;
-    s16 spacing = 16;
+    s16 spacing = 18;
     print_text(GFX_DIMENSIONS_RECT_FROM_LEFT_EDGE(20), 209-20, "ABILITIES");
     gSPDisplayList(gDisplayListHead++, dl_rgba16_text_begin);
     gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, gDialogTextAlpha);
-
-    if (SM64AP_CanDoubleJump()) {
+    if (SM64AP_CanTripleJump()) {
+        u8 str_triple_jump[] = { TEXT_TRIPLE_JUMP };
+        print_generic_string(x, y, str_triple_jump);
+    } else if (SM64AP_CanDoubleJump()) {
         u8 str_double_jump[] = { TEXT_DOUBLE_JUMP };
         print_generic_string(x, y, str_double_jump);
     }
-    if (SM64AP_CanTripleJump()) {
-        u8 str_triple_jump[] = { TEXT_TRIPLE_JUMP };
-        print_generic_string(x, y - spacing, str_triple_jump);
-    }
     if (SM64AP_CanLongJump()) {
         u8 str_long_jump[] = { TEXT_LONG_JUMP };
-        print_generic_string(x, y - spacing*2, str_long_jump);
+        print_generic_string(x, y - spacing, str_long_jump);
     }
     if (SM64AP_CanBackflip()) {
         u8 str_backflip[] = { TEXT_BACKFLIP };
-        print_generic_string(x, y - spacing*3, str_backflip);
+        print_generic_string(x, y - spacing*2, str_backflip);
     }
     if (SM64AP_CanSideFlip()) {
         u8 str_side_flip[] = { TEXT_SIDE_FLIP };
-        print_generic_string(x, y - spacing*4, str_side_flip);
+        print_generic_string(x, y - spacing*3, str_side_flip);
     }
     if (SM64AP_CanWallKick()) {
         u8 str_wall_kick[] = { TEXT_WALL_KICK };
-        print_generic_string(x, y - spacing*5, str_wall_kick);
+        print_generic_string(x, y - spacing*4, str_wall_kick);
     }
     if (SM64AP_CanDive()) {
         u8 str_dive[] = { TEXT_DIVE };
-        print_generic_string(x, y - spacing*6, str_dive);
+        print_generic_string(x, y - spacing*5, str_dive);
     }
     if (SM64AP_CanGroundPound()) {
         u8 str_ground_pound[] = { TEXT_GROUND_POUND };
-        print_generic_string(x, y - spacing*7, str_ground_pound);
+        print_generic_string(x, y - spacing*6, str_ground_pound);
     }
     if (SM64AP_CanKick()) {
         u8 str_kick[] = { TEXT_KICK };
-        print_generic_string(x, y - spacing*8, str_kick);
+        print_generic_string(x, y - spacing*7, str_kick);
     }
     if (SM64AP_CanClimb()) {
         u8 str_climb[] = { TEXT_CLIMB };
-        print_generic_string(x, y - spacing*9, str_climb);
+        print_generic_string(x, y - spacing*8, str_climb);
     }
     if (SM64AP_CanLedgeGrab()) {
         u8 str_ledge_grab[] = { TEXT_LEDGE_GRAB };
-        print_generic_string(x, y - spacing*10, str_ledge_grab);
+        print_generic_string(x, y - spacing*9, str_ledge_grab);
     }
     return 0;
 }
