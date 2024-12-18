@@ -35,6 +35,7 @@
 #define TEXT_CANYON _("Cannon Unlocked")
 #endif
 // Moves
+#define TEXT_DOUBLE_JUMP _("DOUBLE JUMP")
 #define TEXT_TRIPLE_JUMP _("TRIPLE JUMP")
 #define TEXT_LONG_JUMP _("LONG JUMP")
 #define TEXT_BACKFLIP _("BACKFLIP")

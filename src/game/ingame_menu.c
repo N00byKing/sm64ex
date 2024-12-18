@@ -2721,6 +2721,9 @@ s16 render_pause_courses_and_castle(void) {
     if (SM64AP_CanTripleJump()) {
         u8 str_triple_jump[] = { TEXT_TRIPLE_JUMP };
         print_generic_string(x, y, str_triple_jump);
+    } else if (SM64AP_CanDoubleJump()) {
+        u8 str_double_jump[] = { TEXT_DOUBLE_JUMP };
+        print_generic_string(x, y, str_double_jump);
     }
     if (SM64AP_CanLongJump()) {
         u8 str_long_jump[] = { TEXT_LONG_JUMP };
