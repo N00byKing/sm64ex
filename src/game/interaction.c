@@ -917,7 +917,7 @@ u32 interact_warp_door(struct MarioState *m, UNUSED u32 interactType, struct Obj
                 if (!sDisplayingDoorText) {
                     // Moat door skip was intended confirmed
                     set_mario_action(m, ACT_READING_AUTOMATIC_DIALOG,
-                                     SM64AP_HaveKey2() ? DIALOG_023 : DIALOG_022);
+                                     SM64AP_HaveKey2() ? DIALOG_099 : DIALOG_022);
                 }
                 sDisplayingDoorText = TRUE;
 

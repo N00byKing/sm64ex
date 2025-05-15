@@ -1228,13 +1228,10 @@ DEFINE_DIALOG(DIALOG_098, 1, 2, 95, 200, _("\
 Come on in here...\n\
 ...heh, heh, heh..."))
 
-// unused
 DEFINE_DIALOG(DIALOG_099, 1, 5, 95, 200, _("\
-Eh he he...\n\
-You're mine, now, hee hee!\n\
-I'll pass right through\n\
-this wall. Can you do\n\
-that? Heh, heh, heh!"))
+This key doesn't fit!\n\
+Maybe it's for the\n\
+second floor..."))
 
 DEFINE_DIALOG(DIALOG_100, 1, 3, 95, 200, _("\
 Ukkiki...Wakkiki...kee kee!\n\
