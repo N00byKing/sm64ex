@@ -1228,7 +1228,7 @@ DEFINE_DIALOG(DIALOG_098, 1, 2, 95, 200, _("\
 Come on in here...\n\
 ...heh, heh, heh..."))
 
-DEFINE_DIALOG(DIALOG_099, 1, 5, 95, 200, _("\
+DEFINE_DIALOG(DIALOG_099, 1, 3, 95, 200, _("\
 This key doesn't fit!\n\
 Maybe it's for the\n\
 second floor..."))
