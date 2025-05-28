@@ -101,8 +101,8 @@ const LevelScript level_hmc_entry[] = {
         OBJECT(/*model*/ MODEL_NONE, /*pos*/ -7152,  3161, 7181, /*angle*/ 0, 135, 0, /*behParam*/ 0x000A0000, /*beh*/ bhvSpinAirborneWarp),
         OBJECT(/*model*/ MODEL_NONE, /*pos*/  3351, -4690, 4773, /*angle*/ 0,   0, 0, /*behParam*/ 0x340B0000, /*beh*/ bhvWarp),
         
-        OBJECT(/*model*/ MODEL_CASTLE_CLOCK_HOUR_HAND, /*pos*/  3350, -4500, 4770, /*angle*/ 0, -45, 0, /*behParam*/ LEVEL_COTMC, /*beh*/ bhvClockHourHand),
-        OBJECT(/*model*/ MODEL_CASTLE_CLOCK_MINUTE_HAND, /*pos*/  3350, -4500, 4770, /*angle*/ 0, -45, 0, /*behParam*/ LEVEL_COTMC, /*beh*/ bhvClockMinuteHand),
+        OBJECT(/*model*/ MODEL_CASTLE_CLOCK_HOUR_HAND, /*pos*/  3350, -4480, 4770, /*angle*/ 0, -45, 0, /*behParam*/ LEVEL_COTMC, /*beh*/ bhvClockHourHand),
+        OBJECT(/*model*/ MODEL_CASTLE_CLOCK_MINUTE_HAND, /*pos*/  3350, -4480, 4770, /*angle*/ 0, -45, 0, /*behParam*/ LEVEL_COTMC, /*beh*/ bhvClockMinuteHand),
         WARP_NODE(/*id*/ 0x0A, /*destLevel*/ LEVEL_HMC, /*destArea*/ 0x01, /*destNode*/ 0x0A, /*flags*/ WARP_NO_CHECKPOINT),
         WARP_NODE(/*id*/ 0x0B, /*destLevel*/ LEVEL_COTMC, /*destArea*/ 0x01, /*destNode*/ 0x0A, /*flags*/ WARP_NO_CHECKPOINT),
         WARP_NODE(/*id*/ 0xF0, /*destLevel*/ LEVEL_CASTLE, /*destArea*/ 0x03, /*destNode*/ 0x34, /*flags*/ WARP_NO_CHECKPOINT),
