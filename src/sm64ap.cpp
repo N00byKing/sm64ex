@@ -32,6 +32,7 @@ bool sm64_have_cannon[15];
 int sm64_completion_type = 0;
 std::bitset<SM64AP_NUM_ABILITIES> sm64_have_abilities;
 int* sm64_clockaction = nullptr;
+int* sm64_clockangle = nullptr;
 int sm64_cost_firstbowserdoor = 8;
 int sm64_cost_basementdoor = 30;
 int sm64_cost_secondfloordoor = 50;
@@ -219,11 +220,11 @@ void SM64AP_RedirectWarp(s16* curLevel, s16* destLevel, s8* curArea, s16* destAr
     }
 }
 
-int SM64AP_CourseToTTC() {
+int SM64AP_EntranceToTTC() {
     int level = 0;
     for (auto itr : map_entrances) {
         if (itr.second/10 == LEVEL_TTC) {
-            return itr.first/10;
+            return itr.first;
         }
     }
     return -1; // Error Cond
@@ -233,9 +234,20 @@ void SM64AP_SetClockToTTCAction(int* action) {
     sm64_clockaction = action;
 }
 
+void SM64AP_SetClockToTTCAngle(int* angle) {
+    sm64_clockangle = angle;
+}
+
+int SM64AP_GetClockToTTCAngle() {
+    if (sm64_clockangle)
+        return *sm64_clockangle;
+    return 0;
+}
+
 void SM64AP_SetClockToTTCState() {
     if (sm64_clockaction) *sm64_clockaction = 5;
     sm64_clockaction = nullptr;
+    sm64_clockangle = nullptr;
 }
 
 void SM64AP_SetFirstBowserDoorCost(int amount) {
@@ -555,6 +567,9 @@ bool SM64AP_CanLedgeGrab() {
 void SM64AP_PrintNext() {
     if (AP_GetConnectionStatus() == AP_ConnectionStatus::Disconnected) {
         print_text(GFX_DIMENSIONS_FROM_LEFT_EDGE(SCREEN_WIDTH / 2) - 7, SCREEN_HEIGHT / 2, "Connecting");
+    } else if (false) {
+        print_text(GFX_DIMENSIONS_FROM_LEFT_EDGE(SCREEN_WIDTH / 2) - 7, SCREEN_HEIGHT / 2,
+                   std::to_string(*sm64_clockangle).c_str());
     }
     if (AP_GetConnectionStatus() == AP_ConnectionStatus::ConnectionRefused) {
         print_text(GFX_DIMENSIONS_FROM_LEFT_EDGE(SCREEN_WIDTH / 2) - 10, SCREEN_HEIGHT / 2, "CONNECTION REFUSED");

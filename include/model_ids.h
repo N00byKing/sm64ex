@@ -105,8 +105,8 @@
 // castle
 #define MODEL_CASTLE_BOWSER_TRAP               0x35        // castle_geo_000F18
 #define MODEL_CASTLE_WATER_LEVEL_PILLAR        0x36        // castle_geo_001940
-#define MODEL_CASTLE_CLOCK_MINUTE_HAND         0x37        // castle_geo_001530
-#define MODEL_CASTLE_CLOCK_HOUR_HAND           0x38        // castle_geo_001548
+#define MODEL_CASTLE_CLOCK_MINUTE_HAND         0x3D        // castle_geo_001530
+#define MODEL_CASTLE_CLOCK_HOUR_HAND           0x3E        // castle_geo_001548
 #define MODEL_CASTLE_CLOCK_PENDULUM            0x39        // castle_geo_001518
 
 // hmc

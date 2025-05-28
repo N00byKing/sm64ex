@@ -14,6 +14,7 @@
 
 #include "make_const_nonconst.h"
 #include "levels/castle_grounds/header.h"
+#include "levels/castle_inside/header.h"
 
 static const LevelScript script_func_local_1[] = {
     WARP_NODE(/*id*/ 0x00, /*destLevel*/ LEVEL_CASTLE, /*destArea*/ 0x01, /*destNode*/ 0x00, /*flags*/ WARP_NO_CHECKPOINT),
@@ -116,6 +117,8 @@ const LevelScript level_castle_grounds_entry[] = {
     LOAD_MODEL_FROM_GEO(MODEL_CASTLE_GROUNDS_VCUTM_GRILL,  castle_grounds_geo_00070C),
     LOAD_MODEL_FROM_GEO(MODEL_CASTLE_GROUNDS_FLAG,         castle_grounds_geo_000660),
     LOAD_MODEL_FROM_GEO(MODEL_CASTLE_GROUNDS_CANNON_GRILL, castle_grounds_geo_000724),
+    LOAD_MODEL_FROM_GEO(MODEL_CASTLE_CLOCK_MINUTE_HAND,    castle_geo_001530),
+    LOAD_MODEL_FROM_GEO(MODEL_CASTLE_CLOCK_HOUR_HAND,      castle_geo_001548),
 
     AREA(/*index*/ 1, castle_grounds_geo_00073C),
         WARP_NODE(/*id*/ 0xF1, /*destLevel*/ LEVEL_CASTLE_GROUNDS, /*destArea*/ 0x01, /*destNode*/ 0x03, /*flags*/ WARP_NO_CHECKPOINT),
@@ -127,6 +130,8 @@ const LevelScript level_castle_grounds_entry[] = {
         MACRO_OBJECTS(/*objList*/ castle_grounds_seg7_macro_objs),
         SET_BACKGROUND_MUSIC(/*settingsPreset*/ 0x0000, /*seq*/ SEQ_SOUND_PLAYER),
         TERRAIN_TYPE(/*terrainType*/ TERRAIN_GRASS),
+        OBJECT(/*model*/ MODEL_CASTLE_CLOCK_HOUR_HAND, /*pos*/ -3325, -225, -2895, /*angle*/ 0, -45, 0, /*behParam*/ LEVEL_VCUTM, /*beh*/ bhvClockHourHand),
+        OBJECT(/*model*/ MODEL_CASTLE_CLOCK_MINUTE_HAND, /*pos*/ -3325, -225, -2895, /*angle*/ 0, -45, 0, /*behParam*/ LEVEL_VCUTM, /*beh*/ bhvClockMinuteHand),
     END_AREA(),
 
     FREE_LEVEL_POOL(),
