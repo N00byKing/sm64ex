@@ -10,21 +10,7 @@ void bhv_rotating_clock_arm_loop(void) {
     int course = entrance / 10;
     s32 isMinuteHand = cur_obj_has_behavior(bhvClockMinuteHand);
     u16 rollAngle = o->oFaceAngleRoll;
-    if (course == LEVEL_SL && o->oBehParams == LEVEL_SL * 10) {
-        // Snowman's Land Reflection. Show TTC hand but don't set clock action from it
-        // Inverse scale of SL
-        cur_obj_scale(-1.2f);
-        // Sync the reflection. Doing this in other ways results in desyncs, so get the angle directly from the real arrow
-        if (isMinuteHand) {
-            u16 originalRollAngle = SM64AP_GetClockToTTCAngle();
-            rollAngle = originalRollAngle + 0x8000;
-            o->oFaceAngleRoll = rollAngle;
-        } else {
-            o->oFaceAngleRoll = 0x8000;
-        }
-        return;
-    }
-    else if ((o->oBehParams <= LEVEL_UNKNOWN_38 && o->oBehParams != course) ||
+    if ((o->oBehParams <= LEVEL_UNKNOWN_38 && o->oBehParams != course) ||
         (o->oBehParams > LEVEL_UNKNOWN_38 && o->oBehParams != entrance)) { // Special handling is done for THI, which has two entrances. If param is greater than max level id, check directly against entrance
         // This entrance doesn't lead to TTC. Remove.
         obj_mark_for_deletion(o);
@@ -35,8 +21,6 @@ void bhv_rotating_clock_arm_loop(void) {
     } else if (isMinuteHand && o->oAction < 2) {
         // This is the correct clock hand. Set the clock action
         SM64AP_SetClockToTTCAction(&(o->oAction));
-        if (o->oBehParams == LEVEL_SL) // Minor optimization. Angle only needs to be externally tracked for SL reflection
-            SM64AP_SetClockToTTCAngle(&(o->oFaceAngleRoll));
     }
     struct Surface *marioSurface;
     o->oFloorHeight =

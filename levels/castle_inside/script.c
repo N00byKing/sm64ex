@@ -139,8 +139,6 @@ static const LevelScript script_func_local_2[] = {
     PAINTING_WARP_NODE(/*id*/ 0x26, /*destLevel*/ LEVEL_SL, /*destArea*/ 0x01, /*destNode*/ 0x0A, /*flags*/ WARP_NO_CHECKPOINT),
     OBJECT(/*model*/ MODEL_CASTLE_CLOCK_HOUR_HAND, /*pos*/  3540, 1790, -270, /*angle*/ 0, 0, 0, /*behParam*/ LEVEL_SL, /*beh*/ bhvClockHourHand),
     OBJECT(/*model*/ MODEL_CASTLE_CLOCK_MINUTE_HAND, /*pos*/  3540, 1790, -270, /*angle*/ 0, 0, 0, /*behParam*/ LEVEL_SL, /*beh*/ bhvClockMinuteHand),
-    OBJECT(/*model*/ MODEL_CASTLE_CLOCK_HOUR_HAND, /*pos*/  5120, 1790, -270, /*angle*/ 0, 180, 0, /*behParam*/ LEVEL_SL * 10, /*beh*/ bhvClockHourHand),
-    OBJECT(/*model*/ MODEL_CASTLE_CLOCK_MINUTE_HAND, /*pos*/  5120, 1790, -270, /*angle*/ 0, 180, 0, /*behParam*/ LEVEL_SL * 10, /*beh*/ bhvClockMinuteHand),
     PAINTING_WARP_NODE(/*id*/ 0x27, /*destLevel*/ LEVEL_THI, /*destArea*/ 0x01, /*destNode*/ 0x0A, /*flags*/ WARP_NO_CHECKPOINT),
     PAINTING_WARP_NODE(/*id*/ 0x28, /*destLevel*/ LEVEL_THI, /*destArea*/ 0x01, /*destNode*/ 0x0A, /*flags*/ WARP_NO_CHECKPOINT),
     PAINTING_WARP_NODE(/*id*/ 0x29, /*destLevel*/ LEVEL_THI, /*destArea*/ 0x01, /*destNode*/ 0x0A, /*flags*/ WARP_NO_CHECKPOINT),
