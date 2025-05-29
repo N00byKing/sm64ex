@@ -29,12 +29,10 @@ void bhv_rotating_clock_arm_loop(void) {
         // This entrance doesn't lead to TTC. Remove.
         obj_mark_for_deletion(o);
         return;
+    } else if (o->oBehParams == LEVEL_VCUTM && !SM64AP_MoatDrained()) { // If the moat isn't drained the clock hands stick out of the water. Remove them.
+        obj_mark_for_deletion(o);
+        return;
     } else if (isMinuteHand && o->oAction < 2) {
-        // If the moat isn't drained the clock hands stick out of the water. Remove them.
-        if (o->oBehParams == LEVEL_VCUTM && !SM64AP_MoatDrained()) {
-            obj_mark_for_deletion(o);
-            return;
-        }
         // This is the correct clock hand. Set the clock action
         SM64AP_SetClockToTTCAction(&(o->oAction));
         if (o->oBehParams == LEVEL_SL) // Minor optimization. Angle only needs to be externally tracked for SL reflection
