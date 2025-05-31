@@ -3,7 +3,6 @@
  */
 
 #include "sm64ap.h"
-#include "../../sm64ap.h"
 
 void bhv_rotating_clock_arm_loop(void) {
     int entrance = SM64AP_EntranceToTTC();
