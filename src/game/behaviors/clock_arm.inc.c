@@ -19,7 +19,7 @@ void bhv_rotating_clock_arm_loop(void) {
         // This is the correct clock hand. Set the clock action
         SM64AP_SetClockToTTCAction(&(o->oAction));
     }
-
+    
     struct Surface *marioSurface;
     u16 rollAngle = o->oFaceAngleRoll;
     o->oFloorHeight =
