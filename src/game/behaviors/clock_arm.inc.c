@@ -8,8 +8,6 @@
 void bhv_rotating_clock_arm_loop(void) {
     int entrance = SM64AP_EntranceToTTC();
     int course = entrance / 10;
-    s32 isMinuteHand = cur_obj_has_behavior(bhvClockMinuteHand);
-    u16 rollAngle = o->oFaceAngleRoll;
     if ((o->oBehParams <= LEVEL_UNKNOWN_38 && o->oBehParams != course) ||
         (o->oBehParams > LEVEL_UNKNOWN_38 && o->oBehParams != entrance)) { // Special handling is done for THI, which has two entrances. If param is greater than max level id, check directly against entrance
         // This entrance doesn't lead to TTC. Remove.
@@ -18,13 +16,16 @@ void bhv_rotating_clock_arm_loop(void) {
     } else if (o->oBehParams == LEVEL_VCUTM && !SM64AP_MoatDrained()) { // If the moat isn't drained the clock hands stick out of the water. Remove them.
         obj_mark_for_deletion(o);
         return;
-    } else if (isMinuteHand && o->oAction < 2) {
+    } else if (cur_obj_has_behavior(bhvClockMinuteHand) && o->oAction < 2) {
         // This is the correct clock hand. Set the clock action
         SM64AP_SetClockToTTCAction(&(o->oAction));
     }
+
     struct Surface *marioSurface;
+    u16 rollAngle = o->oFaceAngleRoll;
     o->oFloorHeight =
         find_floor(gMarioObject->oPosX, gMarioObject->oPosY, gMarioObject->oPosZ, &marioSurface);
+
     // On first frame, set entrance-specific settings
     if (o->oTimer == 0) {
         switch (o->oBehParams) {
@@ -102,7 +103,7 @@ void bhv_rotating_clock_arm_loop(void) {
         // If Mario is touching the Tick Tock Clock painting...
         if (1) {
             // And this is the minute hand...
-            if (isMinuteHand) {
+            if (cur_obj_has_behavior(bhvClockMinuteHand)) {
                 // Set Tick Tick Clock's speed based on the angle of the hand.
                 // The angle actually counting down from 0xFFFF to 0 so
                 //   11 o'clock is a small value and 1 o'clock is a large value.
@@ -125,6 +126,6 @@ void bhv_rotating_clock_arm_loop(void) {
     }
 
     // Only rotate the hands until Mario enters the painting. Don't rotate the hour hand except in TTC
-    if (o->oAction < 2 && (o->oBehParams == LEVEL_TTC || isMinuteHand))
+    if (o->oAction < 2 && (o->oBehParams == LEVEL_TTC || cur_obj_has_behavior(bhvClockMinuteHand)))
         cur_obj_rotate_face_angle_using_vel();
 }
