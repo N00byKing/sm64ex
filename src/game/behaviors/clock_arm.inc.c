@@ -7,12 +7,9 @@
 void bhv_rotating_clock_arm_loop(void) {
     int entrance = SM64AP_EntranceToTTC();
     int course = entrance / 10;
-    if ((o->oBehParams <= LEVEL_UNKNOWN_38 && o->oBehParams != course) ||
-        (o->oBehParams > LEVEL_UNKNOWN_38 && o->oBehParams != entrance)) { // Special handling is done for THI, which has two entrances. If param is greater than max level id, check directly against entrance
-        // This entrance doesn't lead to TTC. Remove.
-        obj_mark_for_deletion(o);
-        return;
-    } else if (o->oBehParams == LEVEL_VCUTM && !SM64AP_MoatDrained()) { // If the moat isn't drained the clock hands stick out of the water. Remove them.
+    if ((o->oBehParams <= LEVEL_UNKNOWN_38 && o->oBehParams != course) || // This entrance doesn't lead to TTC. Remove.
+        (o->oBehParams > LEVEL_UNKNOWN_38 && o->oBehParams != entrance) || // Special handling is done for THI, which has two entrances. If param is greater than max level id, check directly against entrance
+        (o->oBehParams == LEVEL_VCUTM && !SM64AP_MoatDrained())) { // If the moat isn't drained the clock hands stick out of the water. Remove them.
         obj_mark_for_deletion(o);
         return;
     } else if (cur_obj_has_behavior(bhvClockMinuteHand) && o->oAction < 2) {
