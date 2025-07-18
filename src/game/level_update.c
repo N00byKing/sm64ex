@@ -841,6 +841,7 @@ void initiate_delayed_warp(void) {
                 case WARP_OP_GAME_OVER:
                     save_file_reload();
                     warp_special(-3);
+                    SM64AP_DeathLinkSend();
                     break;
 
                 case WARP_OP_CREDITS_END:
