@@ -16,9 +16,12 @@ extern "C" {
 #include <set>
 
 #define WARP_NODE_CREDITS_MIN 0xF8 // level_update.c
+#define NUM_PAINTING_LOCKS 15
 
 // Set to false on some branch for compat with patches
 static constexpr bool SM64AP_SUPPORT_MOVE_RANDO = true;
+// Set to false on some branch for compat with patches
+static constexpr bool SM64AP_SUPPORT_PAINTING_RANDO = true;
 
 int starsCollected = 0;
 bool sm64_locations[SM64AP_NUM_LOCS];
@@ -29,6 +32,7 @@ bool sm64_have_metalcap = false;
 bool sm64_have_vanishcap = false;
 int sm64_moat_state = 0;
 bool sm64_have_cannon[15];
+bool sm64_have_painting[NUM_PAINTING_LOCKS];
 int sm64_completion_type = 0;
 std::bitset<SM64AP_NUM_ABILITIES> sm64_have_abilities;
 int* sm64_clockaction = nullptr;
@@ -78,6 +82,10 @@ void SM64AP_RecvItem(int64_t idx, bool notify) {
             break;
         case SM64AP_ID_CANNONUNLOCK(0) ... SM64AP_ID_CANNONUNLOCK(15-1):
             sm64_have_cannon[idx-(SM64AP_ID_CANNONUNLOCK(0))] = true;
+            break;
+        case SM64AP_ID_PAINTINGUNLOCK(0) ... SM64AP_ID_PAINTINGUNLOCK(NUM_PAINTING_LOCKS-1):
+	    // We don't have a painting unlock for BoB so we have to add 1 to get to painting 2
+            sm64_have_painting[idx-(SM64AP_ID_PAINTINGUNLOCK(0))+1] = true;
             break;
         case SM64AP_ID_ABILITY(0):
             sm64_have_abilities[idx-SM64AP_ABILITY_OFFSET+1] = sm64_have_abilities[idx-SM64AP_ABILITY_OFFSET];
@@ -275,6 +283,13 @@ void SM64AP_SetMoveRandoVec(int vec) {
         sm64_have_abilities[i] = !std::bitset<SM64AP_NUM_ABILITIES>(vec).test(i) || sm64_have_abilities[i];
     }
 }
+void SM64AP_SetPaintingRando(int boolAsInt) {
+    if(boolAsInt == 0) { // 0 = not enabled, so unlock all paintings
+	for (int i = 0; i < NUM_PAINTING_LOCKS; i++) {
+	    sm64_have_painting[i] = true;
+	}
+    }
+}
 
 void SM64AP_ResetItems() {
     for (int i = 0; i < SM64AP_NUM_LOCS; i++) {
@@ -282,6 +297,9 @@ void SM64AP_ResetItems() {
     }
     for (int i = 0; i < 15; i++) {
         sm64_have_cannon[i] = false;
+    }
+    for (int i = 0; i < NUM_PAINTING_LOCKS; i++) {
+        sm64_have_painting[i] = false;
     }
     sm64_have_abilities.reset();
     sm64_have_key1 = false;
@@ -333,6 +351,7 @@ void SM64AP_GenericInit() {
     AP_RegisterSlotDataIntCallback("StarsToFinish", &SM64AP_SetStarsToFinish);
     AP_RegisterSlotDataIntCallback("CompletionType", &SM64AP_SetCompletionType);
     AP_RegisterSlotDataIntCallback("MoveRandoVec", &SM64AP_SetMoveRandoVec);
+    AP_RegisterSlotDataIntCallback("PaintingRando", &SM64AP_SetPaintingRando);
     AP_RegisterSlotDataMapIntIntCallback("AreaRando", &SM64AP_SetCourseMap);
 
     course_dest_supported = {
@@ -486,6 +505,28 @@ bool SM64AP_HaveCannon(int courseIdx) {
     return true;
 }
 
+bool SM64AP_HavePainting(int courseIdx) {
+    switch(courseIdx) {
+	case 1:  // BOB painting is always unlocked
+	case 5:  // BBH doesn't have a painting
+	case 6:  // HMC has a painting but you get stuck in an infinite loop of falling in and getting pushed out, so let's not do that :)
+	case 15: // RR doesn't have a painting
+	    return true;
+	default:
+	    bool haveUnlock = sm64_have_painting[courseIdx];
+	    return haveUnlock;
+    }
+}
+
+bool SM64AP_HaveAllPaintings() {
+    for(int i = 0; i < NUM_PAINTING_LOCKS; i++) {
+	if(!sm64_have_painting[i]) {
+	    return false;
+	}
+    }
+    return true;
+}
+
 bool SM64AP_MoatDrained() {
     return sm64_moat_state != 0;
 }
@@ -563,6 +604,10 @@ void SM64AP_PrintNext() {
     if (!sm64_have_abilities.all() && !SM64AP_SUPPORT_MOVE_RANDO) {
         print_text(GFX_DIMENSIONS_FROM_LEFT_EDGE(SCREEN_WIDTH / 2) - 10, SCREEN_HEIGHT / 2, "INCOMPATIBLE WITH");
         print_text(GFX_DIMENSIONS_FROM_LEFT_EDGE(SCREEN_WIDTH / 2) - 10, SCREEN_HEIGHT / 2 - 20, "MOUE RANDO");
+    }
+    if(!SM64AP_HaveAllPaintings() && !SM64AP_SUPPORT_PAINTING_RANDO) {
+        print_text(GFX_DIMENSIONS_FROM_LEFT_EDGE(SCREEN_WIDTH / 2) - 10, SCREEN_HEIGHT / 2, "INCOMPATIBLE WITH");
+        print_text(GFX_DIMENSIONS_FROM_LEFT_EDGE(SCREEN_WIDTH / 2) - 10, SCREEN_HEIGHT / 2 - 20, "PAINTING RANDO");
     }
     if (!AP_IsMessagePending()) return;
     AP_Message* msg = AP_GetLatestMessage();

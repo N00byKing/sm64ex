@@ -47,6 +47,26 @@
 #define TEXT_CLIMB _("CLIMB")
 #define TEXT_LEDGE_GRAB _("LEDGE GRAB")
 
+// Paintings
+#define TEXT_PAINTING_BOB _("BOB")
+#define TEXT_PAINTING_WF  _("WF ")
+#define TEXT_PAINTING_JRB _("JRB")
+#define TEXT_PAINTING_CCM _("CCM")
+#define TEXT_PAINTING_BBH _("BBH")
+#define TEXT_PAINTING_HMC _("HMC")
+#define TEXT_PAINTING_LLL _("LLL")
+#define TEXT_PAINTING_SSL _("SSL")
+#define TEXT_PAINTING_DDD _("DDD")
+#define TEXT_PAINTING_SL  _("SL ")
+#define TEXT_PAINTING_WDW _("WDW")
+#define TEXT_PAINTING_TTM _("TTM")
+#define TEXT_PAINTING_THI _("THI")
+#define TEXT_PAINTING_TTC _("TTC")
+#define TEXT_PAINTING_RR  _("RR ")
+#define TEXT_PAINTING_UNK _("UNK")
+#define TEXT_PAINTING_Y   _("Y")
+#define TEXT_PAINTING_N   _("N")
+
 #if defined(VERSION_JP) || defined(VERSION_SH)
 
 /**

@@ -673,6 +673,12 @@ void initiate_painting_warp(void) {
                 if (!(warpNode.destLevel & 0x80)) {
                     D_8032C9E0 = check_warp_checkpoint(&warpNode);
                 }
+		// If we don't have the painting for this course, kick Mario out
+		// The function takes care of handling if painting locking is not enabled
+		if(!SM64AP_HavePainting(gLevelToCourseNumTable[warpNode.destLevel - 1])) {
+		    set_mario_action(gMarioState, ACT_HARD_BACKWARD_AIR_KB, 0);
+		    return;
+		}
 
                 initiate_warp(warpNode.destLevel & 0x7F, warpNode.destArea, warpNode.destNode, 0);
                 check_if_should_set_warp_checkpoint(&warpNode);
