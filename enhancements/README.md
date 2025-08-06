@@ -39,7 +39,7 @@ Holding `L` while the star dance is playing disables nonstop mode and allows you
 
 Any map changes require you to leave the level to take effect.
 
-## Painting Locking
+## Painting Locking - `painting-locking_v0.0.0.patch`
 
 This adds the ability for Archipelago to randomize passability of paintings, meaning, paintings will prevent Mario from entering them if locked.
 
