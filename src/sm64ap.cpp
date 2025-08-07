@@ -81,11 +81,10 @@ void SM64AP_RecvItem(int64_t idx, bool notify) {
         case SM64AP_ID_CANNONUNLOCK(0) ... SM64AP_ID_CANNONUNLOCK(15-1):
             sm64_have_cannon[idx-(SM64AP_ID_CANNONUNLOCK(0))] = true;
             break;
-        case SM64AP_ID_PAINTINGUNLOCK(1) ... SM64AP_ID_PAINTINGUNLOCK(NUM_PAINTING_LOCKS-1):
-	    // We don't have a painting unlock for BoB (PAINTINGUNLOCK(0) won't ever appear),
-	    // but courses are 1-indexed so we have to add 1 to get to painting 2
-            sm64_have_painting[idx-(SM64AP_ID_PAINTINGUNLOCK(0))+1] = true;
-            break;
+	case SM64AP_ID_PAINTINGUNLOCK(0) ... SM64AP_ID_PAINTINGUNLOCK(NUM_PAINTING_LOCKS-1):
+	    // We don't have a painting unlock for BoB, so (0) will never appear; index 1 corresponds to WF, and so on
+	    sm64_have_painting[idx-(SM64AP_ID_PAINTINGUNLOCK(0))] = true;
+	    break;
         case SM64AP_ID_ABILITY(0):
             sm64_have_abilities[idx-SM64AP_ABILITY_OFFSET+1] = sm64_have_abilities[idx-SM64AP_ABILITY_OFFSET];
             sm64_have_abilities[idx-SM64AP_ABILITY_OFFSET] = true;
@@ -513,7 +512,8 @@ bool SM64AP_HavePainting(int courseIdx) {
 	case 15: // RR doesn't have a painting
 	    return true;
 	default:
-	    return sm64_have_painting[courseIdx];
+	    // courses are 1-indexed, the items are 0-indexed
+	    return sm64_have_painting[courseIdx-1];
     }
 }
 
