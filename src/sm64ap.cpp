@@ -20,8 +20,6 @@ extern "C" {
 
 // Set to false on some branch for compat with patches
 static constexpr bool SM64AP_SUPPORT_MOVE_RANDO = true;
-// Set to false on some branch for compat with patches
-static constexpr bool SM64AP_SUPPORT_PAINTING_RANDO = true;
 
 int starsCollected = 0;
 bool sm64_locations[SM64AP_NUM_LOCS];
@@ -83,8 +81,9 @@ void SM64AP_RecvItem(int64_t idx, bool notify) {
         case SM64AP_ID_CANNONUNLOCK(0) ... SM64AP_ID_CANNONUNLOCK(15-1):
             sm64_have_cannon[idx-(SM64AP_ID_CANNONUNLOCK(0))] = true;
             break;
-        case SM64AP_ID_PAINTINGUNLOCK(0) ... SM64AP_ID_PAINTINGUNLOCK(NUM_PAINTING_LOCKS-1):
-	    // We don't have a painting unlock for BoB so we have to add 1 to get to painting 2
+        case SM64AP_ID_PAINTINGUNLOCK(1) ... SM64AP_ID_PAINTINGUNLOCK(NUM_PAINTING_LOCKS-1):
+	    // We don't have a painting unlock for BoB (PAINTINGUNLOCK(0) won't ever appear),
+	    // but courses are 1-indexed so we have to add 1 to get to painting 2
             sm64_have_painting[idx-(SM64AP_ID_PAINTINGUNLOCK(0))+1] = true;
             break;
         case SM64AP_ID_ABILITY(0):
@@ -283,8 +282,9 @@ void SM64AP_SetMoveRandoVec(int vec) {
         sm64_have_abilities[i] = !std::bitset<SM64AP_NUM_ABILITIES>(vec).test(i) || sm64_have_abilities[i];
     }
 }
-void SM64AP_SetPaintingRando(int boolAsInt) {
-    if(boolAsInt == 0) { // 0 = not enabled, so unlock all paintings
+void SM64AP_SetPaintingRando(int enabled) {
+    if(!enabled) {
+	// not enabled, so unlock all paintings
 	for (int i = 0; i < NUM_PAINTING_LOCKS; i++) {
 	    sm64_have_painting[i] = true;
 	}
@@ -513,18 +513,8 @@ bool SM64AP_HavePainting(int courseIdx) {
 	case 15: // RR doesn't have a painting
 	    return true;
 	default:
-	    bool haveUnlock = sm64_have_painting[courseIdx];
-	    return haveUnlock;
+	    return sm64_have_painting[courseIdx];
     }
-}
-
-bool SM64AP_HaveAllPaintings() {
-    for(int i = 0; i < NUM_PAINTING_LOCKS; i++) {
-	if(!sm64_have_painting[i]) {
-	    return false;
-	}
-    }
-    return true;
 }
 
 bool SM64AP_MoatDrained() {
@@ -604,10 +594,6 @@ void SM64AP_PrintNext() {
     if (!sm64_have_abilities.all() && !SM64AP_SUPPORT_MOVE_RANDO) {
         print_text(GFX_DIMENSIONS_FROM_LEFT_EDGE(SCREEN_WIDTH / 2) - 10, SCREEN_HEIGHT / 2, "INCOMPATIBLE WITH");
         print_text(GFX_DIMENSIONS_FROM_LEFT_EDGE(SCREEN_WIDTH / 2) - 10, SCREEN_HEIGHT / 2 - 20, "MOUE RANDO");
-    }
-    if(!SM64AP_HaveAllPaintings() && !SM64AP_SUPPORT_PAINTING_RANDO) {
-        print_text(GFX_DIMENSIONS_FROM_LEFT_EDGE(SCREEN_WIDTH / 2) - 10, SCREEN_HEIGHT / 2, "INCOMPATIBLE WITH");
-        print_text(GFX_DIMENSIONS_FROM_LEFT_EDGE(SCREEN_WIDTH / 2) - 10, SCREEN_HEIGHT / 2 - 20, "PAINTING RANDO");
     }
     if (!AP_IsMessagePending()) return;
     AP_Message* msg = AP_GetLatestMessage();

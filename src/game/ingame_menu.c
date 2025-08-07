@@ -2758,11 +2758,7 @@ s16 render_pause_courses_and_castle(void) {
 	    case 13:
 	    case 14:
 		print_generic_string(linex, liney, lvlnames[i]);
-		if(SM64AP_HavePainting(i)) {
-		    print_generic_string(linex + 26, liney, txt_y);
-		} else {
-		    print_generic_string(linex + 26, liney, txt_n);
-		}
+		print_generic_string(linex + 26, liney, SM64AP_HavePainting(i)? txt_y : txt_n);
 		break;
 	    default:
 		print_generic_string(linex, liney, lvlnames[0]);
