@@ -38,13 +38,3 @@ Allows Mario to stay within the level after collecting a star.
 Holding `L` while the star dance is playing disables nonstop mode and allows you to leave the level normally.
 
 Any map changes require you to leave the level to take effect.
-
-## Painting Locking - `painting-locking_v0.0.0.patch`
-
-This adds the ability for Archipelago to randomize passability of paintings, meaning, paintings will prevent Mario from entering them if locked.
-
-The pause menu has been augmented to show the locked or unlocked status (Y - passable, N - impassable) of each level's entrance that can be locked.
-
-Most courses are lockable, with the exception of Big Boo's Haunt (BBH), Hazy Maze Cave (HMC), and Rainbow Ride (RR), as they either don't have paintings (BBH, RR) or in HMC's case the painting is in the ground.
-
-Bob-Omb Battlefield is never locked to ensure that sphere 0 always has something to do.
