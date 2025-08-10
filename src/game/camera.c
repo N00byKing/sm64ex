@@ -17,6 +17,7 @@
 #include "engine/behavior_script.h"
 #include "level_update.h"
 #include "ingame_menu.h"
+#include "sm64ap.h"
 #include "mario_actions_cutscene.h"
 #include "save_file.h"
 #include "object_helpers.h"
@@ -5199,7 +5200,11 @@ u8 get_cutscene_from_mario_status(struct Camera *c) {
             cutscene = CUTSCENE_ENTER_CANNON;
         }
         if (SURFACE_IS_PAINTING_WARP(sMarioGeometry.currFloorType)) {
-            cutscene = CUTSCENE_ENTER_PAINTING;
+            struct WarpNode* warpNode = get_painting_warp_node();
+            if (SM64AP_HavePainting(gLevelToCourseNumTable[warpNode->destLevel - 1]))
+                cutscene = CUTSCENE_ENTER_PAINTING;
+            else
+                cutscene = 0;
         }
         switch (sMarioCamState->action) {
             case ACT_DEATH_EXIT:
