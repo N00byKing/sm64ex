@@ -662,12 +662,31 @@ struct WarpNode *get_painting_warp_node(void) {
     return warpNode;
 }
 
-void reject_mario_from_painting(void) {
+void reject_mario_from_painting(s16 courseNum, s16 destArea) {
     Vec3s rejectAngle = {0, 0, 0};
-    #warning TODO implement for each painting
-    rejectAngle[1] = (s16) ccm_painting.yaw;
+    f32 newYaw = 0.0f;
+    switch(courseNum) {
+        case 1:  newYaw = bob_painting.yaw;      break;
+        case 2:  newYaw = wf_painting.yaw;       break;
+        case 3:  newYaw = jrb_painting.yaw;      break;
+        case 4:  newYaw = ccm_painting.yaw;      break;
+        // BBH and HMC are skipped here
+        case 7:  newYaw = lll_painting.yaw;      break;
+        case 8:  newYaw = ssl_painting.yaw;      break;
+        case 9:  newYaw = ddd_painting.yaw;      break;
+        case 10: newYaw = sl_painting.yaw;       break;
+        case 11: newYaw = wdw_painting.yaw;      break;
+        case 12: newYaw = ttm_painting.yaw;      break;
+        case 13: newYaw = destArea == 1?
+               thi_huge_painting.yaw 
+             : thi_tiny_painting.yaw;
+         break;
+        case 14: newYaw = ttc_painting.yaw;      break;
+    }
+    rejectAngle[1] = (s16) newYaw;
     vec3s_copy(gMarioState->faceAngle, rejectAngle);
     set_mario_action(gMarioState, ACT_HARD_FORWARD_AIR_KB, 0);
+    play_sound(SOUND_GENERAL_PAINTING_EJECT, gDefaultSoundArgs);
 }
 
 /**
@@ -686,9 +705,10 @@ void initiate_painting_warp(void) {
 
                 // If we don't have the painting for this course, kick Mario out
                 // The function takes care of handling if painting locking is not enabled
-                if(!SM64AP_HavePainting(gLevelToCourseNumTable[warpNode.destLevel - 1])) {
+                s16 destCourse = gLevelToCourseNumTable[warpNode.destLevel - 1];
+                if(!SM64AP_HavePainting(destCourse)) {
                     // If we're not allowed we need to be ejected forcefully enough not to fall back in
-                    reject_mario_from_painting();
+                    reject_mario_from_painting(destCourse, warpNode.destArea);
                     return;
                 }
 
