@@ -15,6 +15,7 @@
 #include "area.h"
 #include "save_file.h"
 #include "sound_init.h"
+#include "levels/castle_inside/header.h"
 #include "mario.h"
 #include "camera.h"
 #include "object_list_processor.h"
@@ -662,45 +663,11 @@ struct WarpNode *get_painting_warp_node(void) {
 }
 
 void reject_mario_from_painting(void) {
-    // Amount to move Mario out by
-    f32   bumpOutDis = -40.0f;
-    Vec3f bumpOutVel;
-
-    // Keep track of the last time we tried to do this; if it's too soon, increment the rejection count
-    // If the rejection count gets too high, warp us to safety
-    if(gGlobalTimer <= timerValueFirstEntryAttempt + 100) {
-        if(stuckPreventionIters++ > 5) {
-            // Get us to safety!
-            stuckPreventionIters = 0;
-            init_mario();
-            return;
-        }
-        // If we haven't gotten out yet, try to force him further out
-        bumpOutDis*= 2.0f*stuckPreventionIters;
-    } else {
-        // Start trying to get Mario out of there; record his first entry position so that we can eject him from there
-        //  and the initial velocity so we can reject him from that angle, regardless of what happens in the meantime
-        stuckPreventionIters = 0;
-        timerValueFirstEntryAttempt = gGlobalTimer;
-        vec3f_copy(stuckPreventionFirstVel, gMarioState->vel);
-        vec3f_copy(stuckPreventionFirstPos, gMarioState->pos);
-    }
-    // Make a constant (bumpOutDis) length vector to add to the ejection position to get him out
-    vec3f_copy(bumpOutVel, stuckPreventionFirstVel);
-    vec3f_normalize(bumpOutVel);
-    vec3f_mul(bumpOutVel, bumpOutDis);
-    gMarioState->pos[0] = stuckPreventionFirstPos[0] + bumpOutVel[0];
-    gMarioState->pos[2] = stuckPreventionFirstPos[2] + bumpOutVel[2];
-
-    gMarioState->marioObj->oPosX = gMarioState->pos[0];
-    gMarioState->marioObj->oPosZ = gMarioState->pos[2];
-
-    vec3f_copy(gMarioState->marioObj->header.gfx.pos, gMarioState->pos);
-    if(gMarioState->forwardVel < 0.0f) {
-        set_mario_action(gMarioState, ACT_HARD_FORWARD_AIR_KB, 0);
-    } else {
-        set_mario_action(gMarioState, ACT_HARD_BACKWARD_AIR_KB, 0);
-    }
+    Vec3s rejectAngle = {0, 0, 0};
+    #warning TODO implement for each painting
+    rejectAngle[1] = (s16) ccm_painting.yaw;
+    vec3s_copy(gMarioState->faceAngle, rejectAngle);
+    set_mario_action(gMarioState, ACT_HARD_FORWARD_AIR_KB, 0);
 }
 
 /**
@@ -717,15 +684,16 @@ void initiate_painting_warp(void) {
             } else if (pWarpNode->id != 0) {
                 warpNode = *pWarpNode;
 
-                if (!(warpNode.destLevel & 0x80)) {
-                    D_8032C9E0 = check_warp_checkpoint(&warpNode);
-                }
                 // If we don't have the painting for this course, kick Mario out
                 // The function takes care of handling if painting locking is not enabled
                 if(!SM64AP_HavePainting(gLevelToCourseNumTable[warpNode.destLevel - 1])) {
                     // If we're not allowed we need to be ejected forcefully enough not to fall back in
                     reject_mario_from_painting();
                     return;
+                }
+
+                if (!(warpNode.destLevel & 0x80)) {
+                    D_8032C9E0 = check_warp_checkpoint(&warpNode);
                 }
 
                 initiate_warp(warpNode.destLevel & 0x7F, warpNode.destArea, warpNode.destNode, 0);
