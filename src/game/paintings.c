@@ -6,6 +6,7 @@
 #include "engine/surface_collision.h"
 #include "game_init.h"
 #include "geo_misc.h"
+#include "sm64ap.h"
 #include "levels/castle_inside/header.h"
 #include "levels/hmc/header.h"
 #include "levels/ttm/header.h"
@@ -1144,12 +1145,20 @@ void set_painting_layer(struct GraphNodeGenerated *gen, struct Painting *paintin
  * Display either a normal painting or a rippling one depending on the painting's ripple status
  */
 Gfx *display_painting(struct Painting *painting) {
+    int courseidx = 1;
+    switch (painting->id) {
+        case 0x0: courseidx = 1; break; // BOB
+        case 0x2: courseidx = 2; break; // WF
+        case 0x3: courseidx = 3; break; // JRB
+        case 0x1: courseidx = 4; break; // CCM
+        #warning TODO rest of paintings
+    }
     switch (painting->state) {
         case PAINTING_IDLE:
             return display_painting_not_rippling(painting);
             break;
         default:
-            return display_painting_rippling(painting);
+            return  SM64AP_HavePainting(courseidx) ? display_painting_rippling(painting) : display_painting_not_rippling(painting);
             break;
     }
 }
