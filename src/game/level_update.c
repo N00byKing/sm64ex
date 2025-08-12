@@ -665,31 +665,53 @@ struct WarpNode *get_painting_warp_node(void) {
 void reject_mario_from_painting(s16 courseNum, s16 destArea) {
     Vec3s rejectAngle = {0, 0, 0};
     f32 newYaw = 0.0f;
+    f32 perpYaw = 0.0f;
+    Vec3f ejectPos = {0.0f,0.0f,0.0f};
+    f32 ejectDistance = 40.0f;
+    f32 halfPSize;
+    struct Painting p;
     switch(courseNum) {
-        case 1:  newYaw = bob_painting.yaw;      break;
-        case 2:  newYaw = wf_painting.yaw;       break;
-        case 3:  newYaw = jrb_painting.yaw;      break;
-        case 4:  newYaw = ccm_painting.yaw;      break;
+        case 1:  p = bob_painting;      break;
+        case 2:  p = wf_painting;       break;
+        case 3:  p = jrb_painting;      break;
+        case 4:  p = ccm_painting;      break;
         // BBH and HMC are skipped here
-        case 7:  newYaw = lll_painting.yaw;      break;
-        case 8:  newYaw = ssl_painting.yaw;      break;
-        case 9:  newYaw = ddd_painting.yaw;      break;
-        case 10: newYaw = sl_painting.yaw;       break;
-        case 11: newYaw = wdw_painting.yaw;      break;
-        case 12: newYaw = ttm_painting.yaw;      break;
-        case 13: newYaw = destArea == 1?
-               thi_huge_painting.yaw 
-             : thi_tiny_painting.yaw;
+        case 7:  p = lll_painting;      break;
+        case 8:  p = ssl_painting;      break;
+        case 9:  p = ddd_painting;      break;
+        case 10: p = sl_painting;       break;
+        case 11: p = wdw_painting;      break;
+        case 12: p = ttm_painting;      break;
+        case 13: p = destArea == 1?
+               thi_huge_painting 
+             : thi_tiny_painting;
          break;
-        case 14: newYaw = ttc_painting.yaw;      break;
+        case 14: p = ttc_painting;      break;
     }
+    newYaw = p.yaw;
+    perpYaw = p.yaw - 90.0f;
+    halfPSize = p.size /2.0f;
+    // Painting placement is by the bottom left corner
+    // Adjust the Y to be the center of the painting by adding half the painting's size
+    vec3f_set(ejectPos, p.posX, p.posY+halfPSize, p.posZ);
+    // Adjust the X+Z to be the center of the painting
+    // Adjust it out of the painting slightly; sin/cosf use radians, convert the yaw to radians
+    ejectPos[0] += ejectDistance * sinf(newYaw * M_PI / 180.0) - halfPSize * sinf(perpYaw * M_PI / 180.0);
+    ejectPos[2] += ejectDistance * cosf(newYaw * M_PI / 180.0) - halfPSize * cosf(perpYaw * M_PI / 180.0);
+
     if(gMarioState->forwardVel > 0.0f) {
         // Eject mario backward, which means face him toward the painting rather than away
         newYaw = (((s16)newYaw + 180) % 360) + 0.0f;
     }
-    // Convert to s16 representation of the angle; -MAX = -180 degree, MAX = 180 degree, 0 = 0
+    // Convert to s16 representation of the angle; -2^15 = -180 degree, 2^15-1 = 180 degree, 0 = 0
     rejectAngle[1] =  (s16)((newYaw > 180.0f? 180.0f-newYaw : newYaw)/180.0f*0x7FFF);
     vec3s_copy(gMarioState->faceAngle, rejectAngle);
+    vec3f_copy(gMarioState->pos, ejectPos);
+
+    gMarioState->marioObj->oPosX = gMarioState->pos[0];
+    gMarioState->marioObj->oPosZ = gMarioState->pos[2];
+
+    vec3f_copy(gMarioState->marioObj->header.gfx.pos, gMarioState->pos);
 
     if(gMarioState->forwardVel > 0.0f) {
         set_mario_action(gMarioState, ACT_HARD_BACKWARD_AIR_KB, 0);
