@@ -1152,15 +1152,15 @@ Gfx *display_painting(struct Painting *painting) {
         case 0x3: courseidx = 3;  break; // JRB
         case 0x1: courseidx = 4;  break; // CCM
             // BBH and HMC are skipped here (courses 5 + 6)
-        case 0x4: courseidx = 6;  break; // LLL
-        case 0x5: courseidx = 7;  break; // SSL
-        case 0x7: courseidx = 8;  break; // DDD
-        case 0xC: courseidx = 9;  break; // SL
-        case 0x8: courseidx = 10; break; // WDW
-        case 0xA: courseidx = 11; break; // TTM
-        case 0xD: courseidx = 12; break; // THI Huge painting
-        case 0x9: courseidx = 12; break; // THI Tiny painting
-        case 0xB: courseidx = 13; break; // TTC
+        case 0x4: courseidx = 7;  break; // LLL
+        case 0x5: courseidx = 8;  break; // SSL
+        case 0x7: courseidx = 9;  break; // DDD
+        case 0xC: courseidx = 10; break; // SL
+        case 0x8: courseidx = 11; break; // WDW
+        case 0xA: courseidx = 12; break; // TTM
+        case 0xD: courseidx = 13; break; // THI Huge painting
+        case 0x9: courseidx = 13; break; // THI Tiny painting
+        case 0xB: courseidx = 14; break; // TTC
     }
     switch (painting->state) {
         case PAINTING_IDLE:

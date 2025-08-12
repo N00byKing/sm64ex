@@ -683,9 +683,19 @@ void reject_mario_from_painting(s16 courseNum, s16 destArea) {
          break;
         case 14: newYaw = ttc_painting.yaw;      break;
     }
-    rejectAngle[1] = (s16) newYaw;
+    if(gMarioState->forwardVel > 0.0f) {
+        // Eject mario backward, which means face him toward the painting rather than away
+        newYaw = (((s16)newYaw + 180) % 360) + 0.0f;
+    }
+    // Convert to s16 representation of the angle; -MAX = -180 degree, MAX = 180 degree, 0 = 0
+    rejectAngle[1] =  (s16)((newYaw > 180.0f? 180.0f-newYaw : newYaw)/180.0f*0x7FFF);
     vec3s_copy(gMarioState->faceAngle, rejectAngle);
-    set_mario_action(gMarioState, ACT_HARD_FORWARD_AIR_KB, 0);
+
+    if(gMarioState->forwardVel > 0.0f) {
+        set_mario_action(gMarioState, ACT_HARD_BACKWARD_AIR_KB, 0);
+    } else {
+        set_mario_action(gMarioState, ACT_HARD_FORWARD_AIR_KB, 0);
+    }
     play_sound(SOUND_GENERAL_PAINTING_EJECT, gDefaultSoundArgs);
 }
 
