@@ -667,8 +667,8 @@ void reject_mario_from_painting(s16 courseNum, s16 destArea) {
     f32 newYaw = 0.0f;
     f32 perpYaw = 0.0f;
     Vec3f ejectPos = {0.0f,0.0f,0.0f};
-    f32 ejectDistance = 40.0f;
-    f32 halfPSize;
+    f32 ejectDistance = 50.0f;
+    f32 minYDiff = 30.0f;
     struct Painting p;
     switch(courseNum) {
         case 1:  p = bob_painting;      break;
@@ -690,14 +690,11 @@ void reject_mario_from_painting(s16 courseNum, s16 destArea) {
     }
     newYaw = p.yaw;
     perpYaw = p.yaw - 90.0f;
-    halfPSize = p.size /2.0f;
     // Painting placement is by the bottom left corner
-    // Adjust the Y to be the center of the painting by adding half the painting's size
-    vec3f_set(ejectPos, p.posX, p.posY+halfPSize, p.posZ);
-    // Adjust the X+Z to be the center of the painting
+    vec3f_set(ejectPos, gMarioState->pos[0], gMarioState->pos[1] < p.posY+minYDiff? p.posY+minYDiff : gMarioState->pos[1], gMarioState->pos[2]);
     // Adjust it out of the painting slightly; sin/cosf use radians, convert the yaw to radians
-    ejectPos[0] += ejectDistance * sinf(newYaw * M_PI / 180.0) - halfPSize * sinf(perpYaw * M_PI / 180.0);
-    ejectPos[2] += ejectDistance * cosf(newYaw * M_PI / 180.0) - halfPSize * cosf(perpYaw * M_PI / 180.0);
+    ejectPos[0] += ejectDistance * sinf(newYaw * M_PI / 180.0);
+    ejectPos[2] += ejectDistance * cosf(newYaw * M_PI / 180.0);
 
     if(gMarioState->forwardVel > 0.0f) {
         // Eject mario backward, which means face him toward the painting rather than away
