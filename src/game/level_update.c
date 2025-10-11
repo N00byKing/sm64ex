@@ -181,11 +181,6 @@ s8 D_8032C9E0 = 0;
 u8 unused3[4];
 u8 unused4[2];
 
-u8 stuckPreventionIters = 0;
-u32 timerValueFirstEntryAttempt = 0;
-Vec3f stuckPreventionFirstPos;
-Vec3f stuckPreventionFirstVel;
-
 u16 level_control_timer(s32 timerOp) {
     switch (timerOp) {
         case TIMER_CONTROL_SHOW:
