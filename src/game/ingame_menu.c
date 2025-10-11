@@ -2717,52 +2717,52 @@ s16 render_pause_courses_and_castle(void) {
     u8 txt_y[] = { TEXT_PAINTING_Y };
     u8 txt_n[] = { TEXT_PAINTING_N };
     u8 lvlnames[][4] = {
-	{ TEXT_PAINTING_UNK },
-	{ TEXT_PAINTING_BOB },
-	{ TEXT_PAINTING_WF  },
-	{ TEXT_PAINTING_JRB },
-	{ TEXT_PAINTING_CCM },
-	{ TEXT_PAINTING_BBH },
-	{ TEXT_PAINTING_HMC },
-	{ TEXT_PAINTING_LLL },
-	{ TEXT_PAINTING_SSL },
-	{ TEXT_PAINTING_DDD },
-	{ TEXT_PAINTING_SL  },
-	{ TEXT_PAINTING_WDW },
-	{ TEXT_PAINTING_TTM },
-	{ TEXT_PAINTING_THI },
-	{ TEXT_PAINTING_TTC },
-	{ TEXT_PAINTING_RR  },
+        { TEXT_PAINTING_UNK },
+        { TEXT_PAINTING_BOB },
+        { TEXT_PAINTING_WF  },
+        { TEXT_PAINTING_JRB },
+        { TEXT_PAINTING_CCM },
+        { TEXT_PAINTING_BBH },
+        { TEXT_PAINTING_HMC },
+        { TEXT_PAINTING_LLL },
+        { TEXT_PAINTING_SSL },
+        { TEXT_PAINTING_DDD },
+        { TEXT_PAINTING_SL  },
+        { TEXT_PAINTING_WDW },
+        { TEXT_PAINTING_TTM },
+        { TEXT_PAINTING_THI },
+        { TEXT_PAINTING_TTC },
+        { TEXT_PAINTING_RR  },
     };
 
     gSPDisplayList(gDisplayListHead++, dl_rgba16_text_begin);
     gDPSetEnvColor(gDisplayListHead++, 255, 255, 255, gDialogTextAlpha);
     for(u8 i = 2; i < 15; i++) {
-	s16 line = (i<5 ? i : i-2)/2; // Adjust for the absence of courses 5 and 6
-	s16 liney = 209-70-26-(13*line);
-	s16 linex = GFX_DIMENSIONS_RECT_FROM_RIGHT_EDGE(78) + (i%2 == 0? 0: 40);
-	switch(i) {
-	    case 5: // BBH doesn't have a painting
-	    case 6: // HMC has a painting but we don't lock it
-	    case 15: // RR doesn't have a painting
-		continue;
-	    case 2:
-	    case 3:
-	    case 4:
-	    case 7:
-	    case 8:
-	    case 9:
-	    case 10:
-	    case 11:
-	    case 12:
-	    case 13:
-	    case 14:
-		print_generic_string(linex, liney, lvlnames[i]);
-		print_generic_string(linex + 26, liney, SM64AP_HavePainting(i)? txt_y : txt_n);
-		break;
-	    default:
-		print_generic_string(linex, liney, lvlnames[0]);
-	}
+        s16 line = (i<5 ? i : i-2)/2; // Adjust for the absence of courses 5 and 6
+        s16 liney = 209-70-26-(13*line);
+        s16 linex = GFX_DIMENSIONS_RECT_FROM_RIGHT_EDGE(78) + (i%2 == 0? 0: 40);
+        switch(i) {
+            case 5: // BBH doesn't have a painting
+            case 6: // HMC has a painting but we don't lock it
+            case 15: // RR doesn't have a painting
+                continue;
+            case 2:
+            case 3:
+            case 4:
+            case 7:
+            case 8:
+            case 9:
+            case 10:
+            case 11:
+            case 12:
+            case 13:
+            case 14:
+                print_generic_string(linex, liney, lvlnames[i]);
+                print_generic_string(linex + 26, liney, SM64AP_HavePainting(i)? txt_y : txt_n);
+                break;
+            default:
+                print_generic_string(linex, liney, lvlnames[0]);
+        }
     }
     s16 x = -32;
     s16 y = 170;

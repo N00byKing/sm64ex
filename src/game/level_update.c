@@ -677,10 +677,9 @@ void reject_mario_from_painting(s16 courseNum, s16 destArea) {
         case 10: p = sl_painting;       break;
         case 11: p = wdw_painting;      break;
         case 12: p = ttm_painting;      break;
-        case 13: p = destArea == 1?
-               thi_huge_painting 
-             : thi_tiny_painting;
-         break;
+        case 13: 
+            p = destArea == 1 ? thi_huge_painting : thi_tiny_painting;
+            break;
         case 14: p = ttc_painting;      break;
     }
     newYaw = p.yaw;

@@ -81,10 +81,10 @@ void SM64AP_RecvItem(int64_t idx, bool notify) {
         case SM64AP_ID_CANNONUNLOCK(0) ... SM64AP_ID_CANNONUNLOCK(15-1):
             sm64_have_cannon[idx-(SM64AP_ID_CANNONUNLOCK(0))] = true;
             break;
-	case SM64AP_ID_PAINTINGUNLOCK(0) ... SM64AP_ID_PAINTINGUNLOCK(NUM_PAINTING_LOCKS-1):
-	    // We don't have a painting unlock for BoB, so (0) will never appear; index 1 corresponds to WF, and so on
-	    sm64_have_painting[idx-(SM64AP_ID_PAINTINGUNLOCK(0))] = true;
-	    break;
+    case SM64AP_ID_PAINTINGUNLOCK(0) ... SM64AP_ID_PAINTINGUNLOCK(NUM_PAINTING_LOCKS-1):
+        // We don't have a painting unlock for BoB, so (0) will never appear; index 1 corresponds to WF, and so on
+        sm64_have_painting[idx-(SM64AP_ID_PAINTINGUNLOCK(0))] = true;
+        break;
         case SM64AP_ID_ABILITY(0):
             sm64_have_abilities[idx-SM64AP_ABILITY_OFFSET+1] = sm64_have_abilities[idx-SM64AP_ABILITY_OFFSET];
             sm64_have_abilities[idx-SM64AP_ABILITY_OFFSET] = true;
@@ -283,10 +283,9 @@ void SM64AP_SetMoveRandoVec(int vec) {
 }
 void SM64AP_SetPaintingRando(int enabled) {
     if(!enabled) {
-	// not enabled, so unlock all paintings
-	for (int i = 0; i < NUM_PAINTING_LOCKS; i++) {
-	    sm64_have_painting[i] = true;
-	}
+        // Not enabled, so unlock all paintings
+        for (int i = 0; i < NUM_PAINTING_LOCKS; i++)
+            sm64_have_painting[i] = true;
     }
 }
 
@@ -506,14 +505,14 @@ bool SM64AP_HaveCannon(int courseIdx) {
 
 bool SM64AP_HavePainting(int courseIdx) {
     switch(courseIdx) {
-	case 1:  // BOB painting is always unlocked
-	case 5:  // BBH doesn't have a painting
-	case 6:  // HMC has a painting but you get stuck in an infinite loop of falling in and getting pushed out, so let's not do that :)
-	case 15: // RR doesn't have a painting
-	    return true;
-	default:
-	    // courses are 1-indexed, the items are 0-indexed
-	    return sm64_have_painting[courseIdx-1];
+        case 1:  // BOB painting is always unlocked
+        case 5:  // BBH doesn't have a painting
+        case 6:  // HMC has a painting but you get stuck in an infinite loop of falling in and getting pushed out, so let's not do that :)
+        case 15: // RR doesn't have a painting
+            return true;
+        default:
+            // courses are 1-indexed, the items are 0-indexed
+            return sm64_have_painting[courseIdx-1];
     }
 }
 
