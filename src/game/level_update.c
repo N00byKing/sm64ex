@@ -729,7 +729,8 @@ void initiate_painting_warp(void) {
                 // If we don't have the painting for this course, kick Mario out
                 // The function takes care of handling if painting locking is not enabled
                 s16 destCourse = gLevelToCourseNumTable[warpNode.destLevel - 1];
-                if(!SM64AP_HavePainting(destCourse)) {
+		// Only check for paintings when in the castle, otherwise they could be interior warps and we don't want to block those
+                if(gCurrLevelNum == LEVEL_CASTLE && !SM64AP_HavePainting(destCourse)) {
                     // If we're not allowed we need to be ejected forcefully enough not to fall back in
                     reject_mario_from_painting(destCourse, warpNode.destArea);
                     return;
