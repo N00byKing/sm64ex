@@ -737,7 +737,7 @@ void initiate_painting_warp(void) {
                 }
 
                 if (!(warpNode.destLevel & 0x80)) {
-                    D_8032C9E0 = 0;
+                    D_8032C9E0 = FALSE;
                 }
 
                 initiate_warp(warpNode.destLevel & 0x7F, warpNode.destArea, warpNode.destNode, 0);
