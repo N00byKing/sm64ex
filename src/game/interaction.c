@@ -738,14 +738,26 @@ void reset_mario_pitch(struct MarioState *m) {
 }
 
 u32 interact_coin(struct MarioState *m, UNUSED u32 interactType, struct Object *o) {
+    s16 preIncCoins = m->numCoins;
     m->numCoins += o->oDamageOrCoinValue;
     m->healCounter += 4 * o->oDamageOrCoinValue;
 
     o->oInteractStatus = INT_STATUS_INTERACTED;
 
-    if (COURSE_IS_MAIN_COURSE(gCurrCourseNum) && m->numCoins - o->oDamageOrCoinValue < 100
-        && m->numCoins >= 100) {
-        bhv_spawn_star_no_level_exit(6);
+    if (COURSE_IS_MAIN_COURSE(gCurrCourseNum)) {
+        if(SM64AP_ShouldCheckMaxCoins()) {
+            s16 truncated = (m->numCoins / 10)*10;
+            if(truncated > preIncCoins) {
+                // Reached a multiple of 10
+                u32 location = SM64AP_LOCATIONID_MAX_COIN(gCurrCourseNum-1, truncated);
+                if(! SM64AP_CheckedLoc(location)) {
+                    SM64AP_SendItem(location);
+                }
+            }
+        }
+        if(m->numCoins - o->oDamageOrCoinValue < 100 && m->numCoins >= 100) {
+            bhv_spawn_star_no_level_exit(6);
+	}
     }
    
     if (o->oDamageOrCoinValue >= 2) {
