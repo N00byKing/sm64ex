@@ -751,6 +751,8 @@ u32 interact_coin(struct MarioState *m, UNUSED u32 interactType, struct Object *
                 // Reached a multiple of 10
                 u32 location = SM64AP_LOCATIONID_MAX_COIN(gCurrCourseNum-1, truncated);
                 if(! SM64AP_CheckedLoc(location)) {
+                    spawn_object(o, MODEL_NONE, bhvStarKeyCollectionPuffSpawner);
+                    play_sound(SOUND_MARIO_HAHA_2, m->marioObj->header.gfx.cameraToObject);
                     SM64AP_SendItem(location);
                 }
             }
