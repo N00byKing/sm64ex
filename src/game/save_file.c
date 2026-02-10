@@ -712,6 +712,12 @@ void save_file_move_cap_to_default_location(void) {
     }
 }
 
+u8 save_file_get_cap_level(void) {
+    struct SaveFile *saveFile = &gSaveBuffer.files[gCurrSaveFileNum - 1][0];
+
+    return saveFile->capLevel;
+}
+
 #ifdef VERSION_EU
 void eu_set_language(u16 language) {
     gSaveBuffer.menuData[0].language = language;

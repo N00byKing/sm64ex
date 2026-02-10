@@ -40,6 +40,21 @@ extern "C" {
 #define SM64AP_ID_CANNONUNLOCK(x) (SM64AP_ID_OFFSET+200+x)
 #define SM64AP_ID_PAINTINGUNLOCK(x) (SM64AP_ID_OFFSET+230+x)
 #define SM64AP_ID_ABILITY(x) (SM64AP_ABILITY_OFFSET+x)
+// Reserving some room for coins, if needed
+// Nice filler
+#define SM64AP_ID_1_HEALTH_PIP   (SM64AP_ID_OFFSET+1750)
+#define SM64AP_ID_2_HEALTH_PIP   (SM64AP_ID_OFFSET+1751)
+#define SM64AP_ID_3_HEALTH_PIP   (SM64AP_ID_OFFSET+1752)
+#define SM64AP_ID_4_HEALTH_PIP   (SM64AP_ID_OFFSET+1753)
+#define SM64AP_ID_FULL_REFILL    (SM64AP_ID_OFFSET+1754)
+// Traps
+#define SM64AP_ID_BONK_TRAP      (SM64AP_ID_OFFSET+1760)
+#define SM64AP_ID_FIRE_TRAP      (SM64AP_ID_OFFSET+1761)
+#define SM64AP_ID_ELEC_TRAP      (SM64AP_ID_OFFSET+1762)
+#define SM64AP_ID_CHUCK_TRAP     (SM64AP_ID_OFFSET+1763)
+#define SM64AP_ID_SPIN_TRAP      (SM64AP_ID_OFFSET+1764)
+#define SM64AP_ID_GUST_TRAP      (SM64AP_ID_OFFSET+1765)
+
 
 #define SM64AP_LOCATIONID_BOARDBOWSERSSUB (SM64AP_ID_OFFSET + 56)
 #define SM64AP_LOCATIONID_BASEMENTTOAD (SM64AP_ID_OFFSET + 168)
@@ -93,6 +108,11 @@ AP_EXTERN_C void SM64AP_SendItem(int);
 
 // Print Next Message to Screen
 AP_EXTERN_C void SM64AP_PrintNext();
+
+// Push a delayed item onto the stack
+AP_EXTERN_C void SM64AP_PushDelayedStack(int64_t);
+// If an item exists on the stack, return it, otherwise 0
+AP_EXTERN_C u32  SM64AP_PopDelayedStack();
 
 // Called on each Bowser stage completion, i is bowser index. Will send StoryComplete depending on completion option.
 AP_EXTERN_C void SM64AP_FinishBowser(int i);

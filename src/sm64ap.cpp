@@ -14,6 +14,7 @@ extern "C" {
 #include <cstdio>
 #include <bitset>
 #include <set>
+#include <queue>
 
 #define WARP_NODE_CREDITS_MIN 0xF8 // level_update.c
 #define NUM_PAINTING_LOCKS 15
@@ -42,6 +43,7 @@ int sm64_cost_mips1 = 15;
 int sm64_cost_mips2 = 50;
 int msg_frame_duration = 90; // 3 Secounds at 30F/s
 int cur_msg_frame_duration = msg_frame_duration;
+std::queue<u32> delayed_queue;
 
 std::map<int,int> map_entrances;
 std::set<int> course_dest_supported;
@@ -81,16 +83,22 @@ void SM64AP_RecvItem(int64_t idx, bool notify) {
         case SM64AP_ID_CANNONUNLOCK(0) ... SM64AP_ID_CANNONUNLOCK(15-1):
             sm64_have_cannon[idx-(SM64AP_ID_CANNONUNLOCK(0))] = true;
             break;
-    case SM64AP_ID_PAINTINGUNLOCK(0) ... SM64AP_ID_PAINTINGUNLOCK(NUM_PAINTING_LOCKS-1):
-        // We don't have a painting unlock for BoB, so (0) will never appear; index 1 corresponds to WF, and so on
-        sm64_have_painting[idx-(SM64AP_ID_PAINTINGUNLOCK(0))] = true;
-        break;
+        case SM64AP_ID_PAINTINGUNLOCK(0) ... SM64AP_ID_PAINTINGUNLOCK(NUM_PAINTING_LOCKS-1):
+            // We don't have a painting unlock for BoB, so (0) will never appear; index 1 corresponds to WF, and so on
+            sm64_have_painting[idx-(SM64AP_ID_PAINTINGUNLOCK(0))] = true;
+            break;
         case SM64AP_ID_ABILITY(0):
             sm64_have_abilities[idx-SM64AP_ABILITY_OFFSET+1] = sm64_have_abilities[idx-SM64AP_ABILITY_OFFSET];
             sm64_have_abilities[idx-SM64AP_ABILITY_OFFSET] = true;
             break;
         case SM64AP_ID_ABILITY(1) ... SM64AP_ID_ABILITY(SM64AP_NUM_ABILITIES-1):
             sm64_have_abilities[idx-SM64AP_ABILITY_OFFSET] = true;
+            break;
+        case SM64AP_ID_1_HEALTH_PIP ... SM64AP_ID_GUST_TRAP:
+            if(!notify) {
+                break;
+            }
+            SM64AP_PushDelayedStack(idx);
             break;
     }
 }
@@ -407,6 +415,20 @@ void SM64AP_SendByBoxID(int id) {
 
 void SM64AP_SendItem(int idx) {
     AP_SendItem(idx);
+}
+
+// Push a delayed item onto the stack
+void SM64AP_PushDelayedStack(int64_t idx) {
+    delayed_queue.push(idx & 0xFFFFFFFF);
+}
+// If an item exists on the stack, return it, otherwise 0
+u32 SM64AP_PopDelayedStack() {
+    if(delayed_queue.empty()) {
+        return 0;
+    }
+    u32 item = delayed_queue.front();
+    delayed_queue.pop();
+    return item;
 }
 
 void SM64AP_FinishBowser(int i) {

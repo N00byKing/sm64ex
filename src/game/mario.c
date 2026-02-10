@@ -1865,7 +1865,17 @@ void init_mario(void) {
     if (save_file_get_flags()
         & (SAVE_FLAG_CAP_ON_GROUND | SAVE_FLAG_CAP_ON_KLEPTO | SAVE_FLAG_CAP_ON_UKIKI
            | SAVE_FLAG_CAP_ON_MR_BLIZZARD)) {
-        gMarioState->flags = 0;
+        switch(save_file_get_cap_level()) {
+            case LEVEL_SSL:
+            case LEVEL_SL:
+            case LEVEL_TTM:
+                gMarioState->flags = 0;
+                break;
+            default:
+                gMarioState->flags = (MARIO_CAP_ON_HEAD | MARIO_NORMAL_CAP);
+                save_file_clear_flags(SAVE_FLAG_CAP_ON_GROUND | SAVE_FLAG_CAP_ON_KLEPTO | SAVE_FLAG_CAP_ON_MR_BLIZZARD | SAVE_FLAG_CAP_ON_UKIKI);
+                break;
+        }
     } else {
         gMarioState->flags = (MARIO_CAP_ON_HEAD | MARIO_NORMAL_CAP);
     }
