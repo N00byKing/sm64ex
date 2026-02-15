@@ -747,7 +747,7 @@ u32 interact_coin(struct MarioState *m, UNUSED u32 interactType, struct Object *
     if (COURSE_IS_MAIN_COURSE(gCurrCourseNum)) {
         if(SM64AP_ShouldCheckMaxCoins()) {
             s16 truncated = (m->numCoins / 10)*10;
-            if(truncated > preIncCoins) {
+            if(truncated > preIncCoins && truncated <= 100) {
                 // Reached a multiple of 10
                 u32 location = SM64AP_LOCATIONID_MAX_COIN(gCurrCourseNum-1, truncated);
                 if(! SM64AP_CheckedLoc(location)) {
