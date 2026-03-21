@@ -714,7 +714,6 @@ void save_file_move_cap_to_default_location(void) {
 
 u8 save_file_get_cap_level(void) {
     struct SaveFile *saveFile = &gSaveBuffer.files[gCurrSaveFileNum - 1][0];
-
     return saveFile->capLevel;
 }
 

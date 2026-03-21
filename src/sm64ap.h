@@ -109,10 +109,8 @@ AP_EXTERN_C void SM64AP_SendItem(int);
 // Print Next Message to Screen
 AP_EXTERN_C void SM64AP_PrintNext();
 
-// Push a delayed item onto the stack
-AP_EXTERN_C void SM64AP_PushDelayedStack(int64_t);
 // If an item exists on the stack, return it, otherwise 0
-AP_EXTERN_C u32  SM64AP_PopDelayedStack();
+AP_EXTERN_C int64_t SM64AP_PopDelayedStack();
 
 // Called on each Bowser stage completion, i is bowser index. Will send StoryComplete depending on completion option.
 AP_EXTERN_C void SM64AP_FinishBowser(int i);
