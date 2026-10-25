@@ -32,6 +32,7 @@ bool sm64_have_vanishcap = false;
 int sm64_moat_state = 0;
 bool sm64_have_cannon[15];
 bool sm64_have_painting[NUM_PAINTING_LOCKS];
+bool sm64_should_check_coin_scores = false;
 int sm64_completion_type = 0;
 std::bitset<SM64AP_NUM_ABILITIES> sm64_have_abilities;
 int* sm64_clockaction = nullptr;
@@ -295,6 +296,14 @@ void SM64AP_SetPaintingRando(int enabled) {
     }
 }
 
+void SM64AP_SetCheckMaxCoins(int enabled) {
+    if(enabled) {
+        sm64_should_check_coin_scores = true;
+    } else {
+        sm64_should_check_coin_scores = false;
+    }
+}
+
 void SM64AP_ResetItems() {
     for (int i = 0; i < SM64AP_NUM_LOCS; i++) {
         sm64_locations[i] = false;
@@ -356,6 +365,7 @@ void SM64AP_GenericInit() {
     AP_RegisterSlotDataIntCallback("CompletionType", &SM64AP_SetCompletionType);
     AP_RegisterSlotDataIntCallback("MoveRandoVec", &SM64AP_SetMoveRandoVec);
     AP_RegisterSlotDataIntCallback("PaintingRando", &SM64AP_SetPaintingRando);
+    AP_RegisterSlotDataIntCallback("ProgressiveMaxCoins", &SM64AP_SetCheckMaxCoins);
     AP_RegisterSlotDataMapIntIntCallback("AreaRando", &SM64AP_SetCourseMap);
 
     course_dest_supported = {
@@ -528,6 +538,10 @@ bool SM64AP_HavePainting(int courseIdx) {
             // courses are 1-indexed, the items are 0-indexed
             return sm64_have_painting[courseIdx-1];
     }
+}
+
+bool SM64AP_ShouldCheckMaxCoins() {
+    return sm64_should_check_coin_scores;
 }
 
 bool SM64AP_MoatDrained() {
