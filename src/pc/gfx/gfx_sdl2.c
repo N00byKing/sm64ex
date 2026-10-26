@@ -35,6 +35,7 @@
 #include "../cliopts.h"
 
 #include "src/pc/controller/controller_keyboard.h"
+#include "src/pc/text_input.h"
 
 // TODO: figure out if this shit even works
 #ifdef VERSION_EU
@@ -234,6 +235,40 @@ static void gfx_sdl_onkeyup(int scancode) {
         kb_key_up(translate_scancode(scancode));
 }
 
+#ifndef TARGET_WEB
+// While a text field is focused, editing keys go to the text input queue instead of the controller bindings.
+// Returns true if the key was consumed.
+static bool gfx_sdl_text_input_key(const SDL_KeyboardEvent *key) {
+    if (key->keysym.mod & KMOD_ALT) return false; // keep Alt+Enter fullscreen toggle working
+
+    const bool shift = key->keysym.mod & KMOD_SHIFT;
+    const bool ctrl = key->keysym.mod & (KMOD_CTRL | KMOD_GUI);
+
+    switch (key->keysym.scancode) {
+        case SDL_SCANCODE_BACKSPACE: text_input_push(TEXT_INPUT_BACKSPACE, 0); break;
+        case SDL_SCANCODE_RETURN:
+        case SDL_SCANCODE_KP_ENTER:  text_input_push(TEXT_INPUT_ENTER, 0); break;
+        case SDL_SCANCODE_TAB:       text_input_push(shift ? TEXT_INPUT_SHIFT_TAB : TEXT_INPUT_TAB, 0); break;
+        case SDL_SCANCODE_ESCAPE:    text_input_push(TEXT_INPUT_ESCAPE, 0); break;
+        case SDL_SCANCODE_UP:        text_input_push(TEXT_INPUT_UP, 0); break;
+        case SDL_SCANCODE_DOWN:      text_input_push(TEXT_INPUT_DOWN, 0); break;
+        case SDL_SCANCODE_LEFT:      text_input_push(TEXT_INPUT_LEFT, 0); break;
+        case SDL_SCANCODE_RIGHT:     text_input_push(TEXT_INPUT_RIGHT, 0); break;
+        case SDL_SCANCODE_V:
+            if (ctrl) {
+                char *clip = SDL_GetClipboardText();
+                if (clip) {
+                    text_input_push_utf8(clip);
+                    SDL_free(clip);
+                }
+            }
+            break;
+        default: break;
+    }
+    return true; // typing must never drive the controller
+}
+#endif
+
 static void gfx_sdl_handle_events(void) {
     SDL_Event event;
     while (SDL_PollEvent(&event)) {
@@ -241,7 +276,11 @@ static void gfx_sdl_handle_events(void) {
 #ifndef TARGET_WEB
             // Scancodes are broken in Emscripten SDL2: https://bugzilla.libsdl.org/show_bug.cgi?id=3259
             case SDL_KEYDOWN:
+                if (text_input_is_active() && gfx_sdl_text_input_key(&event.key)) break;
                 gfx_sdl_onkeydown(event.key.keysym.scancode);
+                break;
+            case SDL_TEXTINPUT:
+                text_input_push_utf8(event.text.text);
                 break;
             case SDL_KEYUP:
                 gfx_sdl_onkeyup(event.key.keysym.scancode);

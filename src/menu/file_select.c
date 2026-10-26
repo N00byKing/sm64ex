@@ -7,6 +7,7 @@
 #include "engine/behavior_script.h"
 #include "engine/graph_node.h"
 #include "engine/math_util.h"
+#include "connect_menu.h"
 #include "file_select.h"
 #include "game/area.h"
 #include "game/game_init.h"
@@ -19,6 +20,7 @@
 #include "game/segment7.h"
 #include "game/spawn_object.h"
 #include "sm64.h"
+#include "sm64ap.h"
 #include "text_strings.h"
 
 #include "eu_translation.h"
@@ -42,18 +44,8 @@ static s16 sSoundTextX;
 static s16 sSoundTextY;
 #endif
 
-//! @Bug (UB Array Access) For PAL, more buttons were added than the array was extended.
-//! This causes no currently known issues on console (as the other variables are not changed
-//! while this is used) but can cause issues with other compilers.
-#ifdef VERSION_EU
-    #ifdef AVOID_UB
-        #define NUM_BUTTONS 36
-    #else
-        #define NUM_BUTTONS 34
-    #endif
-#else
-#define NUM_BUTTONS 32
-#endif
+// One for every button id, including the ones of the connections menu.
+#define NUM_BUTTONS MENU_BUTTON_CONNECT_MAX
 
 // Amount of main menu buttons defined in the code called by spawn_object_rel_with_rot.
 // See file_select.h for the names in MenuButtonTypes.
@@ -171,6 +163,11 @@ static unsigned char textEraseFileButton[][16] = { {TEXT_ERASE_FILE}, {TEXT_ERAS
 #ifndef VERSION_EU
 static unsigned char textSoundModes[][8] = { { TEXT_STEREO }, { TEXT_MONO }, { TEXT_HEADSET } };
 #endif
+
+static unsigned char textConnect[] = {
+    ASCII_TO_DIALOG('C'), ASCII_TO_DIALOG('O'), ASCII_TO_DIALOG('N'), ASCII_TO_DIALOG('N'),
+    ASCII_TO_DIALOG('E'), ASCII_TO_DIALOG('C'), ASCII_TO_DIALOG('T'), DIALOG_CHAR_TERMINATOR,
+};
 
 static unsigned char textMarioA[] = { TEXT_FILE_MARIO_A };
 static unsigned char textMarioB[] = { TEXT_FILE_MARIO_B };
@@ -1339,16 +1336,20 @@ void bhv_menu_button_manager_init(void) {
     sMainMenuButtons[MENU_BUTTON_SCORE]->oMenuButtonScale = 1.0f;
     // Copy menu button
     sMainMenuButtons[MENU_BUTTON_COPY] = spawn_object_rel_with_rot(
-        gCurrentObject, MODEL_MAIN_MENU_BLUE_COPY_BUTTON, bhvMenuButton, -2134, -3500, 0, 0, 0, 0);
+        gCurrentObject, MODEL_MAIN_MENU_BLUE_COPY_BUTTON, bhvMenuButton, -3200, -3500, 0, 0, 0, 0);
     sMainMenuButtons[MENU_BUTTON_COPY]->oMenuButtonScale = 1.0f;
     // Erase menu button
     sMainMenuButtons[MENU_BUTTON_ERASE] = spawn_object_rel_with_rot(
-        gCurrentObject, MODEL_MAIN_MENU_RED_ERASE_BUTTON, bhvMenuButton, 2134, -3500, 0, 0, 0, 0);
+        gCurrentObject, MODEL_MAIN_MENU_RED_ERASE_BUTTON, bhvMenuButton, 0, -3500, 0, 0, 0, 0);
     sMainMenuButtons[MENU_BUTTON_ERASE]->oMenuButtonScale = 1.0f;
     // Sound mode menu button (Option Mode in EU)
     sMainMenuButtons[MENU_BUTTON_SOUND_MODE] = spawn_object_rel_with_rot(
-        gCurrentObject, MODEL_MAIN_MENU_PURPLE_SOUND_BUTTON, bhvMenuButton, 6400, -3500, 0, 0, 0, 0);
+        gCurrentObject, MODEL_MAIN_MENU_PURPLE_SOUND_BUTTON, bhvMenuButton, 3200, -3500, 0, 0, 0, 0);
     sMainMenuButtons[MENU_BUTTON_SOUND_MODE]->oMenuButtonScale = 1.0f;
+    // Connections button, it opens an overlay instead of growing into a menu
+    sMainMenuButtons[MENU_BUTTON_CONNECT] = spawn_object_rel_with_rot(
+        gCurrentObject, MODEL_MAIN_MENU_GENERIC_BUTTON, bhvMenuButton, 6400, -3500, 0, 0, 0, 0);
+    sMainMenuButtons[MENU_BUTTON_CONNECT]->oMenuButtonScale = 1.0f;
 
     sTextBaseAlpha = 0;
 }
@@ -1358,6 +1359,8 @@ void bhv_menu_button_manager_init(void) {
 #else
     #define SAVE_FILE_SOUND SOUND_MENU_STAR_SOUND_OKEY_DOKEY
 #endif
+
+void render_connect_menu_buttons(struct Object *connectButton, s32 page);
 
 /**
  * In the main menu, check if a button was clicked to play it's button growing state.
@@ -1373,6 +1376,10 @@ void check_main_menu_clicked_buttons(void) {
                                 sMainMenuButtons[MENU_BUTTON_SOUND_MODE]->oPosY, 200.0f) == TRUE) {
             sMainMenuButtons[MENU_BUTTON_SOUND_MODE]->oMenuButtonState = MENU_BUTTON_STATE_GROWING;
             sSelectedButtonID = MENU_BUTTON_SOUND_MODE;
+        } else if (check_clicked_button(sMainMenuButtons[MENU_BUTTON_CONNECT]->oPosX,
+                                        sMainMenuButtons[MENU_BUTTON_CONNECT]->oPosY, 200.0f) == TRUE) {
+            sMainMenuButtons[MENU_BUTTON_CONNECT]->oMenuButtonState = MENU_BUTTON_STATE_GROWING;
+            sSelectedButtonID = MENU_BUTTON_CONNECT;
         } else {
             // Main Menu buttons
             s8 buttonID;
@@ -1382,6 +1389,13 @@ void check_main_menu_clicked_buttons(void) {
                 s16 buttonY = sMainMenuButtons[buttonID]->oPosY;
 
                 if (check_clicked_button(buttonX, buttonY, 200.0f) == TRUE) {
+                    // A file can only be played if it knows which Archipelago slot to connect to
+                    if (buttonID <= MENU_BUTTON_PLAY_FILE_D
+                        && !SM64AP_CanConnectFromSave(save_file_get_ap_server(buttonID), save_file_get_ap_name(buttonID))) {
+                        play_sound(SOUND_MENU_CAMERA_BUZZ, gDefaultSoundArgs);
+                        connect_menu_show_no_connection_notice();
+                        break;
+                    }
                     // If menu button clicked, select it
                     sMainMenuButtons[buttonID]->oMenuButtonState = MENU_BUTTON_STATE_GROWING;
                     sSelectedButtonID = buttonID;
@@ -1429,12 +1443,95 @@ void check_main_menu_clicked_buttons(void) {
                 play_sound(SOUND_MENU_CAMERA_ZOOM_IN, gDefaultSoundArgs);
                 render_sound_mode_menu_buttons(sMainMenuButtons[MENU_BUTTON_SOUND_MODE]);
                 break;
+            case MENU_BUTTON_CONNECT:
+                play_sound(SOUND_MENU_CAMERA_ZOOM_IN, gDefaultSoundArgs);
+                render_connect_menu_buttons(sMainMenuButtons[MENU_BUTTON_CONNECT], CONNECT_PAGE_FILES);
+                break;
         }
 #ifdef VERSION_EU
     }
 #endif
 }
 #undef SAVE_FILE_SOUND
+
+// The page of the connections menu that the current buttons belong to, -1 if there are none.
+static s32 sConnectButtonsPage = -1;
+
+static void delete_connect_menu_buttons(void) {
+    s32 buttonID;
+    for (buttonID = MENU_BUTTON_CONNECT_MIN; buttonID < MENU_BUTTON_CONNECT_MAX; buttonID++) {
+        if (sMainMenuButtons[buttonID] != NULL) {
+            mark_obj_for_deletion(sMainMenuButtons[buttonID]);
+            sMainMenuButtons[buttonID] = NULL;
+        }
+    }
+    sConnectButtonsPage = -1;
+}
+
+static void spawn_connect_menu_button(struct Object *connectButton, s32 buttonID, s32 model, s16 x, s16 y) {
+    sMainMenuButtons[buttonID] = spawn_object_rel_with_rot(connectButton, model, bhvMenuButton, x, y, -100, 0, -0x8000, 0);
+    sMainMenuButtons[buttonID]->oMenuButtonScale = 0.11111111f;
+}
+
+/**
+ * Render buttons for the connections menu, laid out like the score menu.
+ * The files page has the four files, the form has the buttons to save it or to return.
+ */
+void render_connect_menu_buttons(struct Object *connectButton, s32 page) {
+    s32 i;
+
+    delete_connect_menu_buttons();
+    sConnectButtonsPage = page;
+
+    if (page == CONNECT_PAGE_FILES) {
+        for (i = 0; i < NUM_SAVE_FILES; i++) {
+            spawn_connect_menu_button(connectButton,
+                                      MENU_BUTTON_CONNECT_FILE_A + i,
+                                      save_file_exists(i) == TRUE ? MODEL_MAIN_MENU_MARIO_SAVE_BUTTON
+                                                                  : MODEL_MAIN_MENU_MARIO_NEW_BUTTON,
+                                      CONNECT_BUTTON_FILE_X(i), CONNECT_BUTTON_FILE_Y(i));
+        }
+    } else {
+        spawn_connect_menu_button(connectButton, MENU_BUTTON_CONNECT_SAVE, MODEL_MAIN_MENU_GREEN_SCORE_BUTTON,
+                                  CONNECT_BUTTON_SAVE_X, CONNECT_BUTTON_SAVE_Y);
+    }
+    // Return button
+    spawn_connect_menu_button(connectButton, MENU_BUTTON_CONNECT_RETURN, MODEL_MAIN_MENU_YELLOW_FILE_BUTTON,
+                              CONNECT_BUTTON_RETURN_X, CONNECT_BUTTON_RETURN_Y);
+}
+
+/**
+ * The connections button grows into a full screen menu like the other buttons. connect_menu.c is
+ * opened once it has finished growing and closes itself with its return button, which shrinks the
+ * button again.
+ */
+static void handle_connect_menu(struct Object *connectButton) {
+    switch (connectButton->oMenuButtonState) {
+        case MENU_BUTTON_STATE_FULLSCREEN:
+            if (connectButton->oMenuButtonActionPhase == 0) {
+                connectButton->oMenuButtonActionPhase = 1;
+                connect_menu_open();
+                sCurrentMenuLevel = MENU_LAYER_SUBMENU;
+            } else if (connect_menu_is_open()) {
+                connect_menu_update(sClickPos[0], sClickPos[1]);
+                // keep the buttons in step with the page
+                if (connect_menu_get_page() != sConnectButtonsPage) {
+                    render_connect_menu_buttons(connectButton, connect_menu_get_page());
+                }
+            } else {
+                connectButton->oMenuButtonActionPhase = 0;
+                play_sound(SOUND_MENU_CAMERA_ZOOM_OUT, gDefaultSoundArgs);
+                connectButton->oMenuButtonState = MENU_BUTTON_STATE_SHRINKING;
+                sCurrentMenuLevel = MENU_LAYER_MAIN;
+            }
+            break;
+        case MENU_BUTTON_STATE_DEFAULT:
+            // done shrinking, back to the main menu
+            delete_connect_menu_buttons();
+            sSelectedButtonID = MENU_BUTTON_NONE;
+            break;
+    }
+}
 
 /**
  * Menu Buttons Menu Manager Loop Action
@@ -1535,6 +1632,10 @@ void bhv_menu_button_manager_loop(void) {
 
         case MENU_BUTTON_SOUND_MODE:
             check_sound_mode_menu_clicked_buttons(sMainMenuButtons[MENU_BUTTON_SOUND_MODE]);
+            break;
+
+        case MENU_BUTTON_CONNECT:
+            handle_connect_menu(sMainMenuButtons[MENU_BUTTON_CONNECT]);
             break;
 
         // STEREO, MONO and HEADSET buttons are undefined so they can be selected without
@@ -1729,9 +1830,9 @@ void print_save_file_star_count(s8 fileIndex, s16 x, s16 y) {
 #if defined(VERSION_JP) || defined(VERSION_SH)
     #define SELECT_FILE_X 96
     #define SCORE_X 50
-    #define COPY_X 115
-    #define ERASE_X 180
-    #define SOUNDMODE_X1 235
+    #define COPY_X 99
+    #define ERASE_X 142
+    #define SOUNDMODE_X1 190
     #define SAVEFILE_X1 92
     #define SAVEFILE_X2 209
     #define MARIOTEXT_X1 92
@@ -1739,8 +1840,8 @@ void print_save_file_star_count(s8 fileIndex, s16 x, s16 y) {
 #elif VERSION_US
     #define SELECT_FILE_X 93
     #define SCORE_X 52
-    #define COPY_X 117
-    #define ERASE_X 177
+    #define COPY_X 101
+    #define ERASE_X 144
     #define SOUNDMODE_X1 sSoundTextX
     #define SAVEFILE_X1 92
     #define SAVEFILE_X2 209
@@ -1786,9 +1887,14 @@ void print_main_menu_strings(void) {
     print_generic_string(COPY_X, 39, textCopy);
     print_generic_string(ERASE_X, 39, textErase);
 #if !defined(VERSION_JP) && !defined(VERSION_SH)
-    sSoundTextX = get_str_x_pos_from_center(254, textSoundModes[sSoundMode], 10.0f);
+    sSoundTextX = get_str_x_pos_from_center(205, textSoundModes[sSoundMode], 10.0f);
 #endif
     print_generic_string(SOUNDMODE_X1, 39, textSoundModes[sSoundMode]);
+#if defined(VERSION_JP) || defined(VERSION_SH)
+    print_generic_string(232, 39, textConnect);
+#else
+    print_generic_string(get_str_x_pos_from_center(254, textConnect, 10.0f), 39, textConnect);
+#endif
     gSPDisplayList(gDisplayListHead++, dl_ia_text_end);
 #endif
     // Print file names
@@ -2750,6 +2856,9 @@ static void print_file_select_strings(void) {
             print_sound_mode_menu_strings();
             break;
     }
+    if (sSelectedButtonID == MENU_BUTTON_NONE || sSelectedButtonID == MENU_BUTTON_CONNECT) {
+        connect_menu_draw(sCursorPos[0], sCursorPos[1], sTextBaseAlpha);
+    }
     // If all 4 save file exists, define true to sAllFilesExist to prevent more copies in copy menu
     if (save_file_exists(SAVE_FILE_A) == TRUE && save_file_exists(SAVE_FILE_B) == TRUE &&
         save_file_exists(SAVE_FILE_C) == TRUE && save_file_exists(SAVE_FILE_D) == TRUE) {
@@ -2789,6 +2898,11 @@ s32 lvl_init_menu_values_and_cursor_pos(UNUSED s32 arg, UNUSED s32 unused) {
     sSelectedButtonID = MENU_BUTTON_NONE;
     sCurrentMenuLevel = MENU_LAYER_MAIN;
     sTextBaseAlpha = 0;
+    connect_menu_close();
+    for (s32 buttonID = MENU_BUTTON_CONNECT_MIN; buttonID < MENU_BUTTON_CONNECT_MAX; buttonID++) {
+        sMainMenuButtons[buttonID] = NULL;
+    }
+    sConnectButtonsPage = -1;
     // Place the cursor over the save file that was being played.
     // gCurrSaveFileNum is 1 by default when the game boots, as such
     // the cursor will point on Mario A save file.
@@ -2846,5 +2960,11 @@ s32 lvl_init_menu_values_and_cursor_pos(UNUSED s32 arg, UNUSED s32 unused) {
  */
 s32 lvl_update_obj_and_load_file_selected(UNUSED s32 arg, UNUSED s32 unused) {
     area_update_objects();
+    if (sSelectedFileNum != 0) {
+        // The file was chosen, connect to the Archipelago slot saved in it
+        const s32 fileIndex = sSelectedFileNum - 1;
+        SM64AP_ConnectFromSave(save_file_get_ap_server(fileIndex), save_file_get_ap_name(fileIndex),
+                               save_file_get_ap_password(fileIndex));
+    }
     return sSelectedFileNum;
 }

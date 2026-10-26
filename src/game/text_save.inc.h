@@ -193,6 +193,16 @@ static s32 write_text_save(s32 fileIndex) {
         fprintf(file, "area = %d\n", savedata->capArea);
     }
 
+    fprintf(file, "
+[archipelago]
+");
+    fprintf(file, "server = \"%s\"
+", savedata->apServer);
+    fprintf(file, "name = \"%s\"
+", savedata->apName);
+    fprintf(file, "password = \"%s\"
+", savedata->apPassword);
+
     // Backup is nessecary for saving recent progress after gameover
     bcopy(&gSaveBuffer.files[fileIndex][0], &gSaveBuffer.files[fileIndex][1],
           sizeof(gSaveBuffer.files[fileIndex][1]));
@@ -324,6 +334,19 @@ static s32 read_text_save(s32 fileIndex) {
         }
     }
     
+    value = ini_get(savedata, "archipelago", "server");
+    if (value) {
+        strncpy(gSaveBuffer.files[fileIndex][0].apServer, value, AP_SERVER_LEN - 1);
+    }
+    value = ini_get(savedata, "archipelago", "name");
+    if (value) {
+        strncpy(gSaveBuffer.files[fileIndex][0].apName, value, AP_NAME_LEN - 1);
+    }
+    value = ini_get(savedata, "archipelago", "password");
+    if (value) {
+        strncpy(gSaveBuffer.files[fileIndex][0].apPassword, value, AP_PASSWORD_LEN - 1);
+    }
+
     // Good, file exists for gSaveBuffer
     gSaveBuffer.files[fileIndex][0].flags |= SAVE_FLAG_FILE_EXISTS;
 

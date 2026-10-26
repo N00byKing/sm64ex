@@ -71,6 +71,12 @@ extern "C" {
 AP_EXTERN_C void SM64AP_InitMW(const char*, const char*, const char*);
 AP_EXTERN_C void SM64AP_InitSP(const char*);
 
+// Connection info saved in a save file (server as "host:port", name, password).
+// Nothing is connected until ConnectFromSave is called, unless a connection was given on the command line,
+// which then takes priority over the saved ones.
+AP_EXTERN_C bool SM64AP_CanConnectFromSave(const char* server, const char* name);
+AP_EXTERN_C void SM64AP_ConnectFromSave(const char* server, const char* name, const char* passwd);
+
 // Local Stars, Keys and Caps
 AP_EXTERN_C int SM64AP_GetStars();
 AP_EXTERN_C int SM64AP_GetRequiredStars(int);

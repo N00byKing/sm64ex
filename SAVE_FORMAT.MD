@@ -156,3 +156,20 @@ type = ground
 level = ssl
 area = 1
 ```
+___
+## Archipelago Section - [archipelago]
+This section contains the Archipelago connection info remembered by this save file. All values are quoted strings and are optional.
+
+| Flag | Description |
+|---|---|
+| server | Server address, including the port (`host:port`), at most 63 characters
+| name | Slot name, at most 31 characters
+| password | Slot password (stored as plain text), at most 31 characters
+
+Example:
+```
+[archipelago]
+server = "archipelago.gg:38281"
+name = "Mario"
+password = ""
+```

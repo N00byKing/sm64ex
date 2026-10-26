@@ -85,15 +85,10 @@ void parse_cli_opts(int argc, char* argv[]) {
             game_exit();
         }
     }
-    if (idx_name == 0) {
-        if (idx_file == 0) {
-            printf("SM64AP: You need to at least specify Name (For MultiWorld) or Seed Filename (For Singleplayer). Exiting.\n");
-            fflush(stdout);
-            game_exit();
-        } else {
-            SM64AP_InitSP(argv[idx_file]);
-        }
-    } else {
+    // Without either of these the connection saved in the chosen save file is used (see Connect on the file select).
+    if (idx_name != 0) {
         SM64AP_InitMW(idx_ip == 0 ? "" : argv[idx_ip], argv[idx_name], idx_passwd == 0 ? "" : argv[idx_passwd]);
+    } else if (idx_file != 0) {
+        SM64AP_InitSP(argv[idx_file]);
     }
 }

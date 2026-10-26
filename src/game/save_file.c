@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <string.h>
 #include "sm64ap.h"
 
 #include <ultra64.h>
@@ -689,6 +690,39 @@ void save_file_set_sound_mode(u16 mode) {
 
     gMainMenuDataModified = TRUE;
     save_main_menu_data();
+}
+
+const char *save_file_get_ap_server(s32 fileIndex) {
+    return gSaveBuffer.files[fileIndex][0].apServer;
+}
+
+const char *save_file_get_ap_name(s32 fileIndex) {
+    return gSaveBuffer.files[fileIndex][0].apName;
+}
+
+const char *save_file_get_ap_password(s32 fileIndex) {
+    return gSaveBuffer.files[fileIndex][0].apPassword;
+}
+
+/**
+ * Store the Archipelago connection info for a save file and write it out.
+ * Strings longer than their field are truncated.
+ */
+void save_file_set_ap_connection(s32 fileIndex, const char *server, const char *name, const char *password) {
+    if (fileIndex < 0 || fileIndex >= NUM_SAVE_FILES)
+        return;
+
+    struct SaveFile *saveFile = &gSaveBuffer.files[fileIndex][0];
+
+    bzero(saveFile->apServer, sizeof(saveFile->apServer));
+    bzero(saveFile->apName, sizeof(saveFile->apName));
+    bzero(saveFile->apPassword, sizeof(saveFile->apPassword));
+    strncpy(saveFile->apServer, server, sizeof(saveFile->apServer) - 1);
+    strncpy(saveFile->apName, name, sizeof(saveFile->apName) - 1);
+    strncpy(saveFile->apPassword, password, sizeof(saveFile->apPassword) - 1);
+
+    gSaveFileModified = TRUE;
+    save_file_do_save(fileIndex);
 }
 
 u16 save_file_get_sound_mode(void) {

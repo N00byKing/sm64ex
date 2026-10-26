@@ -87,7 +87,20 @@ enum MenuButtonTypes {
     MENU_BUTTON_LANGUAGE_RETURN,
 #endif
 
-    MENU_BUTTON_OPTION_MAX
+    MENU_BUTTON_OPTION_MAX,
+
+    // Connections button on the main menu, it grows into the menu of connect_menu.c
+    MENU_BUTTON_CONNECT,
+
+    // Connections menu buttons, they only exist while that menu is open
+    MENU_BUTTON_CONNECT_MIN,
+    MENU_BUTTON_CONNECT_FILE_A = MENU_BUTTON_CONNECT_MIN,
+    MENU_BUTTON_CONNECT_FILE_B,
+    MENU_BUTTON_CONNECT_FILE_C,
+    MENU_BUTTON_CONNECT_FILE_D,
+    MENU_BUTTON_CONNECT_RETURN,
+    MENU_BUTTON_CONNECT_SAVE,
+    MENU_BUTTON_CONNECT_MAX
 };
 
 enum ScoreMenuMessageID {

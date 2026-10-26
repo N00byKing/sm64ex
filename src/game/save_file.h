@@ -8,8 +8,16 @@
 
 #include "course_table.h"
 
-#define EEPROM_SIZE 0x200
+#define EEPROM_SIZE 0x600
 #define NUM_SAVE_FILES 4
+
+// Archipelago connection info stored per save file (NUL-terminated strings)
+#define AP_SERVER_LEN   64 // "host:port"
+#define AP_NAME_LEN     32
+#define AP_PASSWORD_LEN 32
+
+// Size of each of the two MainMenuSaveData copies
+#define MENU_DATA_SIZE 0x20
 
 struct SaveBlockSignature
 {
@@ -34,6 +42,10 @@ struct SaveFile
     u8 courseStars[COURSE_COUNT];
 
     u8 courseCoinScores[COURSE_STAGES_COUNT];
+
+    char apServer[AP_SERVER_LEN];
+    char apName[AP_NAME_LEN];
+    char apPassword[AP_PASSWORD_LEN];
 
     struct SaveBlockSignature signature;
 };
@@ -60,8 +72,8 @@ struct MainMenuSaveData
 #define SUBTRAHEND 6
 #endif
 
-    // Pad to match the EEPROM size of 0x200 (10 bytes on JP/US, 8 bytes on EU)
-    u8 filler[EEPROM_SIZE / 2 - SUBTRAHEND - NUM_SAVE_FILES * (4 + sizeof(struct SaveFile))];
+    // Pad to MENU_DATA_SIZE (10 bytes on JP/US, 8 bytes on EU)
+    u8 filler[MENU_DATA_SIZE - SUBTRAHEND - NUM_SAVE_FILES * 4];
 
     struct SaveBlockSignature signature;
 };
@@ -142,6 +154,10 @@ s32 save_file_is_cannon_unlocked(void);
 void save_file_set_cannon_unlocked(void);
 void save_file_set_cap_pos(s16 x, s16 y, s16 z);
 s32 save_file_get_cap_pos(Vec3s capPos);
+const char *save_file_get_ap_server(s32 fileIndex);
+const char *save_file_get_ap_name(s32 fileIndex);
+const char *save_file_get_ap_password(s32 fileIndex);
+void save_file_set_ap_connection(s32 fileIndex, const char *server, const char *name, const char *password);
 void save_file_set_sound_mode(u16 mode);
 u16 save_file_get_sound_mode(void);
 void save_file_move_cap_to_default_location(void);

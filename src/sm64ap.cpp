@@ -395,16 +395,56 @@ void SM64AP_GenericInit() {
     map_boxid_locid[LEVEL_WMOTR*10 + 1] = 3626243;
 }
 
-void SM64AP_InitMW(const char* ip, const char* player_name, const char* passwd) {
+// Whether the connection was given on the command line, in which case saved connections are ignored.
+static bool cli_connection = false;
+
+// The saved connection that is currently in use, so choosing another file with the same one doesn't reconnect.
+static bool have_saved_connection = false;
+static std::string saved_address;
+static std::string saved_name;
+static std::string saved_passwd;
+
+static void init_multiworld(const char* ip, const char* player_name, const char* passwd) {
     AP_Init(ip, "Super Mario 64", player_name, passwd);
     SM64AP_GenericInit();
     AP_Start();
 }
 
+void SM64AP_InitMW(const char* ip, const char* player_name, const char* passwd) {
+    cli_connection = true;
+    init_multiworld(ip, player_name, passwd);
+}
+
 void SM64AP_InitSP(const char * filename) {
+    cli_connection = true;
     AP_Init(filename);
     SM64AP_GenericInit();
     AP_Start();
+}
+
+bool SM64AP_CanConnectFromSave(const char* server, const char* name) {
+    return cli_connection || (server[0] != '\0' && name[0] != '\0');
+}
+
+void SM64AP_ConnectFromSave(const char* server, const char* name, const char* passwd) {
+    if (cli_connection || server[0] == '\0' || name[0] == '\0') return;
+
+    std::string address = server;
+    if (address.find(':') == std::string::npos) {
+        address += ":38281"; // the default Archipelago port, same as AP_Init uses when no server is given
+    }
+
+    if (have_saved_connection && AP_IsInit() && address == saved_address && saved_name == name && saved_passwd == passwd) {
+        return;
+    }
+    if (AP_IsInit()) {
+        AP_Shutdown();
+    }
+    have_saved_connection = true;
+    saved_address = address;
+    saved_name = name;
+    saved_passwd = passwd;
+    init_multiworld(address.c_str(), name, passwd);
 }
 
 void SM64AP_SendByBoxID(int id) {
