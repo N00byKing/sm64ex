@@ -44,6 +44,7 @@ int sm64_cost_mips2 = 50;
 int msg_frame_duration = 90; // 3 Secounds at 30F/s
 int cur_msg_frame_duration = msg_frame_duration;
 std::queue<int64_t> delayed_queue;
+std::string playerName = "You";
 
 std::map<int,int> map_entrances;
 std::set<int> course_dest_supported;
@@ -397,6 +398,7 @@ void SM64AP_GenericInit() {
 
 void SM64AP_InitMW(const char* ip, const char* player_name, const char* passwd) {
     AP_Init(ip, "Super Mario 64", player_name, passwd);
+    playerName = player_name;
     SM64AP_GenericInit();
     AP_Start();
 }
@@ -612,6 +614,10 @@ void SM64AP_PrintNext() {
     AP_Message* msg = AP_GetLatestMessage();
     if (msg->type == AP_MessageType::ItemSend) {
         AP_ItemSendMessage* o_msg = static_cast<AP_ItemSendMessage*>(msg);
+        if (o_msg->sendPlayer != playerName) {
+            AP_ClearLatestMessage();
+            return;
+        }
         print_text(GFX_DIMENSIONS_FROM_LEFT_EDGE(0), (1-0)*20, (o_msg->item + std::string(" was sent")).c_str());
         print_text(GFX_DIMENSIONS_FROM_LEFT_EDGE(0), (1-1)*20, (std::string("to ") + o_msg->recvPlayer).c_str());
     } else if (msg->type == AP_MessageType::ItemRecv) {
