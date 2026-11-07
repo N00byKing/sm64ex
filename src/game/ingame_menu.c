@@ -2172,6 +2172,22 @@ void render_pause_red_coins(void) {
     }
 }
 
+void render_max_coin_location_collection(s16 courseNum, s16 x, s16 y) {
+    if(!SM64AP_ShouldCheckMaxCoins()) {
+        return;
+    }
+
+    s8 xp = 0;
+    for(u8 i = 10; i < 101; i+=10) {
+        if(!SM64AP_CheckedLoc(SM64AP_LOCATIONID_MAX_COIN(courseNum, i))) {
+            // No sense in continuing to check if we've reached the end
+            break;
+        }
+        print_hud_lut_string(HUD_LUT_GLOBAL, x + (xp * 6), y, gHudSymCoin);
+        xp = i % 20 != 0? xp+2 : xp+3;
+    }
+}
+
 #ifdef VERSION_EU
 u8 gTextCourseArr[][7] = {
     { TEXT_COURSE },
@@ -2250,6 +2266,7 @@ void render_pause_my_score_coins(void) {
 
     if (courseIndex < COURSE_STAGES_COUNT) {
         print_hud_my_score_coins(1, gCurrSaveFileNum - 1, courseIndex, 178, 103);
+        render_max_coin_location_collection(gCurrCourseNum-1, 80, 210);
         print_hud_my_score_stars(gCurrSaveFileNum - 1, courseIndex, 118, 103);
     }
 
@@ -2588,6 +2605,7 @@ void render_pause_castle_main_strings(s16 x, s16 y) {
 #ifdef VERSION_EU
         print_generic_string(x - 17, y + 30, courseName);
 #endif
+        render_max_coin_location_collection(gDialogLineNum, x-18, y+150);
     } else {
         u8 textStarX[] = { TEXT_STAR_X };
         courseName = segmented_to_virtual(courseNameTbl[COURSE_MAX]);
